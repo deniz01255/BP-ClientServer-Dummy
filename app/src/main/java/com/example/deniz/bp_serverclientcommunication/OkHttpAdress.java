@@ -2,6 +2,7 @@ package com.example.deniz.bp_serverclientcommunication;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -52,6 +53,7 @@ public class OkHttpAdress  extends AsyncTask<Object,Void,GeoPoint> {
 
             try (Response response = client.newCall(request).execute()) {
                 respo = response.body().string();
+
                 JSONObject json;
 
                 try {
