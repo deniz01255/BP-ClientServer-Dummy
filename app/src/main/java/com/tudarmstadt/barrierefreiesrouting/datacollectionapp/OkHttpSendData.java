@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -13,7 +14,7 @@ import okhttp3.Response;
  * Created by deniz on 12.05.17.
  */
 
-public class OkHttpSendData extends AsyncTask<String, Void, String>{
+public class OkHttpSendData extends AsyncTask<String, Void, String> {
 
     public String ret = "";
 
@@ -61,7 +62,7 @@ public class OkHttpSendData extends AsyncTask<String, Void, String>{
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
 import android.location.Criteria;
 
 import android.widget.Toast;
@@ -35,9 +34,7 @@ import org.osmdroid.views.overlay.Marker;
 import java.util.concurrent.ExecutionException;
 
 
-
-
-public class MainActivity extends AppCompatActivity implements LocationListener{
+public class MainActivity extends AppCompatActivity implements LocationListener {
 
     // variables for taken the income of the frontend
     private EditText et;
@@ -51,16 +48,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     private LocationListener listener;
     private LocationManager locationManager;
     private String mprovider;
-
-
-
-
-
-
-    /**
-     * Called when the activity is first created.
-     */
-
 
     String responseString = "";
 
@@ -81,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         scriptUrlString.append("http://maps.googleapis.com/maps/api/geocode/json?address=");
 
         et = (EditText) findViewById(R.id.editText);
@@ -90,46 +76,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         tv = (TextView) findViewById(R.id.textView2);
         map = (MapView) findViewById(R.id.map);
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
 
+        mprovider = locationManager.getBestProvider(criteria, false);
 
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Criteria criteria = new Criteria();
-
-            mprovider = locationManager.getBestProvider(criteria, false);
-
-            if (mprovider != null && !mprovider.equals("")) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(mprovider);
-                locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
-
-                if (location != null)
-                    onLocationChanged(location);
-                else
-                    Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
+        if (mprovider != null && !mprovider.equals("")) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
             }
+            Location location = locationManager.getLastKnownLocation(mprovider);
+            locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
 
-
-
-/*
-#####################################################################################################################
- */
-
-
-
-
-/*
-####################################################################################################################
- */
-
+            if (location != null)
+                onLocationChanged(location);
+            else
+                Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
+        }
         /**
          * Button to Receive Data From Server
          */
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -138,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
                         String param = scriptUrlString.toString();
                         example = new OkHttpAdress(tv, param);
                         try {
-                            Log.d("MyApp","I am here");
+                            Log.d("MyApp", "I am here");
                             answer = example.execute().get();
 
                         } catch (ExecutionException e) {
@@ -151,13 +120,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
                         } else {
 
                             tv.setText("Korrekt");
-
-
                             Context ctx = getApplicationContext();
                             //important! set your user agent to prevent getting banned from the osm servers
                             Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-
-
 
                             map.setTileSource(TileSourceFactory.MAPNIK);
                             map.setBuiltInZoomControls(true);
@@ -165,9 +130,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
                             IMapController mapController = map.getController();
                             mapController.setZoom(15);
                             mapController.setCenter(answer);
-
                         }
-
                     }
                 });
 
@@ -209,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     @Override
     public void onLocationChanged(Location location) {
 
-        tv.setText("Longitude = "+ location.getLongitude() + "\n Latitude = "+ location.getLatitude());
+        tv.setText("Longitude = " + location.getLongitude() + "\n Latitude = " + location.getLatitude());
 
-        locationPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
+        locationPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
 
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
@@ -220,10 +183,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         mapController.setZoom(15);
         mapController.setCenter(locationPoint);
 
-
         //###########
         Marker startMarker = new Marker(map);
-        startMarker.setPosition(new GeoPoint(location.getLatitude(),location.getLongitude()));
+        startMarker.setPosition(new GeoPoint(location.getLatitude(), location.getLongitude()));
         //startMarker.setIcon(R.drawable.ic_launcher);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, 1.0f);
         //InfoWindow infoWindow = new MyInfoWindow(R.layout.bonuspack_bubble, map);
@@ -251,8 +213,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     }
 
 
-
-
     public boolean internetAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -268,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         //if you make changes to the configuration, use
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
-
 
 
 }

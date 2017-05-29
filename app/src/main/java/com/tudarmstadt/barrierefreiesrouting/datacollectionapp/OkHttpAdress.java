@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -19,7 +20,7 @@ import org.osmdroid.util.GeoPoint;
  * Created by deniz on 12.05.17.
  */
 
-public class OkHttpAdress  extends AsyncTask<Object,Void,GeoPoint> {
+public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
 
     TextView textResponse;
     private Exception exception;
@@ -29,7 +30,7 @@ public class OkHttpAdress  extends AsyncTask<Object,Void,GeoPoint> {
     GeoPoint locationPoint = null;
 
 
-    OkHttpAdress(TextView tv, String address){
+    OkHttpAdress(TextView tv, String address) {
 
         this.addr = address;
         this.textResponse = tv;
@@ -73,8 +74,8 @@ public class OkHttpAdress  extends AsyncTask<Object,Void,GeoPoint> {
                 return locationPoint;
 
 
-               // return respo = response.body().string();
-            }catch (Exception e){
+                // return respo = response.body().string();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (Exception e) {
@@ -90,34 +91,34 @@ public class OkHttpAdress  extends AsyncTask<Object,Void,GeoPoint> {
         super.onPostExecute(feed);
     }
 
-    public String getAnswer(){
+    public String getAnswer() {
         return respo;
     }
 
     public static void main(String[] args) throws IOException {
-       /** OkHttpAdress example = new OkHttpAdress();
-        String response = example.run("https://raw.github.com/square/okhttp/master/README.md");
-        System.out.println(response);**/
+        /** OkHttpAdress example = new OkHttpAdress();
+         String response = example.run("https://raw.github.com/square/okhttp/master/README.md");
+         System.out.println(response);**/
     }
 
-  /**  try {
-        URL url = new URL(
-                "http://maps.googleapis.com/maps/api/geocode/json?address="
-                        + URIUtil.encodeQuery("Sayaji Hotel, Near balewadi stadium, pune") + "&sensor=true");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
+    /**  try {
+     URL url = new URL(
+     "http://maps.googleapis.com/maps/api/geocode/json?address="
+     + URIUtil.encodeQuery("Sayaji Hotel, Near balewadi stadium, pune") + "&sensor=true");
+     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+     conn.setRequestMethod("GET");
+     conn.setRequestProperty("Accept", "application/json");
 
-        if (conn.getResponseCode() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-        }
-        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+     if (conn.getResponseCode() != 200) {
+     throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+     }
+     BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-        String output = "", full = "";
-        while ((output = br.readLine()) != null) {
-            System.out.println(output);
-            full += output;
-        }**/
+     String output = "", full = "";
+     while ((output = br.readLine()) != null) {
+     System.out.println(output);
+     full += output;
+     }**/
 
 
 }
