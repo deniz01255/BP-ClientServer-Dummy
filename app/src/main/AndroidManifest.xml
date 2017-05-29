@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.deniz.bp_serverclientcommunication">
+    package="com.tudarmstadt.barrierefreiesrouting.datacollectionapp">
 
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

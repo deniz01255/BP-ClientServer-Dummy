@@ -1,11 +1,7 @@
-package com.example.deniz.bp_serverclientcommunication;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 
 import android.os.AsyncTask;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;

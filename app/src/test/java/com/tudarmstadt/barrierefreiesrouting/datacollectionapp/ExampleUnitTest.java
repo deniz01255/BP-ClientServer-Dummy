@@ -1,4 +1,4 @@
-package com.example.deniz.bp_serverclientcommunication;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 
 import org.junit.Test;
 

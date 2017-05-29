@@ -1,4 +1,4 @@
-package com.example.deniz.bp_serverclientcommunication;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

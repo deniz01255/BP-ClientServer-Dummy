@@ -1,8 +1,7 @@
-package com.example.deniz.bp_serverclientcommunication;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -13,14 +12,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 
 /**
