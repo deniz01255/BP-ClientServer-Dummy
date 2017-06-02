@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -23,6 +24,8 @@ import android.location.Criteria;
 
 import android.widget.Toast;
 
+
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -165,8 +168,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             }
         });
-
-
     }
 
     @Override
@@ -229,5 +230,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
 
-
+    /** Called when the user clicks the add button **/
+    public void openObstacleSelection(View view) {
+        Intent intent = new Intent(this, ObstacleSelection.class);
+        startActivity(intent);
+    }
 }
