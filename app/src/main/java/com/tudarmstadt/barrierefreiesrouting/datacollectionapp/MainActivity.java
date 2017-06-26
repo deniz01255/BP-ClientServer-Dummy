@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 
 
@@ -113,6 +114,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         addBarrierBUTTON = (Button) findViewById(R.id.button3);
        // dispCurrentPosBUTTON = (Button) findViewById(R.id.button);
         map = (MapView) findViewById(R.id.map);
+        GeoPoint startPoint = new GeoPoint(49.8728, 8.6512);
+        IMapController mapController = map.getController();
+        mapController.setCenter(startPoint);
+
+        map.getController().setZoom(18);
 
         Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner2);
         ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
@@ -487,29 +493,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                     }
                 });
-    }
-
-    class Glistener implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
-        @Override
-        public boolean onItemLongPress(int index, OverlayItem item) {
-            Toast.makeText(MainActivity.this, "Item ",
-                    Toast.LENGTH_LONG).show();
-
-            return false;
-        }
-
-        @Override
-        public boolean onItemSingleTapUp(int index, OverlayItem item) {
-            Toast.makeText(MainActivity.this, "Item ",
-                    Toast.LENGTH_LONG).show();
-            return true; // We 'handled' this event.
-
-        }
-
-
-
-
-
     }
 
 }
