@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 
@@ -34,7 +34,7 @@ public class DisplayCard extends AppCompatActivity implements LocationListener {
     private EditText et;
     private Button bt, btPost;
     public TextView tv;
-    private OkHttpAdress example;
+    private BpServerHandler example;
     private GeoPoint locationPoint;
     private GeoPoint answer;
     private static MapView map;

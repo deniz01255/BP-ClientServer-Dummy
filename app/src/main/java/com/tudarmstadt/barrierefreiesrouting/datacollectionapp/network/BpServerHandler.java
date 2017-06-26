@@ -4,23 +4,31 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
+import bp.common.model.Obstacle;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.OverlayItem;
 
 
 /**
  * Created by deniz on 12.05.17.
  */
 
-public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
+public class BpServerHandler extends AsyncTask<Object, Void, GeoPoint> {
 
 
     private Exception exception;
@@ -30,7 +38,7 @@ public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
     GeoPoint locationPoint = null;
 
 
-    OkHttpAdress( String address) {
+    BpServerHandler(String address) {
 
         this.addr = address;
 
@@ -90,8 +98,9 @@ public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
         super.onPostExecute(feed);
     }
 
-    public String getAnswer() {
-        return respo;
+    public List<Obstacle> getObstaclesFromServer() {
+       return null;
     }
+
 
 }

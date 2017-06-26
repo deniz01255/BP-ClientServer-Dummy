@@ -36,8 +36,10 @@ import android.location.Criteria;
 import android.widget.Toast;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Ramp;
@@ -45,13 +47,22 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Stai
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.util.constants.MapViewConstants;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener, MapViewConstants, AdapterView.OnItemSelectedListener {
@@ -60,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
     public TextView tv;
-    private OkHttpAdress example;
+    private BpServerHandler example;
     private GeoPoint locationPoint;
     private GeoPoint answer;
     private static MapView map;
@@ -69,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private String mprovider;
     private ArrayList<OverlayItem> mItems;
     private Overlay mMYLocationOverlay;
+    private ItemizedOverlayWithFocus<OverlayItem> barriersOverlay;
+    private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+
+
     private Stairs stairs;
     private Ramp ramp;
     private long selectedBarrier;
@@ -122,9 +137,27 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
+        barriersOverlay = new ItemizedOverlayWithFocus<>(this, items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(final int index, final OverlayItem item) {
+                        return false;
+                    }
+                });
 
 
+        barriersOverlay.setFocusItemsOnTap(true);
+        map.getOverlays().add(barriersOverlay);
+
+        getObstaclesFromServer();
+        map.invalidate();
     }
+
 
     private void makeMYDialog() {
         switch (String.valueOf(selectedBarrier)) {
@@ -160,9 +193,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 Log.v("Object stairs in JSON", gson.toJson(stairs));
 
                                 createOnMAP(stairs, "STUFE",coordinaten);
-
-
-
 
                             }
                         }
@@ -414,6 +444,50 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         selectedBarrier = barrier;
     }
 
+    public void getObstaclesFromServer() {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://routing.vincinator.de/routing/barriers")
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, IOException e) {
+                        // Error
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        String res = response.body().string();
+                        ObjectMapper mapper = new ObjectMapper();
+                        if (!response.isSuccessful())
+                            return;
+                        final List<bp.common.model.Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<bp.common.model.Obstacle>>() {
+                        });
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (bp.common.model.Obstacle obstacle : obstacleList) {
+                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                                    overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                                    barriersOverlay.addItem(overlayItem);
+                                }
+                                map.invalidate();
+                            }
+                        });
+
+                    }
+                });
+    }
 
     class Glistener implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
         @Override
@@ -431,6 +505,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             return true; // We 'handled' this event.
 
         }
+
+
+
 
 
     }
