@@ -94,30 +94,4 @@ public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
         return respo;
     }
 
-    public static void main(String[] args) throws IOException {
-        /** OkHttpAdress example = new OkHttpAdress();
-         String response = example.run("https://raw.github.com/square/okhttp/master/README.md");
-         System.out.println(response);**/
-    }
-
-    /**  try {
-     URL url = new URL(
-     "http://maps.googleapis.com/maps/api/geocode/json?address="
-     + URIUtil.encodeQuery("Sayaji Hotel, Near balewadi stadium, pune") + "&sensor=true");
-     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-     conn.setRequestMethod("GET");
-     conn.setRequestProperty("Accept", "application/json");
-
-     if (conn.getResponseCode() != 200) {
-     throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-     }
-     BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-     String output = "", full = "";
-     while ((output = br.readLine()) != null) {
-     System.out.println(output);
-     full += output;
-     }**/
-
-
 }

@@ -38,7 +38,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpSendData;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Ramp;
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
     public TextView tv;
     private OkHttpAdress example;
-    private OkHttpSendData examplePost;
     private GeoPoint locationPoint;
     private GeoPoint answer;
     private static MapView map;

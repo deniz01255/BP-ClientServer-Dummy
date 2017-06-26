@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpSendData;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 
@@ -36,7 +35,6 @@ public class DisplayCard extends AppCompatActivity implements LocationListener {
     private Button bt, btPost;
     public TextView tv;
     private OkHttpAdress example;
-    private OkHttpSendData examplePost;
     private GeoPoint locationPoint;
     private GeoPoint answer;
     private static MapView map;
@@ -117,7 +115,6 @@ public class DisplayCard extends AppCompatActivity implements LocationListener {
                     @Override
                     public void run() {
                         try {
-                            OkHttpSendData example = new OkHttpSendData();
                             tv.setText(example.execute().get().toString());
                         } catch (InterruptedException i) {
                             i.printStackTrace();
