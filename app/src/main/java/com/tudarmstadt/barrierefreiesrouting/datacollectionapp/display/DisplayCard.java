@@ -10,14 +10,13 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.OkHttpAdress;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.OkHttpSendData;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpSendData;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 

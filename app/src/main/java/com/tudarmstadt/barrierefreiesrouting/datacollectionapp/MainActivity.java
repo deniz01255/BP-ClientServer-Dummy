@@ -37,8 +37,8 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Uneveness;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.display.DisplayCard;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpAdress;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.OkHttpSendData;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Ramp;

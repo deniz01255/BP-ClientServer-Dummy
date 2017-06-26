@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network;
 
 
 import android.os.AsyncTask;
