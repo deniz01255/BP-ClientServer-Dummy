@@ -3,19 +3,19 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,29 +25,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.osmdroid.config.Configuration;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.MapView;
-
-
-import android.location.Criteria;
-
 import android.widget.Toast;
-
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.util.constants.MapViewConstants;
@@ -164,7 +156,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
 
     private void makeMYDialog() {
+
         switch (String.valueOf(selectedBarrier)) {
+
             case "0" : // stairspic
 
                 View viewStairs = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_dialog_stairs, null);
@@ -200,8 +194,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                             pushObstacleToServer(stairs);
                             createOverlayItemOnMap(stairs);
-
-
+                            
                             }
                         }
                 );
@@ -349,35 +342,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    private void proceedSWITCH() {
-        Log.d("MyApp", "Step into with = " + selectedBarrier);
-        switch (String.valueOf(selectedBarrier)) {
-            case "0" : // stairspic
-                barrier = "STAIRS";
-
-                break;
-            case "1" : // Ramp
-                barrier = "RAMP";
-                break;
-            case "2" : // Uneveness
-                barrier = "UNEVENESS";
-                break;
-            case "3" : // Construction
-                barrier = "CONSTRUCTIONS";
-                break;
-            case "4" : // Fast_Traffic_Light
-                barrier = "FAST_TRAFFIC_LIGHT";
-                break;
-            case "5" : // Elevator
-                barrier = "ELEVATOR";
-                break;
-            case "6" : // Tight_Passage
-                barrier = "TIGHT_PASSAGE";
-                break;
-        }
-        printMYLOG(barrier);
-    }
-
     private void printMYLOG(String barrier) {
         Log.d("Selection of Barrier", barrier);
     }
@@ -394,8 +358,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         mapController.setZoom(15);
         mapController.setCenter(locationPoint);
 
-        //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.barrier_stairs);
-
         Marker startMarker = new Marker(map);
         startMarker.setPosition(new GeoPoint(location.getLatitude(), location.getLongitude()));
         startMarker.setAnchor(Marker.ANCHOR_CENTER, 1.0f);
@@ -403,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         //startMarker.setInfoWindow(infoWindow);
         map.getOverlays().add(startMarker);
         // startMarker.setTitle("Barrier-Type: stairspic\n Ammount of stairspic = "+ stairs.getNumberOfStairs()+"\n Heigth of stairspic: "+stairs.getHeightOfStairs());
-
     }
 
     @Override
@@ -420,7 +381,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     public void onProviderDisabled(String s) {
 
     }
-
 
     public boolean internetAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);

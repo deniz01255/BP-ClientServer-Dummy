@@ -28,7 +28,7 @@ import org.osmdroid.views.overlay.OverlayItem;
  * Created by deniz on 12.05.17.
  */
 
-public class BpServerHandler extends AsyncTask<Object, Void, GeoPoint> {
+public  class BpServerHandler extends AsyncTask<Object, Void, GeoPoint> {
 
 
     private Exception exception;
@@ -37,13 +37,12 @@ public class BpServerHandler extends AsyncTask<Object, Void, GeoPoint> {
     String addr;
     GeoPoint locationPoint = null;
 
-
     BpServerHandler(String address) {
-
         this.addr = address;
-
-
     }
+
+
+
 
     @Override
     protected GeoPoint doInBackground(Object... params) {
