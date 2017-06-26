@@ -22,7 +22,7 @@ import org.osmdroid.util.GeoPoint;
 
 public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
 
-    TextView textResponse;
+
     private Exception exception;
     OkHttpClient client = new OkHttpClient();
     private String respo = "";
@@ -30,10 +30,10 @@ public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
     GeoPoint locationPoint = null;
 
 
-    OkHttpAdress(TextView tv, String address) {
+    OkHttpAdress( String address) {
 
         this.addr = address;
-        this.textResponse = tv;
+
 
     }
 
@@ -87,7 +87,6 @@ public class OkHttpAdress extends AsyncTask<Object, Void, GeoPoint> {
     }
 
     protected void onPostExecute(GeoPoint feed) {
-        textResponse.setText(respo);
         super.onPostExecute(feed);
     }
 

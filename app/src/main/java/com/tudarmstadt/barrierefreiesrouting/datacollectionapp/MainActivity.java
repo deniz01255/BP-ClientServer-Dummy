@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     String responseString = "";
 
     // final string because of using server-Address always the same.
-    final StringBuilder scriptUrlString = new StringBuilder();//"http://api.openstreetmap.org/api/0.6/trackpoints?bbox=0,51.5,0.25,51.75&page=0";
+    final String scriptUrlString = "Adresse";//"http://api.openstreetmap.org/api/0.6/trackpoints?bbox=0,51.5,0.25,51.75&page=0";
 
     /**
      * Method is always created automatically by Developing environment, setting up an interactive Gui connected to backend
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        scriptUrlString.append("http://maps.googleapis.com/maps/api/geocode/json?address=");
+        OkHttpAdress getMyOverlayOkHttp = new OkHttpAdress(scriptUrlString);
 
         et = (EditText) findViewById(R.id.editText);
         bt = (Button) findViewById(R.id.button);
@@ -105,10 +105,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        scriptUrlString.append(et.getText().toString());
-                        scriptUrlString.append("&sensor=true");
+
                         String param = scriptUrlString.toString();
-                        example = new OkHttpAdress(tv, param);
+                        example = new OkHttpAdress( param);
                         try {
                             Log.d("MyApp", "I am here");
                             answer = example.execute().get();
