@@ -37,14 +37,11 @@ import android.location.Criteria;
 import android.widget.Toast;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Ramp;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Stairs;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -59,10 +56,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
@@ -84,9 +85,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     private ItemizedOverlayWithFocus<OverlayItem> barriersOverlay;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
-
-    private Stairs stairs;
-    private Ramp ramp;
     private long selectedBarrier;
     private String barrier;
 
@@ -178,27 +176,31 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 builder.setMessage("Barrier stair configuration").setView(viewStairs).setPositiveButton("Create Barrier", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                /**locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                                 Criteria criteria = new Criteria();
-                                 mprovider = locationManager.getBestProvider(criteria, false);
-                                 if (mprovider != null && !mprovider.equals("")) {
-                                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                 return;
-                                 }
-                                 Location location = locationManager.getLastKnownLocation(mprovider);
-                                 **/
+                            /**locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                             Criteria criteria = new Criteria();
+                             mprovider = locationManager.getBestProvider(criteria, false);
+                             if (mprovider != null && !mprovider.equals("")) {
+                             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                             return;
+                             }
+                             Location location = locationManager.getLastKnownLocation(mprovider);
+                             **/
 
-                                int height = Integer.parseInt(stairHeightStairs.getText().toString());
-                                int number = Integer.parseInt(stairAmmountStairs.getText().toString());
-                                //default test darmstadt49.8705556
-                                GeoPoint coordinaten = new GeoPoint(49.8705556,8.6494444);
-                                stairs = new Stairs("STAIRS", coordinaten.getLongitude(), coordinaten.getLatitude(), number, height, true);
+                            int height = Integer.parseInt(stairHeightStairs.getText().toString());
+                            int number = Integer.parseInt(stairAmmountStairs.getText().toString());
+                            //default test darmstadt49.8705556
+                            GeoPoint coordinaten = new GeoPoint(49.8705556,8.6494444);
+                            Stairs stairs = new Stairs();
 
-                                // Obstacle finish
-                                Gson gson = new Gson();
-                                Log.v("Object stairs in JSON", gson.toJson(stairs));
+                            stairs.setLongitude(coordinaten.getLongitude());
+                            stairs.setLatitude(coordinaten.getLatitude());
 
-                                createOnMAP(stairs, "STUFE",coordinaten);
+                            stairs.setNumberOfStairs(number);
+                            stairs.setHandleAvailable(true);
+
+                            pushObstacleToServer(stairs);
+                            createOverlayItemOnMap(stairs);
+
 
                             }
                         }
@@ -224,12 +226,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 int deg = Integer.parseInt(degree.getText().toString());
                                 //default test darmstadt49.8705556
                                 GeoPoint coordinaten = new GeoPoint(49.8705556,8.6494444);
-                                Ramp ramp = new Ramp("RAMP", coordinaten.getLongitude(), coordinaten.getLatitude(), deg,true);
+                               // Ramp ramp = new Ramp("RAMP", coordinaten.getLongitude(), coordinaten.getLatitude(), deg,true);
 
-                                Gson gson = new Gson();
-                                Log.v("Object stairs in JSON", gson.toJson(ramp));
-
-                                createOnMAP(ramp, "RAMPE",coordinaten);
+                                //Gson gson = new Gson();
+                                //Log.v("Object stairs in JSON", gson.toJson(ramp));
+                                //createOverlayItemOnMap(ramp, "RAMPE",coordinaten);
 
 
 
@@ -258,43 +259,67 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         }
     }
 
-    private void createOnMAP(Obstacle obs, String name, GeoPoint coordinaten) {
+    private void pushObstacleToServer(final Obstacle obstacle) {
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        String jsonString = "";
+        ObjectMapper mapper = new ObjectMapper();
 
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
-        mapController.setZoom(15);
-        mapController.setCenter(coordinaten);
-
-        //BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.barrier_stairs);
-
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(coordinaten);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-        switch (obs.getName()) {
-            case "STAIRS": // stairspic
-                Stairs s = (Stairs)obs;
-                startMarker.setTitle(name+ "AMK ! : Anzahl der Sufen = "+ s.getNumberOfStairs()+" und Höhe CHOOO = "+ s.getHeightOfStairs());
-                map.invalidate();
-                startMarker.setIcon(getResources().getDrawable(R.mipmap.stairspic));
-                map.getOverlays().add(startMarker);
-
-                break;
-            case "RAMP" : // Ramp
-                Ramp ramp = (Ramp)obs;
-                startMarker.setTitle(name+ "AMK ! : Degree of Ramp = "+ ramp.getDegree());
-                map.invalidate();
-                startMarker.setIcon(getResources().getDrawable(R.mipmap.ramppic));
-                //InfoWindow infoWindow = new MyInfoWindow(R.layout.bonuspack_bubble, map);
-                //startMarker.setInfoWindow(infoWindow);
-                //  Drawable
-                //startMarker.setIcon(R.drawable.barrier_stairs);
-                map.getOverlays().add(startMarker);
-                break;
+        try {
+            jsonString = mapper.writeValueAsString(obstacle);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return;
         }
+        RequestBody body = RequestBody.create(JSON, jsonString);
 
+        OkHttpClient client = new OkHttpClient();
+
+
+        Request request = new Request.Builder()
+                .url("https://routing.vincinator.de/routing/barriers")
+                .post(body)
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, IOException e) {
+                        // Error
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this, "Fehler",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Toast.makeText(MainActivity.this, "Barriere hinzugefügt",
+                                        Toast.LENGTH_LONG).show();
+
+                                createOverlayItemOnMap(obstacle);
+                               }
+                        });
+
+                    }
+                });
+
+
+
+    }
+
+    private void createOverlayItemOnMap(Obstacle obs) {
+
+        OverlayItem overlayItem = new OverlayItem(obs.getName(), "Chabo", new GeoPoint(obs.getLongitude(), obs.getLatitude()));
+        overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+        barriersOverlay.addItem(overlayItem);
+        map.invalidate();
 
     }
 
@@ -417,13 +442,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
     }
 
-    /**
-     * Called when the user clicks the add button
-     **/
-    public void openObstacleSelection(View view) {
-        Intent intent = new Intent(this, ObstacleSelection.class);
-        startActivity(intent);
-    }
 
     public void openMapView(View view) {
         //Intent intent = new Intent(this, DisplayCard.class);
