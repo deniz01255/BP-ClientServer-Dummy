@@ -8,6 +8,7 @@ public class Stairs extends Obstacle{
     private int numberOfStairs;
     private int heightOfStairs;
     private boolean handleAvailable;
+    private int id;
 
     public Stairs(){
 
@@ -18,6 +19,7 @@ public class Stairs extends Obstacle{
         this.numberOfStairs = numberOfStairs;
         this.heightOfStairs = heightOfStairs;
         this.handleAvailable = handleAvailable;
+        this.setId(0);
     }
 
     public int getNumberOfStairs() {
@@ -43,5 +45,9 @@ public class Stairs extends Obstacle{
     public void setHandleAvailable(boolean bool) {
         this.handleAvailable = bool;
     }
+
+    public void setId(int id){this.id = id;}
+
+    public int getId(){return this.id;}
 
 }
