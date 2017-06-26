@@ -1,4 +1,7 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL;
+
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.ObstacleTypes;
 
 /**
  * Created by deniz on 24.06.17.

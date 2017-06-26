@@ -124,17 +124,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             }
         });
 
-        dispCurrentPosBUTTON.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        runMyPosition();
-                    }
-                });
-            }
-        });
+
 
     }
 
@@ -143,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             case "0" : // stairspic
 
                 View viewStairs = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_dialog_stairs, null);
-                final EditText stairAmmountStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmountH);
-                final EditText stairHeightStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmount);
+                final EditText stairAmmountStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmount);
+                final EditText stairHeightStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmountH);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 

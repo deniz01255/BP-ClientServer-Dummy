@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Stairs;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL.Stairs;
 
 public class selectionStairs extends AppCompatActivity {
 

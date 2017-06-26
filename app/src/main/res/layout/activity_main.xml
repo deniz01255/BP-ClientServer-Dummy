@@ -9,26 +9,42 @@
     tools:layout_editor_absoluteX="0dp">
 
     <org.osmdroid.views.MapView android:id="@+id/map"
-        android:layout_width="380dp"
-        android:layout_height="428dp"
-        tools:layout_editor_absoluteY="40dp"
-        tools:layout_editor_absoluteX="2dp" />
+        android:layout_width="0dp"
+        android:layout_height="383dp"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="380dp"
-        android:layout_height="38dp"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:onClick="openObstacleSelection"
         android:text="Add"
-        tools:layout_editor_absoluteY="469dp"
-        tools:layout_editor_absoluteX="2dp" />
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Spinner
         android:id="@+id/spinner2"
-        android:layout_width="385dp"
-        android:layout_height="38dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/map"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

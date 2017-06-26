@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.display;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.OkHttpAdress;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.OkHttpSendData;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacleViews.ObstacleSelection;
 
 import org.osmdroid.api.IMapController;

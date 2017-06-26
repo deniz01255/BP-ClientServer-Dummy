@@ -1,10 +1,13 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.abstacleIMPL;
+
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.Obstacle;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.obstacles.ObstacleTypes;
 
 /**
  * Created by Bi on 18.05.2017.
  * Copied by Felix on 02.06.2017
  */
-public class Stairs extends Obstacle{
+public class Stairs extends Obstacle {
     private int numberOfStairs;
     private int heightOfStairs;
     private boolean handleAvailable;
