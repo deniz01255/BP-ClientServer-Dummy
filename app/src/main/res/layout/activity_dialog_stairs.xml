@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+
+    <EditText
+        android:id="@+id/editTextStairsAmount"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0.13"
+        android:hint="Number of Stairs"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/editTextStairsAmountH"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="0.13"
+        android:hint="Height of Stairs"
+        android:inputType="numberDecimal"/>
 
 </LinearLayout>

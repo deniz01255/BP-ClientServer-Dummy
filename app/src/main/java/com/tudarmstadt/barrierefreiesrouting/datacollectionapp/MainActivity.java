@@ -98,13 +98,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
         scriptUrlString.append("http://maps.googleapis.com/maps/api/geocode/json?address=");
         addBarrierBUTTON = (Button) findViewById(R.id.button3);
-        dispCurrentPosBUTTON = (Button) findViewById(R.id.button);
+       // dispCurrentPosBUTTON = (Button) findViewById(R.id.button);
         map = (MapView) findViewById(R.id.map);
 
-        Spinner dropDownMenu = (Spinner) findViewById(R.id.planets_spinner);
+        Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner2);
         ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
         dropDownMenu.setBackground(backgroundColor);
-        dropDownMenu.setPopupBackgroundResource(R.color.popUPColorlightRed);
+       // dropDownMenu.setPopupBackgroundResource(R.color.popUPColorlightRed);
         dropDownMenu.setOnItemSelectedListener(this);
             // Create an ArrayAdapter using the string array and a default dropDownMenu layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -143,8 +143,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             case "0" : // stairspic
 
                 View viewStairs = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_dialog_stairs, null);
-                final EditText stairAmmountStairs = (EditText) viewStairs.findViewById(R.id.editText4);
-                final EditText stairHeightStairs = (EditText) viewStairs.findViewById(R.id.editText);
+                final EditText stairAmmountStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmountH);
+                final EditText stairHeightStairs = (EditText) viewStairs.findViewById(R.id.editTextStairsAmount);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
 
                 View viewRamp = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_dialog_ramp, null);
-                final EditText degree = (EditText) viewRamp.findViewById(R.id.editTextRAMP);
+                final EditText degree = (EditText) viewRamp.findViewById(R.id.editTextRamp);
 
 
                 AlertDialog.Builder builderRamp = new AlertDialog.Builder(MainActivity.this);
@@ -217,36 +217,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
                 break;
             case "2" : // Uneveness
-
-
-                View viewUneveness = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_dialog_uneveness, null);
-                final EditText sortOfUneveness = (EditText) viewUneveness.findViewById(R.id.editTextRAMP);
-
-
-                AlertDialog.Builder builderUneveness = new AlertDialog.Builder(MainActivity.this);
-
-                builderUneveness.setMessage("Barrier Ramp configuration").setView(viewUneveness).setPositiveButton("Create Barrier", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                String sortOfUnev = sortOfUneveness.getText().toString();
-                                //default test darmstadt49.8705556
-                                GeoPoint coordinaten = new GeoPoint(49.8705556,8.6494444);
-                                Uneveness uneve = new Uneveness("UNEVENESS", coordinaten.getLongitude(), coordinaten.getLatitude(), sortOfUnev,true);
-
-                                Gson gson = new Gson();
-                                Log.v("Object stairs in JSON", gson.toJson(uneve));
-
-                                createOnMAP(uneve, "UNEVENESS",coordinaten);
-
-
-
-                            }
-                        }
-                );
-                AlertDialog alertUneveness = builderUneveness.create();
-                alertUneveness.show();
-
 
                 break;
             case "3" : // Construction
@@ -432,8 +402,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
     }
 
     public void openMapView(View view) {
-        Intent intent = new Intent(this, DisplayCard.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, DisplayCard.class);
+        //startActivity(intent);
     }
 
     @Override
