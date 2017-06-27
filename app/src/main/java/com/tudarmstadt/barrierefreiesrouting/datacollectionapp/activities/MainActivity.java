@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToAttributeViewConverter;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
@@ -110,6 +111,10 @@ public class MainActivity extends AppCompatActivity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the dropDownMenu
         dropDownMenu.setAdapter(adapter);
+
+
+
+        ObstacleToAttributeViewConverter.convert(new Obstacle(), mapEditorFragment.getContext());
 
         BpServerHandler.getObstaclesFromServer(this, mapEditorFragment);
     }
