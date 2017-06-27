@@ -3,6 +3,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
+import bp.common.model.Stairs;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -83,7 +86,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
         map = (MapView) v.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setBuiltInZoomControls(true);
+        map.setBuiltInZoomControls(false);
         map.setMultiTouchControls(true);
         map.setClickable(true);
 
@@ -148,16 +151,22 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
 
+        Guideline editorTopLine = (Guideline) getActivity().findViewById(R.id.horizontalEditGuideline);
+        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
+
+        lp.guidePercent = 1f;
+        editorTopLine.setLayoutParams(lp);
+
         return false;
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
 
-        final Obstacle newObstacle = new Obstacle("Chabos wissen wo die Treppe steht", ObstacleTypes.STAIRS, p.getLongitude(), p.getLatitude()) ;
+        final Obstacle newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
 
-        if (BpServerHandler.PostNewObstacle(getActivity(), this, newObstacle))
-            return true;
+       //if (BpServerHandler.PostNewObstacle(getActivity(), this, newObstacle))
+           // return true;
 
         return false;
     }

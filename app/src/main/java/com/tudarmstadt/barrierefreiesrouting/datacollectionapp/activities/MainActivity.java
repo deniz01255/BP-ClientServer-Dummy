@@ -39,8 +39,14 @@ import org.osmdroid.views.overlay.OverlayItem;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import bp.common.model.Construction;
+import bp.common.model.Elevator;
+import bp.common.model.FastTrafficLight;
 import bp.common.model.Obstacle;
+import bp.common.model.Ramp;
 import bp.common.model.Stairs;
+import bp.common.model.TightPassage;
+import bp.common.model.Uneveness;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -59,21 +65,15 @@ public class MainActivity extends AppCompatActivity
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
     public TextView tv;
-    private BpServerHandler example;
-    private GeoPoint locationPoint;
-    private GeoPoint answer;
-    private static MapView map;
-    private LocationListener listener;
-    private LocationManager locationManager;
-    private String mprovider;
-    private ArrayList<OverlayItem> mItems;
-    private Overlay mMYLocationOverlay;
+
     private ItemizedOverlayWithFocus<OverlayItem> barriersOverlay;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
     private long selectedBarrier;
     private String barrier;
     private MapEditorFragment mapEditorFragment = null;
+    private ObstacleDetailsFragment obstacleDetailsFragment = null;
+
 
     String responseString = "";
 
@@ -90,12 +90,23 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
             mapEditorFragment = new MapEditorFragment();
-
             mapEditorFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.map_fragment_container, mapEditorFragment).commit();
+
         }
+        if (findViewById(R.id.obstacle_editor_fragment_container) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+            obstacleDetailsFragment = new ObstacleDetailsFragment();
+            obstacleDetailsFragment.setArguments(getIntent().getExtras());
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.obstacle_editor_fragment_container, obstacleDetailsFragment).commit();
+        }
+
 
         Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner2);
         ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
@@ -105,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         dropDownMenu.setOnItemSelectedListener(this);
         // Create an ArrayAdapter using the string array and a default dropDownMenu layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.planets_array, android.R.layout.simple_spinner_item);
+                R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the dropDownMenu
@@ -202,67 +213,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void pushObstacleToServer(final Obstacle obstacle) {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        String jsonString = "";
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            jsonString = mapper.writeValueAsString(obstacle);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return;
-        }
-        RequestBody body = RequestBody.create(JSON, jsonString);
-
-        OkHttpClient client = new OkHttpClient();
-
-
-        Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers")
-                .post(body)
-                .build();
-
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(final Call call, IOException e) {
-                        // Error
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this, "Fehler",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Toast.makeText(MainActivity.this, "Barriere hinzugefügt",
-                                        Toast.LENGTH_LONG).show();
-
-                                createOverlayItemOnMap(obstacle);
-                               }
-                        });
-
-                    }
-                });
-
-
-
-    }
-
     private void createOverlayItemOnMap(Obstacle obs) {
 
         OverlayItem overlayItem = new OverlayItem(obs.getName(), "Chabo", new GeoPoint(obs.getLongitude(), obs.getLatitude()));
         overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
         barriersOverlay.addItem(overlayItem);
-        map.invalidate();
 
     }
 
@@ -301,9 +256,9 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
         setChosenBarrier(id);
-        FragmentManager fragmentManager = getFragmentManager();
 
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.obstacle_editor_fragment_container, ObstacleDetailsFragment.newInstance()).commit();
 
     }
 
@@ -314,6 +269,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Obstacle getObstacle() {
-        return new Stairs();
+
+        switch(String.valueOf(selectedBarrier)){
+            case "0":
+                return new Stairs();
+            case "1":
+                return new Ramp();
+            case "2":
+                return new Uneveness();
+            case "3":
+                return new Construction();
+            case "4":
+                return new FastTrafficLight();
+            case "5":
+                return new Stairs();
+            case "6":
+                return new TightPassage();
+            default:
+                return new Stairs();
+
+        }
     }
 }

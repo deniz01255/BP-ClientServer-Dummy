@@ -23,9 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".obstacleViews.ObstacleSelection" />
-        <activity android:name=".obstacleViews.selectionStairs" />
-        <activity android:name=".activities.EditAttributesActivity"></activity>
+        <activity
+            android:name=".activities.EditAttributesActivity"></activity>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 
 /**
@@ -65,10 +66,10 @@ public class ObstacleToViewConverter {
         });
     };
 
-    public static HashMap<Field, View> convert(Obstacle obstacle, Context ctx){
+    public static HashMap<Field, View> convert(IObstacle obstacle, Context ctx){
 
 
-        Field[] fieldsOfObstacle = obstacle.getClass().getFields();
+        Field[] fieldsOfObstacle = obstacle.getClass().getDeclaredFields();
         HashMap<Field, View> mapping = new HashMap<>();
 
         for (Field f : fieldsOfObstacle ) {

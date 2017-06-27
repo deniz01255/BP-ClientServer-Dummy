@@ -13,14 +13,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToViewConverter;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+
+import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 
 public class ObstacleDetailsFragment extends Fragment {
@@ -30,6 +35,9 @@ public class ObstacleDetailsFragment extends Fragment {
 
     private LinearLayout.LayoutParams defaultParams;
 
+    private HashMap<Field, View> mapping;
+
+    private IObstacle obstacleToEdit;
 
 
     public ObstacleDetailsFragment() {
@@ -57,19 +65,49 @@ public class ObstacleDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v =  inflater.inflate(R.layout.fragment_obstacle_details, container, false);
-        Obstacle o = ((IObstacleProvider)getActivity()).getObstacle();
-
-
-        HashMap<Field, View> mapping = ObstacleToViewConverter.convert(new Obstacle(), getContext());
-
-        View pl = v.findViewById(R.id.EditViewList);
+        obstacleToEdit = ((IObstacleProvider)getActivity()).getObstacle();
         LinearLayout.LayoutParams defaultLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        View pl = v.findViewById(R.id.EditViewList);
+
+        mapping = ObstacleToViewConverter.convert( obstacleToEdit, getContext());
+
+
+        TextView heading = new TextView(getContext());
+
+        heading.setLayoutParams(defaultLinearLayoutParams);
+        heading.setText("Edit " + obstacleToEdit.getTypeName());
+
+        ((LinearLayout)pl).addView(heading);
+
+
+
+
+
+
+
         for(Map.Entry<Field, View> entry: mapping.entrySet()) {
 
             View attributeViewElement = entry.getValue();
             attributeViewElement.setLayoutParams(defaultLinearLayoutParams);
             ((LinearLayout)pl).addView(attributeViewElement);
         }
+
+        Button commitButton = new Button(getContext());
+
+        commitButton.setLayoutParams(defaultLinearLayoutParams);
+        commitButton.setText("Commit");
+
+        commitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+              // BpServerHandler.PostNewObstacle(getActivity(), this, obstacleToEdit);
+                // return true;
+
+            }
+        });
+
+        ((LinearLayout)pl).addView(commitButton);
 
 
 
@@ -104,6 +142,10 @@ public class ObstacleDetailsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    public void doShit(){
+
+    }
 
 
 }

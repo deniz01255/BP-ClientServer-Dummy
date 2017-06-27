@@ -88,8 +88,8 @@
         app:layout_constraintVertical_bias="0.941"
         app:layout_constraintTop_toTopOf="@+id/horizontalEditGuideline">
 
-        <fragment android:name="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment"
-            android:id="@+id/ObstacleDetailsContainer"
+        <FrameLayout
+            android:id="@+id/obstacle_editor_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

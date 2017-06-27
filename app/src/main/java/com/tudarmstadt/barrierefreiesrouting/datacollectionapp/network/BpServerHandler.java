@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -81,7 +82,7 @@ public  class BpServerHandler {
                     }
                 });
     }
-    public static boolean PostNewObstacle(final Activity activity, final MapEditorFragment mapEditorFragment, final Obstacle newObstacle) {
+    public static boolean PostNewObstacle(final Activity activity, final MapEditorFragment mapEditorFragment, final IObstacle newObstacle) {
         ObjectMapper mapper = new ObjectMapper();
 
         String jsonString = "";
@@ -125,9 +126,9 @@ public  class BpServerHandler {
 
                                 Toast.makeText(activity, "Barriere hinzugefügt",
                                         Toast.LENGTH_LONG).show();
-                                OverlayItem overlayItem = new OverlayItem(newObstacle.getName(), "Importierte Barriere", new GeoPoint(newObstacle.getLatitude(), newObstacle.getLongitude()));
-                                overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
-                                mapEditorFragment.mOverlay.addItem(overlayItem);
+                               // OverlayItem overlayItem = new OverlayItem(newObstacle.getName(), "Importierte Barriere", new GeoPoint(newObstacle.getLatitude(), newObstacle.getLongitude()));
+                               // overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
+                                //mapEditorFragment.mOverlay.addItem(overlayItem);
                                 mapEditorFragment.refresh();
                             }
                         });
