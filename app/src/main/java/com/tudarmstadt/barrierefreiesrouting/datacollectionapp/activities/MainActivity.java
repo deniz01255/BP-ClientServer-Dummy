@@ -1,5 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
@@ -299,6 +301,10 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
         setChosenBarrier(id);
+        FragmentManager fragmentManager = getFragmentManager();
+
+
+
     }
 
     @Override

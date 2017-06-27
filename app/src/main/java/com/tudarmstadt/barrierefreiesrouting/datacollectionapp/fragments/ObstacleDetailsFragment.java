@@ -25,9 +25,6 @@ public class ObstacleDetailsFragment extends Fragment {
     public ObstacleDetailsFragment() {
     }
 
-
-
-
     public static ObstacleDetailsFragment newInstance() {
         ObstacleDetailsFragment fragment = new ObstacleDetailsFragment();
         Bundle args = new Bundle();
