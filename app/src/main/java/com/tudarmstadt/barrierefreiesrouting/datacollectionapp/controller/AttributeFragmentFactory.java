@@ -27,7 +27,7 @@ public class AttributeFragmentFactory {
 
         TextAttributeFragment myFrag = new TextAttributeFragment();
 
-        fragTransaction.add(R.id.editor_attribute_list_container, myFrag);
+        fragTransaction.add(R.id.editor_attribute_list_container, myFrag, "My Unique Fragment TAG");
         fragTransaction.commit();
 
 

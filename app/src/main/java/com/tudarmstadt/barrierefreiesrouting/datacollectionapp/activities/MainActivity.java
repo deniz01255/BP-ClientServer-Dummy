@@ -36,14 +36,14 @@ import bp.common.model.Obstacle;
 import bp.common.model.Ramp;
 import bp.common.model.Stairs;
 import bp.common.model.TightPassage;
-import bp.common.model.Uneveness;
+import bp.common.model.Unevenness;
 
 
 public class MainActivity extends AppCompatActivity
         implements
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener
-        , IObstacleProvider{
+        , IObstacleProvider, IMapFragmentProvider{
     // variables for taken the income of the frontend
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
@@ -54,9 +54,10 @@ public class MainActivity extends AppCompatActivity
 
     private long selectedBarrier;
     private String barrier;
-    private MapEditorFragment mapEditorFragment = null;
+    private MapEditorFragment mapEditorFragment;
     private ObstacleDetailsFragment obstacleDetailsFragment = null;
 
+    public MapEditorFragment getMapEditorFragment(){ return mapEditorFragment;}
 
     String responseString = "";
 
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity
             case "1":
                 return new Ramp();
             case "2":
-                return new Uneveness();
+                return new Unevenness();
             case "3":
                 return new Construction();
             case "4":

@@ -5,13 +5,17 @@ import android.app.Activity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
+import bp.common.model.annotations.EditableAttribute;
 
 /**
  * Created by Vincent on 27.06.2017.
@@ -19,25 +23,37 @@ import bp.common.model.Stairs;
 
 public class ObstacleViewModel {
 
-    private Map<Field, ObstacleAttribute<?>> attributes = new HashMap<>();
+    private Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
 
-    public ObstacleViewModel(Map<Field, ObstacleAttribute<?>> attributes){
-        this.attributes = attributes;
+    private IObstacle mObstacleData;
+
+    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, IObstacle obstacle){
+        attributesMap = attributes;
+        mObstacleData = obstacle;
     }
-
 
     public void commit(Activity activity, MapEditorFragment mapEditorFragment){
 
-        BpServerHandler.PostNewObstacle(activity, mapEditorFragment, finalizeObstacle());
+        Field[] obstacleFields = mObstacleData.getClass().getDeclaredFields();
 
-    }
+        for (Field field : obstacleFields){
 
-    private IObstacle finalizeObstacle() {
-        Stairs stairs = new Stairs();
+            String tag = field.getAnnotation(EditableAttribute.class).value();
 
-        stairs.setLatitude(49);
-        stairs.setLongitude(8);
+            if(attributesMap.get(tag) != null){
 
-        return new Stairs();
+                try {
+                    field.set(mObstacleData, attributesMap.get(tag) );
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+
+
+        BpServerHandler.PostNewObstacle(activity, mapEditorFragment, mObstacleData);
+
     }
 }

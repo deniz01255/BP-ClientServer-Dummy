@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import bp.common.model.IObstacle;
+import bp.common.model.annotations.EditableAttribute;
 
 /**
  * Created by Vincent on 27.06.2017.
@@ -65,16 +66,16 @@ public class ObstacleToViewConverter {
         });
     };
 
-    public static HashMap<Field, ObstacleAttribute<?>> convertObstacleToAttributeMap(IObstacle obstacle, Context ctx){
+    public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(IObstacle obstacle, Context ctx){
 
 
         Field[] fieldsOfObstacle = obstacle.getClass().getDeclaredFields();
-        HashMap<Field, ObstacleAttribute<?>>  map = new HashMap<Field, ObstacleAttribute<?>>();
+        HashMap<String, ObstacleAttribute<?>>  map = new HashMap<String, ObstacleAttribute<?>>();
 
         for (Field f : fieldsOfObstacle ) {
             if(converterForClass.get(f.getType()) != null)
                 try {
-                    map.put(f, converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
+                    map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
 
 
                 } catch (IllegalAccessException e) {
