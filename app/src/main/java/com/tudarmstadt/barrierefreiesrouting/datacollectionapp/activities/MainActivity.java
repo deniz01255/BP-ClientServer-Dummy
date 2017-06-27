@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         // Apply the adapter to the dropDownMenu
         dropDownMenu.setAdapter(adapter);
 
-        getObstaclesFromServer();
+        BpServerHandler.getObstaclesFromServer(this, mapEditorFragment);
     }
 
 
@@ -289,50 +289,6 @@ public class MainActivity extends AppCompatActivity
         selectedBarrier = barrier;
     }
 
-    public void getObstaclesFromServer() {
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers")
-                .build();
-
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(final Call call, IOException e) {
-                        // Error
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        String res = response.body().string();
-                        ObjectMapper mapper = new ObjectMapper();
-                        if (!response.isSuccessful())
-                            return;
-                        final List<bp.common.model.Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<bp.common.model.Obstacle>>() {
-                        });
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (bp.common.model.Obstacle obstacle : obstacleList) {
-                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
-                                    overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-                                    mapEditorFragment.addObstacle(overlayItem);
-                                }
-                                mapEditorFragment.map.invalidate();
-                            }
-                        });
-
-                    }
-                });
-    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -343,10 +299,6 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         parent.getItemAtPosition(position);
         setChosenBarrier(id);
-        //Open dioalog window with input
-        //   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        // ID ist absteigend von 0 - n von den Elementen
     }
 
     @Override

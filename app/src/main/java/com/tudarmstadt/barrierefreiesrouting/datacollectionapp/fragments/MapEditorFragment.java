@@ -31,6 +31,8 @@ import bp.common.model.Obstacle;
 import bp.common.model.ObstacleTypes;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -150,62 +152,16 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonString = "";
 
         final Obstacle newObstacle = new Obstacle("Chabos wissen wo die Treppe steht", ObstacleTypes.STAIRS, p.getLongitude(), p.getLatitude()) ;
 
-        try {
-            jsonString = mapper.writeValueAsString(newObstacle);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return false;
-        }
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, jsonString);
+        if (BpServerHandler.PostNewObstacle(getActivity(), this, newObstacle))
+            return true;
 
-
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers")
-                .post(body)
-                .build();
-
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(final Call call, IOException e) {
-                        // Error
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), "Fehler",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Toast.makeText(getActivity(), "Barriere hinzugefügt",
-                                        Toast.LENGTH_LONG).show();
-                                OverlayItem overlayItem = new OverlayItem(newObstacle.getName(), "Importierte Barriere", new GeoPoint(newObstacle.getLatitude(), newObstacle.getLongitude()));
-                                overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-                                mOverlay.addItem(overlayItem);
-                                refresh();
-                            }
-                        });
-
-                    }
-                });
         return false;
     }
+
+
 
     public void addObstacle(OverlayItem overlayItem) {
         mOverlay.addItem(overlayItem);
