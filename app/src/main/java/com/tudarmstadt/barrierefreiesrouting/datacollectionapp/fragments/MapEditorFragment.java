@@ -58,17 +58,18 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public MapEditorFragment() {
     }
 
-    public static MapEditorFragment newInstance() {
+    public static MapEditorFragment newInstance(Obstacle obs) {
         MapEditorFragment fragment = new MapEditorFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 

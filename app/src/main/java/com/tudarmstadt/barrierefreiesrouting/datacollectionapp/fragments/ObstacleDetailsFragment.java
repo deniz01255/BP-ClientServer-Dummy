@@ -14,6 +14,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToViewConverter;
+
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import bp.common.model.Obstacle;
 
 public class ObstacleDetailsFragment extends Fragment {
 
@@ -21,6 +29,7 @@ public class ObstacleDetailsFragment extends Fragment {
     private LinearLayout myLayout;
 
     private LinearLayout.LayoutParams defaultParams;
+
 
 
     public ObstacleDetailsFragment() {
@@ -48,13 +57,20 @@ public class ObstacleDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v =  inflater.inflate(R.layout.fragment_obstacle_details, container, false);
+        Obstacle o = ((IObstacleProvider)getActivity()).getObstacle();
 
+
+        HashMap<Field, View> mapping = ObstacleToViewConverter.convert(new Obstacle(), getContext());
 
         View pl = v.findViewById(R.id.EditViewList);
-        TextView Paper = new TextView(pl.getContext());
-        Paper.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        Paper.setText("Inserted TestText");
-        ((LinearLayout)pl).addView(Paper);
+        LinearLayout.LayoutParams defaultLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        for(Map.Entry<Field, View> entry: mapping.entrySet()) {
+
+            View attributeViewElement = entry.getValue();
+            attributeViewElement.setLayoutParams(defaultLinearLayoutParams);
+            ((LinearLayout)pl).addView(attributeViewElement);
+        }
+
 
 
         return v;

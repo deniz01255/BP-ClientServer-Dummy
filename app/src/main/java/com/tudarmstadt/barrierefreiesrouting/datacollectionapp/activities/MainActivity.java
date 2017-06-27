@@ -1,7 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
@@ -23,10 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToAttributeViewConverter;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
@@ -40,7 +38,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
@@ -52,10 +49,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler.PostNewObstacle;
+
 
 public class MainActivity extends AppCompatActivity
-        implements AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener {
-
+        implements AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener
+        , IObstacleProvider{
     // variables for taken the income of the frontend
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
@@ -113,9 +112,6 @@ public class MainActivity extends AppCompatActivity
         dropDownMenu.setAdapter(adapter);
 
 
-
-        ObstacleToAttributeViewConverter.convert(new Obstacle(), mapEditorFragment.getContext());
-
         BpServerHandler.getObstaclesFromServer(this, mapEditorFragment);
     }
 
@@ -146,8 +142,7 @@ public class MainActivity extends AppCompatActivity
 
                             stairs.setNumberOfStairs(number);
                             stairs.setHandleAvailable(true);
-
-                            pushObstacleToServer(stairs);
+                             //PostNewObstacle((Activity) MainActivity.class, mapEditorFragment, stairs);
                             createOverlayItemOnMap(stairs);
                             
                             }
@@ -317,4 +312,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public Obstacle getObstacle() {
+        return new Stairs();
+    }
 }
