@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragements;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
@@ -126,6 +129,9 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
 
+
+
+
         v.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         return v;
@@ -154,7 +160,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         Guideline editorTopLine = (Guideline) getActivity().findViewById(R.id.horizontalEditGuideline);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
 
-        lp.guidePercent = 1f;
+        lp.guidePercent = 0.9f;
         editorTopLine.setLayoutParams(lp);
 
         return false;

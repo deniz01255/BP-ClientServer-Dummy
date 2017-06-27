@@ -1,16 +1,13 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.text.Layout;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -19,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import bp.common.model.IObstacle;
-import bp.common.model.Obstacle;
 
 /**
  * Created by Vincent on 27.06.2017.
@@ -28,80 +24,65 @@ import bp.common.model.Obstacle;
 public class ObstacleToViewConverter {
 
     interface Converter {
-        View convert(IObstacle obstacle, Context ctx);
+        ObstacleAttribute<?> convert(Object value, Context ctx);
     }
-    private static Map<Class,Converter> converterForClass = new HashMap<>();
+    private static Map<Class, Converter> converterForClass = new HashMap<>();
 
     static {
         converterForClass.put(Long.TYPE, new Converter() {
             @Override
-            public View convert(IObstacle obstacle, Context ctx) {
+            public ObstacleAttribute<?> convert(Object value, Context ctx) {
 
-                EditText editText = new EditText(ctx);
-                editText.setText("Long");
-                return editText;
+                ObstacleAttribute<Long> oa = new ObstacleAttribute<Long>();
+                oa.value = (Long) value;
+                return oa;
             }
         });
         converterForClass.put(Integer.TYPE, new Converter() {
             @Override
-            public View convert(IObstacle obstacle, Context ctx) {
-
-                EditText editText = new EditText(ctx);
-                editText.setText("Integer");
-                return editText;
+            public ObstacleAttribute<?> convert(Object value, Context ctx) {
+                ObstacleAttribute<Integer> oa = new ObstacleAttribute<Integer>();
+                oa.value = (Integer) value;
+                return oa;
             }
         });
         converterForClass.put(Double.TYPE, new Converter() {
             @Override
-            public View convert(IObstacle obstacle, Context ctx) {
+            public ObstacleAttribute<?> convert(Object value, Context ctx) {
+                ObstacleAttribute<Double> oa = new ObstacleAttribute<Double>();
+                oa.value = (Double) value;
+                return oa;
 
-                TextView label = new TextView(ctx);
-                label.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                label.setGravity(Gravity.LEFT);
-                label.setText("Double Input");
-
-                EditText editText = new EditText(ctx);
-                editText.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                editText.setGravity(Gravity.RIGHT);
-                editText.setText("......");
-
-                LinearLayout rowLayout = new LinearLayout(ctx);
-
-                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-                rowLayout.addView(label);
-                rowLayout.addView(editText);
-
-                return rowLayout;
             }
         });
         converterForClass.put(String.class, new Converter() {
             @Override
-            public View convert(IObstacle obstacle, Context ctx) {
-
-                EditText editText = new EditText(ctx);
-                editText.setText("String");
-                return editText;
+            public ObstacleAttribute<?> convert(Object value, Context ctx) {
+                ObstacleAttribute<String> oa = new ObstacleAttribute<String>();
+                oa.value = (String) value;
+                return oa;
             }
         });
     };
 
-    public static HashMap<Field, View> convert(IObstacle obstacle, Context ctx){
+    public static HashMap<Field, ObstacleAttribute<?>> convertObstacleToAttributeMap(IObstacle obstacle, Context ctx){
 
 
         Field[] fieldsOfObstacle = obstacle.getClass().getDeclaredFields();
-        HashMap<Field, View> mapping = new HashMap<>();
+        HashMap<Field, ObstacleAttribute<?>>  map = new HashMap<Field, ObstacleAttribute<?>>();
 
         for (Field f : fieldsOfObstacle ) {
             if(converterForClass.get(f.getType()) != null)
-                mapping.put(f, converterForClass.get(f.getType()).convert(obstacle, ctx));
+                try {
+                    map.put(f, converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
 
+
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
         }
 
-        return mapping;
+        return map;
     }
 
 

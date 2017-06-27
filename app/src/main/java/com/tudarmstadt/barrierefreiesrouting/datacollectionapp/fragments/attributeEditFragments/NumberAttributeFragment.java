@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,34 +7,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
-import org.w3c.dom.Text;
-
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragements;
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DefaultEditorFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DefaultEditorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DefaultEditorFragment extends Fragment {
+public class NumberAttributeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public DefaultEditorFragment() {
+    public NumberAttributeFragment() {
         // Required empty public constructor
     }
 
-    public static DefaultEditorFragment newInstance() {
-        DefaultEditorFragment fragment = new DefaultEditorFragment();
+    // TODO: Rename and change types and number of parameters
+    public static NumberAttributeFragment newInstance() {
+        NumberAttributeFragment fragment = new NumberAttributeFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -50,19 +36,11 @@ public class DefaultEditorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        TextView textView = (TextView) getActivity().findViewById(R.id.default_editor_textview);
-
-
-        textView.setText("Longpress on the Map to Add a new Barrier");
-
-
-
-        return inflater.inflate(R.layout.fragment_default_editor, container, false);
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_number_attribute, container, false);
     }
 
-
-
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -85,6 +63,7 @@ public class DefaultEditorFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
