@@ -1,9 +1,14 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
 
 import android.content.Context;
+import android.text.Layout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
@@ -23,14 +28,14 @@ import bp.common.model.Obstacle;
 public class ObstacleToViewConverter {
 
     interface Converter {
-        View convert(Context ctx);
+        View convert(IObstacle obstacle, Context ctx);
     }
     private static Map<Class,Converter> converterForClass = new HashMap<>();
 
     static {
         converterForClass.put(Long.TYPE, new Converter() {
             @Override
-            public View convert(Context ctx) {
+            public View convert(IObstacle obstacle, Context ctx) {
 
                 EditText editText = new EditText(ctx);
                 editText.setText("Long");
@@ -39,7 +44,7 @@ public class ObstacleToViewConverter {
         });
         converterForClass.put(Integer.TYPE, new Converter() {
             @Override
-            public View convert(Context ctx) {
+            public View convert(IObstacle obstacle, Context ctx) {
 
                 EditText editText = new EditText(ctx);
                 editText.setText("Integer");
@@ -48,16 +53,34 @@ public class ObstacleToViewConverter {
         });
         converterForClass.put(Double.TYPE, new Converter() {
             @Override
-            public View convert(Context ctx) {
+            public View convert(IObstacle obstacle, Context ctx) {
+
+                TextView label = new TextView(ctx);
+                label.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                label.setGravity(Gravity.LEFT);
+                label.setText("Double Input");
 
                 EditText editText = new EditText(ctx);
-                editText.setText("Double");
-                return editText;
+                editText.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                editText.setGravity(Gravity.RIGHT);
+                editText.setText("......");
+
+                LinearLayout rowLayout = new LinearLayout(ctx);
+
+                rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+                rowLayout.addView(label);
+                rowLayout.addView(editText);
+
+                return rowLayout;
             }
         });
         converterForClass.put(String.class, new Converter() {
             @Override
-            public View convert(Context ctx) {
+            public View convert(IObstacle obstacle, Context ctx) {
 
                 EditText editText = new EditText(ctx);
                 editText.setText("String");
@@ -74,7 +97,7 @@ public class ObstacleToViewConverter {
 
         for (Field f : fieldsOfObstacle ) {
             if(converterForClass.get(f.getType()) != null)
-                mapping.put(f, converterForClass.get(f.getType()).convert(ctx));
+                mapping.put(f, converterForClass.get(f.getType()).convert(obstacle, ctx));
 
         }
 

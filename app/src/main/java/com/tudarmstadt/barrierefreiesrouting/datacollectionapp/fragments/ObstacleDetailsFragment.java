@@ -79,12 +79,6 @@ public class ObstacleDetailsFragment extends Fragment {
 
         ((LinearLayout)pl).addView(heading);
 
-
-
-
-
-
-
         for(Map.Entry<Field, View> entry: mapping.entrySet()) {
 
             View attributeViewElement = entry.getValue();
