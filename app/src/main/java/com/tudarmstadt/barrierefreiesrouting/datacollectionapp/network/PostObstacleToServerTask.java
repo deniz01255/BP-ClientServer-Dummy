@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 
 import org.json.JSONArray;
@@ -36,53 +37,21 @@ import org.osmdroid.views.overlay.OverlayItem;
 /**
  * Created by deniz on 12.05.17.
  */
-public  class BpServerHandler {
+public class DownloadObstaclesTask extends AsyncTask<IObstacle, Void, Void> {
 
-    public static void getObstaclesFromServer(final Activity activity, final MapEditorFragment mapEditorFragment) {
-        OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers")
-                .build();
+    private MainActivity activity; //activity is defined as a global variable in your AsyncTask
 
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(final Call call, IOException e) {
-                        // Error
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        String res = response.body().string();
-                        ObjectMapper mapper = new ObjectMapper();
-                        if (!response.isSuccessful())
-                            return;
-                        final List<bp.common.model.Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<bp.common.model.Obstacle>>() {
-                        });
-
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (bp.common.model.Obstacle obstacle : obstacleList) {
-                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
-                                    overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
-                                    mapEditorFragment.addObstacle(overlayItem);
-                                }
-                                mapEditorFragment.map.invalidate();
-                            }
-                        });
-
-                    }
-                });
+    public DownloadObstaclesTask(MainActivity a) {
+        activity = a;
     }
-    public static boolean PostNewObstacle(final Activity activity, final MapEditorFragment mapEditorFragment, final IObstacle newObstacle) {
+
+
+    public void getObstaclesFromServer() {
+
+    }
+
+    public boolean PostNewObstacle(IObstacle newObstacle) {
         ObjectMapper mapper = new ObjectMapper();
 
         String jsonString = "";
@@ -126,16 +95,63 @@ public  class BpServerHandler {
 
                                 Toast.makeText(activity, "Barriere hinzugefügt",
                                         Toast.LENGTH_LONG).show();
-                               // OverlayItem overlayItem = new OverlayItem(newObstacle.getName(), "Importierte Barriere", new GeoPoint(newObstacle.getLatitude(), newObstacle.getLongitude()));
-                               // overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
+                                // OverlayItem overlayItem = new OverlayItem(newObstacle.getName(), "Importierte Barriere", new GeoPoint(newObstacle.getLatitude(), newObstacle.getLongitude()));
+                                // overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
                                 //mapEditorFragment.mOverlay.addItem(overlayItem);
-                                mapEditorFragment.refresh();
+                                activity.getMapEditorFragment().refresh();
                             }
                         });
 
                     }
                 });
         return false;
+    }
+
+
+    @Override
+    protected Void doInBackground(IObstacle... params) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://routing.vincinator.de/routing/barriers")
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, IOException e) {
+                        // Error
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    }
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        String res = response.body().string();
+                        ObjectMapper mapper = new ObjectMapper();
+                        if (!response.isSuccessful())
+                            return;
+                        final List<IObstacle> obstacleList = mapper.readValue(res, new TypeReference<List<IObstacle>>() {
+                        });
+
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (IObstacle obstacle : obstacleList) {
+                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                                    overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
+                                    activity.getMapEditorFragment().addObstacle(overlayItem);
+                                }
+                                activity.getMapEditorFragment().refresh();
+
+                            }
+                        });
+
+                    }
+                });
     }
 
 
