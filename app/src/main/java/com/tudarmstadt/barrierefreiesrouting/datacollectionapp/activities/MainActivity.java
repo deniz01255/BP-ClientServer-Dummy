@@ -1,25 +1,15 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Guideline;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,19 +24,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.util.constants.MapViewConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +50,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-public class MainActivity extends AppCompatActivity implements LocationListener, MapViewConstants, AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener {
 
     // variables for taken the income of the frontend
     private EditText et;
@@ -83,83 +71,45 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     private long selectedBarrier;
     private String barrier;
-
+    private MapEditorFragment mapEditorFragment = null;
 
     String responseString = "";
 
-    // final string because of using server-Address always the same.
-    final StringBuilder scriptUrlString = new StringBuilder();//"http://api.openstreetmap.org/api/0.6/trackpoints?bbox=0,51.5,0.25,51.75&page=0";
+    final StringBuilder scriptUrlString = new StringBuilder();
 
-    /**
-     * Method is always created automatically by Developing environment, setting up an interactive Gui connected to backend
-     * <p>
-     * Function of method on Create(Bundle): - connecting attributes to buttons on our surface
-     * - add ONE ButtonClickListener for sending message to Server -> calling method sendToServer
-     * [Checks always first for an Internet connection before sending to Server]
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        scriptUrlString.append("http://maps.googleapis.com/maps/api/geocode/json?address=");
-        addBarrierBUTTON = (Button) findViewById(R.id.button3);
-       // dispCurrentPosBUTTON = (Button) findViewById(R.id.button);
-        map = (MapView) findViewById(R.id.map);
-        GeoPoint startPoint = new GeoPoint(49.8728, 8.6512);
-        IMapController mapController = map.getController();
-        mapController.setCenter(startPoint);
+        if (findViewById(R.id.map_fragment_container) != null) {
 
-        map.getController().setZoom(18);
+            if (savedInstanceState != null) {
+                return;
+            }
+            mapEditorFragment = new MapEditorFragment();
+
+            mapEditorFragment.setArguments(getIntent().getExtras());
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.map_fragment_container, mapEditorFragment).commit();
+        }
 
         Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner2);
         ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
+
         dropDownMenu.setBackground(backgroundColor);
-       // dropDownMenu.setPopupBackgroundResource(R.color.popUPColorlightRed);
+        // dropDownMenu.setPopupBackgroundResource(R.color.popUPColorlightRed);
         dropDownMenu.setOnItemSelectedListener(this);
-            // Create an ArrayAdapter using the string array and a default dropDownMenu layout
+        // Create an ArrayAdapter using the string array and a default dropDownMenu layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
-            // Specify the layout to use when the list of choices appears
+        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the dropDownMenu
+        // Apply the adapter to the dropDownMenu
         dropDownMenu.setAdapter(adapter);
 
-        final MainActivity mainActivity = this;
-
-        addBarrierBUTTON.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Guideline horizontalEditGuideline = (Guideline) findViewById(R.id.horizontalEditGuideline);
-                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) horizontalEditGuideline.getLayoutParams();
-                lp.guidePercent = 0.5f;
-
-                horizontalEditGuideline.setLayoutParams(lp);
-            }
-        });
-
-        barriersOverlay = new ItemizedOverlayWithFocus<>(this, items,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        return false;
-                    }
-                });
-
-
-        barriersOverlay.setFocusItemsOnTap(true);
-        map.getOverlays().add(barriersOverlay);
-
         getObstaclesFromServer();
-        map.invalidate();
     }
 
 
@@ -314,112 +264,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
 
     }
 
-    private void runMyPosition() {
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        Criteria criteria = new Criteria();
-
-        mprovider = locationManager.getBestProvider(criteria, false);
-
-        if (mprovider != null && !mprovider.equals("")) {
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            Location location = locationManager.getLastKnownLocation(mprovider);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, MainActivity.this);
-            //locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
-
-
-            if (location != null) {
-                onLocationChanged(location);
-            } else {
-            }
-
-
-        }
-    }
-
-    private void printMYLOG(String barrier) {
-        Log.d("Selection of Barrier", barrier);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        locationPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-        IMapController mapController = map.getController();
-        mapController.setZoom(15);
-        mapController.setCenter(locationPoint);
-
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(new GeoPoint(location.getLatitude(), location.getLongitude()));
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, 1.0f);
-        //InfoWindow infoWindow = new MyInfoWindow(R.layout.bonuspack_bubble, map);
-        //startMarker.setInfoWindow(infoWindow);
-        map.getOverlays().add(startMarker);
-        // startMarker.setTitle("Barrier-Type: stairspic\n Ammount of stairspic = "+ stairs.getNumberOfStairs()+"\n Heigth of stairspic: "+stairs.getHeightOfStairs());
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    public boolean internetAvailable() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
-    public static MapView getMap() {
-        return map;
-    }
-
-
     public void onResume() {
         super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
+
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        Context context = getApplicationContext();
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+
+        if (mapEditorFragment != null && mapEditorFragment.mLocationOverlay != null) {
+            mapEditorFragment.mLocationOverlay.enableMyLocation();
+            mapEditorFragment.mLocationOverlay.enableFollowLocation();
+        }
     }
-
-
-    public void openMapView(View view) {
-        //Intent intent = new Intent(this, DisplayCard.class);
-        //startActivity(intent);
-    }
-
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        parent.getItemAtPosition(position);
-        Log.d("MyApp", String.valueOf(id));
-        setChosenBarrier(id);
-            //Open dioalog window with input
-            //   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-             // ID ist absteigend von 0 - n von den Elementen
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    protected void onPause() {
+        super.onPause();
+        if (mapEditorFragment != null && mapEditorFragment.mLocationOverlay != null) {
+            mapEditorFragment.mLocationOverlay.disableMyLocation();
+            mapEditorFragment.mLocationOverlay.disableFollowLocation();
+        }
     }
 
     public void setChosenBarrier(long barrier){
@@ -461,14 +324,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                                 for (bp.common.model.Obstacle obstacle : obstacleList) {
                                     OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                     overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-                                    barriersOverlay.addItem(overlayItem);
+                                    mapEditorFragment.addObstacle(overlayItem);
                                 }
-                                map.invalidate();
+                                mapEditorFragment.map.invalidate();
                             }
                         });
 
                     }
                 });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        parent.getItemAtPosition(position);
+        setChosenBarrier(id);
+        //Open dioalog window with input
+        //   AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // ID ist absteigend von 0 - n von den Elementen
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
 }

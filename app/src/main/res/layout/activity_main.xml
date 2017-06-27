@@ -28,7 +28,26 @@
         tools:layout_constraintRight_creator="1"
         app:layout_constraintVertical_bias="0.0" />
 
-    <org.osmdroid.views.MapView
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        android:background="#d81cff07"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalEditGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1"
+        app:layout_constraintVertical_bias="0.0"  />
+
+   <!-- <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -44,7 +63,7 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintTop_creator="1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0" /> -->
 
 
         <android.support.constraint.Guideline
@@ -69,17 +88,11 @@
         app:layout_constraintVertical_bias="0.941"
         app:layout_constraintTop_toTopOf="@+id/horizontalEditGuideline">
 
-        <LinearLayout
+        <fragment android:name="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment"
+            android:id="@+id/ObstacleDetailsContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Button" />
-        </LinearLayout>
     </ScrollView>
 
     <android.support.constraint.Guideline

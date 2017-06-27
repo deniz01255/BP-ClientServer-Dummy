@@ -50,20 +50,6 @@ public class ObstacleDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        myLayout = (LinearLayout) getActivity().findViewById(R.id.EditViewList);
-
-
-        defaultParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-
-        defaultParams.setMargins(0, 40, 0, 40);
-
-        addEditText();
-        addCheckbox();
-        addButton();
-
 
         return inflater.inflate(R.layout.fragment_obstacle_details, container, false);
     }
@@ -98,35 +84,4 @@ public class ObstacleDetailsFragment extends Fragment {
 
 
 
-    public void addCheckbox(){
-        CheckBox myCheckbox = new CheckBox(getActivity());
-
-        myCheckbox.setLayoutParams(defaultParams);
-
-        myCheckbox.setText("Checkbox");
-        myLayout.addView(myCheckbox);
-
-    }
-
-
-    public void addEditText(){
-
-        EditText myEditText = new EditText( getActivity());
-
-        myEditText.setLayoutParams(defaultParams);
-
-        myEditText.setText("Text Edit");
-
-        myLayout.addView(myEditText);
-    }
-
-    public void addButton(){
-
-        Button myButton = new Button(getActivity());
-        myButton.setLayoutParams(defaultParams);
-
-        myButton.setText("Button");
-
-        myLayout.addView(myButton);
-    }
 }

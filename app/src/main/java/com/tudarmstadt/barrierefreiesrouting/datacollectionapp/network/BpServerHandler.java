@@ -41,9 +41,6 @@ public  class BpServerHandler extends AsyncTask<Object, Void, GeoPoint> {
         this.addr = address;
     }
 
-
-
-
     @Override
     protected GeoPoint doInBackground(Object... params) {
         try {
