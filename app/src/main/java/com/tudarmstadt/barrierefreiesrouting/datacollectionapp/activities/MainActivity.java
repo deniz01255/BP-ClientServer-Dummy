@@ -15,6 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Guideline;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -132,7 +133,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             @Override
             public void onClick(View v) {
 
+                Guideline horizontalEditGuideline = (Guideline) findViewById(R.id.horizontalEditGuideline);
+                ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) horizontalEditGuideline.getLayoutParams();
+                lp.guidePercent = 0.5f;
 
+                horizontalEditGuideline.setLayoutParams(lp);
             }
         });
 
