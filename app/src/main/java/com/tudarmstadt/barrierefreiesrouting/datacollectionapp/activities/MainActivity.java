@@ -1,8 +1,9 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
@@ -13,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
 import org.osmdroid.api.IMapController;
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
             @Override
             public void onClick(View v) {
 
-                makeMYDialog();
+
             }
         });
 
@@ -170,22 +173,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener,
                 builder.setMessage("Barrier stair configuration").setView(viewStairs).setPositiveButton("Create Barrier", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                            /**locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                             Criteria criteria = new Criteria();
-                             mprovider = locationManager.getBestProvider(criteria, false);
-                             if (mprovider != null && !mprovider.equals("")) {
-                             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                             return;
-                             }
-                             Location location = locationManager.getLastKnownLocation(mprovider);
-                             **/
 
                             int height = Integer.parseInt(stairHeightStairs.getText().toString());
                             int number = Integer.parseInt(stairAmmountStairs.getText().toString());
-                            //default test darmstadt49.8705556
+
                             GeoPoint coordinaten = new GeoPoint(49.8705556,8.6494444);
                             Stairs stairs = new Stairs();
-
                             stairs.setLongitude(coordinaten.getLongitude());
                             stairs.setLatitude(coordinaten.getLatitude());
 
