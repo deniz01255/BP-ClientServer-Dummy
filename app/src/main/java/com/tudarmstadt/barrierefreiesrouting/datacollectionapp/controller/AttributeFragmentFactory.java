@@ -5,14 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.DefaultEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.TextAttributeFragment;
 
 import java.util.Map;
-
-import bp.common.model.IObstacle;
 
 
 /**
@@ -21,7 +18,6 @@ import bp.common.model.IObstacle;
 
 public class AttributeFragmentFactory {
     private static final int CONTENT_VIEW_ID = 10101010;
-
 
     public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel){
 
