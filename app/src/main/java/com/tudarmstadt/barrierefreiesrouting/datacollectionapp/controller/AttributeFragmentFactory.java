@@ -6,7 +6,11 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.DefaultEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.CheckBoxAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.TextAttributeFragment;
+
+import java.util.Map;
 
 import bp.common.model.IObstacle;
 
@@ -19,21 +23,33 @@ public class AttributeFragmentFactory {
     private static final int CONTENT_VIEW_ID = 10101010;
 
 
-    public static void insertAttributeFragements(Fragment fragment, ObstacleViewModel obstacleViewModel){
+    public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel){
 
+        Map<String, ObstacleAttribute<?>> obstacle = obstacleViewModel.attributesMap;
+        for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet())
+        {
+            // TODO: PASS Label Names
 
-        FragmentManager fragMan = fragment.getFragmentManager();
-        FragmentTransaction fragTransaction = fragMan.beginTransaction();
-
-        TextAttributeFragment myFrag = new TextAttributeFragment();
-
-        fragTransaction.add(R.id.editor_attribute_list_container, myFrag, "My Unique Fragment TAG");
-        fragTransaction.commit();
-
-
-
-
+            if(entry.getValue().typeParameterClass == Double.TYPE){
+                CommitFragment(fragment,new NumberAttributeFragment(), entry.getKey());
+            }
+            else if(entry.getValue().typeParameterClass == Integer.TYPE){
+                CommitFragment(fragment,new NumberAttributeFragment(), entry.getKey());
+            }
+            else if(entry.getValue().typeParameterClass == String.class){
+                CommitFragment(fragment,new TextAttributeFragment(), entry.getKey());
+            }
+            else if(entry.getValue().typeParameterClass == Boolean.TYPE){
+                CommitFragment(fragment,new CheckBoxAttributeFragment(), entry.getKey());
+            }
+        }
     }
 
+    private static void CommitFragment(Fragment parentFragment, Fragment newFragment ,String tag) {
+        FragmentManager fragMan = parentFragment.getFragmentManager();
+        FragmentTransaction fragTransaction = fragMan.beginTransaction();
+        fragTransaction.add(R.id.editor_attribute_list_container, newFragment, tag);
+        fragTransaction.commit();
+    }
 
 }

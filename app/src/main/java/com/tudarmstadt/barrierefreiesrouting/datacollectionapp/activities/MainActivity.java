@@ -16,34 +16,49 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.CheckBoxAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import bp.common.model.Construction;
+import bp.common.model.Elevator;
 import bp.common.model.FastTrafficLight;
 import bp.common.model.Obstacle;
 import bp.common.model.Ramp;
 import bp.common.model.Stairs;
 import bp.common.model.TightPassage;
 import bp.common.model.Unevenness;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity
         implements
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
-        TextAttributeFragment.OnFragmentInteractionListener
-        , IObstacleProvider, IMapFragmentProvider{
+        TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
+        , IObstacleProvider, IMapFragmentProvider {
     // variables for taken the income of the frontend
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
@@ -106,8 +121,7 @@ public class MainActivity extends AppCompatActivity
         // Apply the adapter to the dropDownMenu
         dropDownMenu.setAdapter(adapter);
 
-
-        BpServerHandler.getObstaclesFromServer(this, mapEditorFragment);
+        getObstaclesFromServer();
     }
 
 
@@ -186,7 +200,7 @@ public class MainActivity extends AppCompatActivity
             case "4":
                 return new FastTrafficLight();
             case "5":
-                return new Stairs();
+                return new Elevator("test",0,9,"1","5");
             case "6":
                 return new TightPassage();
             default:
@@ -194,4 +208,72 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+    public void getObstaclesFromServer() {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://routing.vincinator.de/routing/barriers")
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(final Call call, IOException e) {
+                        // Error
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, final Response response) throws IOException {
+                        String res = response.body().string();
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<Obstacle> obstacleList = new LinkedList<Obstacle>();
+                        if (!response.isSuccessful())
+                            return;
+
+                        try{
+                           // obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {});
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+
+
+                        final List<Obstacle> finalObstacleList = obstacleList;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (Obstacle obstacle : finalObstacleList) {
+                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                                    overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                                    mapEditorFragment.mOverlay.addItem(overlayItem);
+
+                                }
+                                Toast.makeText(getBaseContext(), "Barriers loaded",
+                                        Toast.LENGTH_LONG).show();
+                                mapEditorFragment.map.invalidate();
+                            }
+                        });
+
+                    }
+                });
+    }
+
+    public void processDownloadedObstacles(List<Obstacle> obstacles) {
+
+        for (Obstacle obstacle : obstacles) {
+            OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+            overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+            getMapEditorFragment().addObstacle(overlayItem);
+        }
+        getMapEditorFragment().refresh();
+    }
+
+
+
 }

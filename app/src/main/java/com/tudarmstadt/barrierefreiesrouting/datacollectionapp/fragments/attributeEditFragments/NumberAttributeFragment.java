@@ -19,7 +19,7 @@ public class NumberAttributeFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static NumberAttributeFragment newInstance() {
+    public static NumberAttributeFragment newInstance(String label) {
         NumberAttributeFragment fragment = new NumberAttributeFragment();
         Bundle args = new Bundle();
 

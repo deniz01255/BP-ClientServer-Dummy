@@ -8,33 +8,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.IMapFragmentProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.IObstacleProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToViewConverter;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Map;
 
-
-import javax.xml.datatype.Duration;
 
 import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
 
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragements;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
 public class ObstacleDetailsFragment extends Fragment  {
@@ -46,7 +39,7 @@ public class ObstacleDetailsFragment extends Fragment  {
 
     private HashMap<Field, View> mapping;
 
-    private IObstacle obstacleToEdit;
+    private Obstacle obstacleToEdit;
 
     private ObstacleViewModel obstacleViewModel;
 
@@ -76,12 +69,12 @@ public class ObstacleDetailsFragment extends Fragment  {
                              Bundle savedInstanceState) {
 
         View v =  inflater.inflate(R.layout.fragment_obstacle_details, container, false);
+
         obstacleToEdit = ((IObstacleProvider)getActivity()).getObstacle();
-        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getContext()), obstacleToEdit);
 
+        LinearLayout.LayoutParams defaultLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams commitButtonLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-
-        LinearLayout.LayoutParams defaultLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         View pl = v.findViewById(R.id.editor_attribute_list_container);
 
         TextView heading = new TextView(getContext());
@@ -92,19 +85,23 @@ public class ObstacleDetailsFragment extends Fragment  {
         // Heading at the Top
         ((LinearLayout)pl).addView(heading);
 
+
+        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getContext()), obstacleToEdit);
+
+
         // Edit Fragments between heading and Commit Button
-        insertAttributeFragements(this, obstacleViewModel);
+        insertAttributeFragments(this, obstacleViewModel);
 
 
         Button commitButton = new Button(getContext());
-
-        commitButton.setLayoutParams(defaultLinearLayoutParams);
+        commitButton.setLayoutParams(commitButtonLinearLayoutParams);
         commitButton.setText("Commit");
+
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                obstacleViewModel.commit(getActivity(), ((IMapFragmentProvider) getActivity()).getMapEditorFragment());
+                //obstacleViewModel.commit(getActivity(), ((IMapFragmentProvider) getActivity()).getMapEditorFragment());
                 Toast.makeText(getContext(), "Obstacle saved", Toast.LENGTH_LONG);
              }
         });

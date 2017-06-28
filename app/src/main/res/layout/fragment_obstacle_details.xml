@@ -14,6 +14,8 @@
             tools:context="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.EditAttributesActivity"
             android:orientation="vertical">
 
+
+
         </LinearLayout>
 
 </FrameLayout>

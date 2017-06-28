@@ -10,10 +10,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -27,25 +23,14 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import bp.common.model.Obstacle;
-import bp.common.model.ObstacleTypes;
+
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
 
 import bp.common.model.Stairs;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragements;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
@@ -130,8 +115,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         map.getOverlays().add(mOverlay);
 
 
-
-
         v.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         return v;
@@ -171,7 +154,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
         final Obstacle newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
 
-       //if (BpServerHandler.PostNewObstacle(getActivity(), this, newObstacle))
+       //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
            // return true;
 
         return false;
@@ -191,4 +174,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         map.invalidate();
 
     }
+
+
 }

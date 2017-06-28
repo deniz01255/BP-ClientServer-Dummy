@@ -2,19 +2,17 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
 
 import android.app.Activity;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.BpServerHandler;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
 
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
-import bp.common.model.Stairs;
 import bp.common.model.annotations.EditableAttribute;
 
 /**
@@ -23,11 +21,11 @@ import bp.common.model.annotations.EditableAttribute;
 
 public class ObstacleViewModel {
 
-    private Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
+    public Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
 
-    private IObstacle mObstacleData;
+    private Obstacle mObstacleData;
 
-    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, IObstacle obstacle){
+    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, Obstacle obstacle){
         attributesMap = attributes;
         mObstacleData = obstacle;
     }
@@ -50,10 +48,13 @@ public class ObstacleViewModel {
 
             }
         }
+        PostObstacleToServerTask postObstacleToServerTask = new PostObstacleToServerTask((MainActivity) activity);
+        //postObstacleToServerTask.execute(mObstacleData);
 
 
+    }
 
-        BpServerHandler.PostNewObstacle(activity, mapEditorFragment, mObstacleData);
-
+    public Obstacle getmObstacleData() {
+        return mObstacleData;
     }
 }

@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import bp.common.model.Obstacle;
 

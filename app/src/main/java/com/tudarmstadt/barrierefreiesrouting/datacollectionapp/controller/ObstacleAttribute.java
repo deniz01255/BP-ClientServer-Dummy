@@ -11,9 +11,17 @@ public class ObstacleAttribute<T> implements Observer {
 
     public String viewId;
 
+    public final Class<T> typeParameterClass;
+
     public T value;
 
     public String name;
+
+    public ObstacleAttribute(Class<T> typeParameterClass) {
+        this.typeParameterClass = typeParameterClass;
+    }
+
+
 
     @Override
     public void update(Observable o, Object arg) {

@@ -34,7 +34,7 @@ public class ObstacleToViewConverter {
             @Override
             public ObstacleAttribute<?> convert(Object value, Context ctx) {
 
-                ObstacleAttribute<Long> oa = new ObstacleAttribute<Long>();
+                ObstacleAttribute<Long> oa = new ObstacleAttribute<Long>(Long.TYPE);
                 oa.value = (Long) value;
                 return oa;
             }
@@ -42,7 +42,7 @@ public class ObstacleToViewConverter {
         converterForClass.put(Integer.TYPE, new Converter() {
             @Override
             public ObstacleAttribute<?> convert(Object value, Context ctx) {
-                ObstacleAttribute<Integer> oa = new ObstacleAttribute<Integer>();
+                ObstacleAttribute<Integer> oa = new ObstacleAttribute<Integer>(Integer.TYPE);
                 oa.value = (Integer) value;
                 return oa;
             }
@@ -50,7 +50,7 @@ public class ObstacleToViewConverter {
         converterForClass.put(Double.TYPE, new Converter() {
             @Override
             public ObstacleAttribute<?> convert(Object value, Context ctx) {
-                ObstacleAttribute<Double> oa = new ObstacleAttribute<Double>();
+                ObstacleAttribute<Double> oa = new ObstacleAttribute<Double>(Double.TYPE);
                 oa.value = (Double) value;
                 return oa;
 
@@ -59,7 +59,7 @@ public class ObstacleToViewConverter {
         converterForClass.put(String.class, new Converter() {
             @Override
             public ObstacleAttribute<?> convert(Object value, Context ctx) {
-                ObstacleAttribute<String> oa = new ObstacleAttribute<String>();
+                ObstacleAttribute<String> oa = new ObstacleAttribute<String>(String.class);
                 oa.value = (String) value;
                 return oa;
             }
@@ -75,8 +75,8 @@ public class ObstacleToViewConverter {
         for (Field f : fieldsOfObstacle ) {
             if(converterForClass.get(f.getType()) != null)
                 try {
+                    f.setAccessible(true);
                     map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
-
 
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
@@ -85,7 +85,6 @@ public class ObstacleToViewConverter {
 
         return map;
     }
-
 
 
 }

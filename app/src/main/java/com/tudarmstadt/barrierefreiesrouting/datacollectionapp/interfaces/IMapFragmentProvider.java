@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 
