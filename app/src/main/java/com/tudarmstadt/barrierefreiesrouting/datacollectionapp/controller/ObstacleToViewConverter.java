@@ -1,21 +1,12 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import bp.common.model.IObstacle;
+import bp.common.model.Obstacle;
 import bp.common.model.annotations.EditableAttribute;
 
 /**
@@ -66,22 +57,31 @@ public class ObstacleToViewConverter {
         });
     };
 
-    public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(IObstacle obstacle, Context ctx){
+    public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(Obstacle obstacle, Context ctx){
 
 
-        Field[] fieldsOfObstacle = obstacle.getClass().getDeclaredFields();
         HashMap<String, ObstacleAttribute<?>>  map = new HashMap<String, ObstacleAttribute<?>>();
 
-        for (Field f : fieldsOfObstacle ) {
-            if(converterForClass.get(f.getType()) != null)
-                try {
-                    f.setAccessible(true);
-                    map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
 
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
+        Class<?> current = obstacle.getClass();
+        while(current.getSuperclass() != null){
+            Field[] fieldsOfObstacle = current.getDeclaredFields();
+
+            for (Field f : fieldsOfObstacle ) {
+                if(converterForClass.get(f.getType()) != null)
+                    try {
+                        f.setAccessible(true);
+                        if(f.getAnnotation(EditableAttribute.class) != null)
+                            map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
+            current = current.getSuperclass();
         }
+
+
 
         return map;
     }

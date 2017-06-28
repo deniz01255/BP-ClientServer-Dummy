@@ -26,21 +26,20 @@ public class AttributeFragmentFactory {
     public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel){
 
         Map<String, ObstacleAttribute<?>> obstacle = obstacleViewModel.attributesMap;
+
         for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet())
         {
-            // TODO: PASS Label Names
-
             if(entry.getValue().typeParameterClass == Double.TYPE){
-                CommitFragment(fragment,new NumberAttributeFragment(), entry.getKey());
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()) , entry.getKey());
             }
             else if(entry.getValue().typeParameterClass == Integer.TYPE){
-                CommitFragment(fragment,new NumberAttributeFragment(), entry.getKey());
+                CommitFragment(fragment,  NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             }
             else if(entry.getValue().typeParameterClass == String.class){
-                CommitFragment(fragment,new TextAttributeFragment(), entry.getKey());
+                CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             }
             else if(entry.getValue().typeParameterClass == Boolean.TYPE){
-                CommitFragment(fragment,new CheckBoxAttributeFragment(), entry.getKey());
+                CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             }
         }
     }

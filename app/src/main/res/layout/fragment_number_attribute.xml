@@ -13,6 +13,7 @@
         android:orientation="horizontal">>
 
         <TextView
+            android:id="@+id/number_attribute_label"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="left"
@@ -30,7 +31,7 @@
 
             android:background="#00FF00"
             android:inputType="number"
-            android:text="Name" />
+            android:text="" />
     </LinearLayout>
 
 </FrameLayout>

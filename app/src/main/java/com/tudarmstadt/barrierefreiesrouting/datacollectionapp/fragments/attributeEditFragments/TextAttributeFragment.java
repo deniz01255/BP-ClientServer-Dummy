@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
@@ -20,6 +21,10 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
  */
 public class TextAttributeFragment extends Fragment {
 
+    private static final String LABEL_PARAM = "labelParam";
+
+    private String mLabelParam;
+
     private OnFragmentInteractionListener mListener;
 
     public TextAttributeFragment() {
@@ -27,9 +32,10 @@ public class TextAttributeFragment extends Fragment {
     }
 
 
-    public static TextAttributeFragment newInstance() {
+    public static TextAttributeFragment newInstance(String labelName) {
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
+        args.putString(LABEL_PARAM, labelName);
 
         fragment.setArguments(args);
         return fragment;
@@ -38,14 +44,25 @@ public class TextAttributeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mLabelParam = getArguments().getString(LABEL_PARAM);
+        }
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_text_attribute, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_text_attribute, container, false);
+
+        TextView label = (TextView) v.findViewById(R.id.text_attribute_label);
+
+        label.setText(mLabelParam);
+
+
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

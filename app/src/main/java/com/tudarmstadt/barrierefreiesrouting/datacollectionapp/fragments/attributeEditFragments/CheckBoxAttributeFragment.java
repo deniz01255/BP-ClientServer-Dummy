@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +23,13 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
  */
 public class CheckBoxAttributeFragment extends Fragment {
 
+
+    private static final String LABEL_PARAM = "labelParam";
+
+    // TODO: Rename and change types of parameters
+    private String mLabelParam;
+
+
     private OnFragmentInteractionListener mListener;
 
     public CheckBoxAttributeFragment() {
@@ -27,17 +37,22 @@ public class CheckBoxAttributeFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static CheckBoxAttributeFragment newInstance(String param1, String param2) {
+    public static CheckBoxAttributeFragment newInstance(String labelName) {
         CheckBoxAttributeFragment fragment = new CheckBoxAttributeFragment();
         Bundle args = new Bundle();
-
+        args.putString(LABEL_PARAM, labelName);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mLabelParam = getArguments().getString(LABEL_PARAM);
+        }
+
     }
 
     @Override
@@ -46,8 +61,9 @@ public class CheckBoxAttributeFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_check_box_attribute, container, false);
 
+        TextView label = (TextView) v.findViewById(R.id.checkbox_attribute_label);
 
-
+        label.setText(mLabelParam);
 
 
         return v;
