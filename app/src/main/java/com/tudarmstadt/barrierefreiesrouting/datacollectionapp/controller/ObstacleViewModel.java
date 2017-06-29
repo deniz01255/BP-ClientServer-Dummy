@@ -48,7 +48,7 @@ public class ObstacleViewModel {
 
             }
         }
-        PostObstacleToServerTask postObstacleToServerTask = new PostObstacleToServerTask((MainActivity) activity);
+       // PostObstacleToServerTask postObstacleToServerTask = new PostObstacleToServerTask((MainActivity) activity);
         //postObstacleToServerTask.execute(mObstacleData);
 
 

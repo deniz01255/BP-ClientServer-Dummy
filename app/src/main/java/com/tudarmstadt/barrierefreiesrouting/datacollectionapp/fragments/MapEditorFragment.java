@@ -29,6 +29,7 @@ import bp.common.model.Obstacle;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
 
 import bp.common.model.Stairs;
 
@@ -143,7 +144,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         Guideline editorTopLine = (Guideline) getActivity().findViewById(R.id.horizontalEditGuideline);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
 
-        lp.guidePercent = 0.9f;
+        lp.guidePercent = 0.7f;
         editorTopLine.setLayoutParams(lp);
 
         return false;
@@ -152,12 +153,12 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public boolean longPressHelper(GeoPoint p) {
 
-        final Obstacle newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
+        final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
+        //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
+          //  return true;
+        PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
 
-       //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
-           // return true;
-
-        return false;
+        return true;
     }
 
 
