@@ -16,12 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.ObstacleDetailsFragment;
@@ -37,10 +32,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import bp.common.model.Construction;
 import bp.common.model.Elevator;
@@ -50,11 +42,6 @@ import bp.common.model.Ramp;
 import bp.common.model.Stairs;
 import bp.common.model.TightPassage;
 import bp.common.model.Unevenness;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class MainActivity extends AppCompatActivity
@@ -216,7 +203,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void getObstaclesFromServer() {
-        DownloadObstaclesTask.DownloadObstacles(this, mapEditorFragment);
+        DownloadObstaclesTask.DownloadStairs(this, mapEditorFragment);
     }
 
 

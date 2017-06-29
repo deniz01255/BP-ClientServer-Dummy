@@ -41,7 +41,7 @@ public class DownloadObstaclesTask{
     public DownloadObstaclesTask() {
     }
 
-    public static void DownloadObstacles(final Activity activity, final MapEditorFragment mapEditorFragment){
+    public static void DownloadStairs(final Activity activity, final MapEditorFragment mapEditorFragment){
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
