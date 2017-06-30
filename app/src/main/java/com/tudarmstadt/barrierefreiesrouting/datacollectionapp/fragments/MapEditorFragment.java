@@ -1,17 +1,30 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.overlays.BasicInfoWindow;
+import org.osmdroid.bonuspack.overlays.Marker;
+import org.osmdroid.bonuspack.overlays.Polyline;
+import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -19,11 +32,13 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import bp.common.model.Obstacle;
 
@@ -35,10 +50,13 @@ import bp.common.model.Stairs;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
-
+    public Road[] mRoads;
+    public Road road;
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
     private MapEventsOverlay evOverlay;
+    private Polyline polylineRoadOverlay;
+
 
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
@@ -157,8 +175,36 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
           //  return true;
         PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
+       //OnRoadChecker onRoadChecker = new OnRoadChecker();
+        //polylineRoadOverlay = onRoadChecker.pointOnRoadCheck(getActivity(),newObstacle);
 
+        //map.getOverlays().add(polylineRoadOverlay);
+        //refresh();
+        GeoPoint startPoint = new GeoPoint( 51.16569,10.451525);
+        GeoPoint endPoint = new GeoPoint(50.8100321,  12.3850986);
+
+       // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
+
+        // start and end points
+        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+        waypoints.add(startPoint);
+        // GeoPoint endPoint = new GeoPoint(48.4, -1.9);
+        waypoints.add(endPoint);
+        // roadManager.addRequestOption("routeType=bicycle");
+        //retreive the road between those points
+        //Road road = roadManager.getRoad(waypoints);
+      //  if (road.mStatus != Road.STATUS_OK){
+       //     Log.d("Road Status", ""+road.mStatus);
+       // }
+
+       // Log.d("Road Status", ""+road.mNodes.size());
+
+
+        //new UpdateRoadTask().execute(waypoints);
         return true;
+
+
+
     }
 
 
@@ -176,5 +222,37 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     }
 
+    /**
+     * Async task to get the road in a separate thread.
+     */
+    /**  private class UpdateRoadTask extends AsyncTask<Object, Void, Road> {
+
+        protected Road doInBackground(Object... params) {
+            @SuppressWarnings("unchecked")
+            ArrayList<GeoPoint> waypoints = (ArrayList<GeoPoint>)params[0];
+            RoadManager roadManager = new OSRMRoadManager();
+
+
+            return roadManager.getRoad(waypoints);
+        }
+        @Override
+        protected void onPostExecute(Road result) {
+            road = result;
+            // showing distance and duration of the road
+            Toast.makeText(getActivity(), "distance="+road.mLength, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "durée="+road.mDuration, Toast.LENGTH_LONG).show();
+
+            if(road.mStatus != Road.STATUS_OK)
+                Toast.makeText(getActivity(), "Error when loading the road - status="+road.mStatus, Toast.LENGTH_SHORT).show();
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road,getActivity());
+
+            map.getOverlays().add(roadOverlay);
+            map.invalidate();
+            //updateUIWithRoad(result);
+        }
+    }**/
+
 
 }
+
+
