@@ -1,17 +1,28 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.overlays.GroundOverlay;
+import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
+import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -20,6 +31,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -29,16 +41,25 @@ import bp.common.model.Obstacle;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad.CloseToRoadChecker;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
 
 import bp.common.model.Stairs;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
+    public MapEditorFragment mapEditorF;
+    public Activity activMAP;
+    public GraphHopperRoadManager graphHopperRoadManager;
 
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
     private MapEventsOverlay evOverlay;
+    private RoadManager roadManager;
+
+    public ArrayList<GeoPoint> waypoints;
+
+    public Road road;
 
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
@@ -91,7 +112,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         mapController = map.getController();
         mapController.setCenter(startPoint);
 
-        map.getController().setZoom(18);
+        map.getController().setZoom(20);
         mLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
                 map.getController().animateTo(mLocationOverlay.getMyLocation());
@@ -158,6 +179,20 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
           //  return true;
         PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
 
+
+
+        // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
+
+        GeoPoint startPoint = new GeoPoint( 49.8705556,8.6494444);
+        GeoPoint endPoint = new GeoPoint(49.873163174 , 8.653830718);
+
+        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+        waypoints.add(startPoint);
+        waypoints.add(endPoint);
+        CloseToRoadChecker.DownloadStairs(getActivity(),p,this);
+
+        new UpdateRoadTask().execute(waypoints,this,getActivity());
+
         return true;
     }
 
@@ -174,6 +209,77 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public void refresh(){
         map.invalidate();
 
+    }
+
+
+
+    /**
+     * Async task to get the road in a separate thread.
+     */
+    private class UpdateRoadTask extends AsyncTask<Object, Void, Road> {
+
+
+        protected Road doInBackground(Object... params) {
+            @SuppressWarnings("unchecked")
+            MapEditorFragment SmapEditorF = (MapEditorFragment)params[1];
+            mapEditorF = SmapEditorF;
+            Activity SactivMAP = (Activity)params[2];
+            activMAP = SactivMAP;
+            waypoints = (ArrayList<GeoPoint>)params[0];
+           //roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
+            //roadManager.addRequestOption("routeType=pedestrian");
+            graphHopperRoadManager = new GraphHopperRoadManager("3eaff35e-11cf-437f-b17b-570ae07759fc",true);
+
+            graphHopperRoadManager.addRequestOption("vehicle=foot");
+
+            return graphHopperRoadManager.getRoad(waypoints);
+        }
+        @Override
+        protected void onPostExecute(Road result) {
+            road = result;
+            // showing distance and duration of the road
+            Toast.makeText(getActivity(), "distance="+road.mLength, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "durée="+road.mDuration, Toast.LENGTH_LONG).show();
+
+            if(road.mStatus != Road.STATUS_OK) {
+                Toast.makeText(getActivity(), "Error when loading the road - status=" + road.mStatus, Toast.LENGTH_SHORT).show();
+            }
+
+
+            for (int i=0; i<road.mNodes.size(); i++){
+                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
+
+                PostObstacleToServerTask.PostStairs(getActivity(), mapEditorF, newObstacle);
+            }
+
+            for (int i=0; i<road.mRouteHigh.size(); i++){
+                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
+
+                PostObstacleToServerTask.PostStairs(getActivity(), mapEditorF, newObstacle);
+
+
+
+            }
+
+
+
+
+            activMAP.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run()
+                {
+
+
+                    Road road = graphHopperRoadManager.getRoad(waypoints);
+
+                    Polyline roadOverlay = GraphHopperRoadManager.buildRoadOverlay(road,0x800000FF,15.0f);
+                    map.getOverlays().add(roadOverlay);
+                    map.invalidate();
+                }
+            });
+            //updateUIWithRoad(result);
+        }
     }
 
 
