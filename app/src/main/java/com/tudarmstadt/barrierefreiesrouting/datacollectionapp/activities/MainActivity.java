@@ -1,6 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +30,11 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.DownloadObstaclesTask;
 
+
+import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
@@ -50,10 +57,13 @@ public class MainActivity extends AppCompatActivity
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider, IMapFragmentProvider {
+    public Activity mActivity = this;
     // variables for taken the income of the frontend
     private EditText et;
     private Button dispCurrentPosBUTTON, addBarrierBUTTON;
     public TextView tv;
+
+
 
     private ItemizedOverlayWithFocus<OverlayItem> barriersOverlay;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
@@ -77,11 +87,27 @@ public class MainActivity extends AppCompatActivity
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+
         if (findViewById(R.id.map_fragment_container) != null) {
 
             if (savedInstanceState != null) {
                 return;
             }
+
+
+
+            /**Context context = getApplicationContext();
+            GeoPoint startPoint = new GeoPoint(48.2,-1.88) ;
+            RoadManager roadManager = new MapQuestRoadManager("Test");
+            ArrayList waypoints = new ArrayList();
+            waypoints.add(startPoint); GeoPoint endPoint = new GeoPoint(48.4, -1.9);
+            waypoints.add(endPoint);
+            Road road = roadManager.getRoad(waypoints);
+            Polyline roadOverlay = RoadManager.buildRoadOverlay(road, 0x8000FF00, 20.0f);
+            mapEditorFragment.map.getOverlays().add(roadOverlay);
+            mapEditorFragment.refresh();**/
+
+
             mapEditorFragment = new MapEditorFragment();
             mapEditorFragment.setArguments(getIntent().getExtras());
 
@@ -116,6 +142,9 @@ public class MainActivity extends AppCompatActivity
         dropDownMenu.setAdapter(adapter);
 
         getObstaclesFromServer();
+
+
+
     }
 
 

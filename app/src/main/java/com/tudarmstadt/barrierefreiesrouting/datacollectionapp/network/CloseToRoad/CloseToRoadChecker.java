@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -69,7 +70,7 @@ public class CloseToRoadChecker {
             }
         }catch (IOException e){}
          catch (JSONException j){
-
+             Log.d("ERROR SERVER OSRM",j.toString());
         }
     }
 

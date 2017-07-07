@@ -2,7 +2,10 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,10 +15,16 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
 
+
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import bp.common.model.IObstacle;
@@ -28,6 +37,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.map;
 
 
 /**
@@ -83,6 +94,7 @@ public class PostObstacleToServerTask {
                                  overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
                                 mapEditorFragment.mOverlay.addItem(overlayItem);
                                 mapEditorFragment.refresh();
+
                             }
                         });
 

@@ -230,7 +230,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             //roadManager.addRequestOption("routeType=pedestrian");
             graphHopperRoadManager = new GraphHopperRoadManager("3eaff35e-11cf-437f-b17b-570ae07759fc",true);
 
-            graphHopperRoadManager.addRequestOption("vehicle=foot");
+            graphHopperRoadManager.addRequestOption("vehicle=");
 
             return graphHopperRoadManager.getRoad(waypoints);
         }
