@@ -177,14 +177,14 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
         //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
           //  return true;
-        PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
+       // PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
 
 
 
         // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
 
-        GeoPoint startPoint = new GeoPoint( 49.8705556,8.6494444);
-        GeoPoint endPoint = new GeoPoint(49.873163174 , 8.653830718);
+        GeoPoint startPoint = new GeoPoint( 49.87683721424917,8.653078681454645);
+        GeoPoint endPoint = new GeoPoint(49.87547201057107, 8.653020858764648);
 
         ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
         waypoints.add(startPoint);
@@ -230,7 +230,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             //roadManager.addRequestOption("routeType=pedestrian");
             graphHopperRoadManager = new GraphHopperRoadManager("3eaff35e-11cf-437f-b17b-570ae07759fc",true);
 
-            graphHopperRoadManager.addRequestOption("vehicle=");
+            graphHopperRoadManager.addRequestOption("vehicle=foot");
 
             return graphHopperRoadManager.getRoad(waypoints);
         }
