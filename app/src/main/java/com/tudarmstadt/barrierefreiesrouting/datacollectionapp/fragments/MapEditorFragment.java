@@ -41,31 +41,27 @@ import bp.common.model.Obstacle;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad.CloseToRoadChecker;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.operators.DefaultMapOperator;
 
 import bp.common.model.Stairs;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
-    public MapEditorFragment mapEditorF;
-    public Activity activMAP;
-    public GraphHopperRoadManager graphHopperRoadManager;
 
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
     private MapEventsOverlay evOverlay;
     private RoadManager roadManager;
 
-    public ArrayList<GeoPoint> waypoints;
-
-    public Road road;
-
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     public ItemizedOverlayWithFocus<OverlayItem> mOverlay;
 
     private OnFragmentInteractionListener mListener;
+    private IMapOperator activeMapOperator;
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
@@ -82,6 +78,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activeMapOperator = new DefaultMapOperator();
 
 
     }
@@ -161,39 +158,18 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
+        System.out.println("..");
 
-        Guideline editorTopLine = (Guideline) getActivity().findViewById(R.id.horizontalEditGuideline);
-        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
+        return activeMapOperator.singleTapConfirmedHelper(p, getActivity(), this);
 
-        lp.guidePercent = 0.7f;
-        editorTopLine.setLayoutParams(lp);
-
-        return false;
     }
+
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
+        System.out.println("..");
 
-        final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
-        //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
-          //  return true;
-       // PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
-
-
-
-        // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
-
-        GeoPoint startPoint = new GeoPoint( 49.87683721424917,8.653078681454645);
-        GeoPoint endPoint = new GeoPoint(49.87547201057107, 8.653020858764648);
-
-        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-        waypoints.add(startPoint);
-        waypoints.add(endPoint);
-        CloseToRoadChecker.DownloadStairs(getActivity(),p,this);
-
-        new UpdateRoadTask().execute(waypoints,this,getActivity());
-
-        return true;
+        return activeMapOperator.longPressHelper(p,getActivity(),this);
     }
 
 
@@ -211,76 +187,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     }
 
-
-
-    /**
-     * Async task to get the road in a separate thread.
-     */
-    private class UpdateRoadTask extends AsyncTask<Object, Void, Road> {
-
-
-        protected Road doInBackground(Object... params) {
-            @SuppressWarnings("unchecked")
-            MapEditorFragment SmapEditorF = (MapEditorFragment)params[1];
-            mapEditorF = SmapEditorF;
-            Activity SactivMAP = (Activity)params[2];
-            activMAP = SactivMAP;
-            waypoints = (ArrayList<GeoPoint>)params[0];
-           //roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
-            //roadManager.addRequestOption("routeType=pedestrian");
-            graphHopperRoadManager = new GraphHopperRoadManager("3eaff35e-11cf-437f-b17b-570ae07759fc",true);
-
-            graphHopperRoadManager.addRequestOption("vehicle=foot");
-
-            return graphHopperRoadManager.getRoad(waypoints);
-        }
-        @Override
-        protected void onPostExecute(Road result) {
-            road = result;
-            // showing distance and duration of the road
-            Toast.makeText(getActivity(), "distance="+road.mLength, Toast.LENGTH_LONG).show();
-            Toast.makeText(getActivity(), "durée="+road.mDuration, Toast.LENGTH_LONG).show();
-
-            if(road.mStatus != Road.STATUS_OK) {
-                Toast.makeText(getActivity(), "Error when loading the road - status=" + road.mStatus, Toast.LENGTH_SHORT).show();
-            }
-
-
-            for (int i=0; i<road.mNodes.size(); i++){
-                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
-
-                PostObstacleToServerTask.PostStairs(getActivity(), mapEditorF, newObstacle);
-            }
-
-            for (int i=0; i<road.mRouteHigh.size(); i++){
-                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
-
-                PostObstacleToServerTask.PostStairs(getActivity(), mapEditorF, newObstacle);
-
-
-
-            }
-
-
-
-
-            activMAP.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run()
-                {
-
-
-                    Road road = graphHopperRoadManager.getRoad(waypoints);
-
-                    Polyline roadOverlay = GraphHopperRoadManager.buildRoadOverlay(road,0x800000FF,15.0f);
-                    map.getOverlays().add(roadOverlay);
-                    map.invalidate();
-                }
-            });
-            //updateUIWithRoad(result);
-        }
-    }
 
 
 }

@@ -94,20 +94,6 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
-
-
-            /**Context context = getApplicationContext();
-            GeoPoint startPoint = new GeoPoint(48.2,-1.88) ;
-            RoadManager roadManager = new MapQuestRoadManager("Test");
-            ArrayList waypoints = new ArrayList();
-            waypoints.add(startPoint); GeoPoint endPoint = new GeoPoint(48.4, -1.9);
-            waypoints.add(endPoint);
-            Road road = roadManager.getRoad(waypoints);
-            Polyline roadOverlay = RoadManager.buildRoadOverlay(road, 0x8000FF00, 20.0f);
-            mapEditorFragment.map.getOverlays().add(roadOverlay);
-            mapEditorFragment.refresh();**/
-
-
             mapEditorFragment = new MapEditorFragment();
             mapEditorFragment.setArguments(getIntent().getExtras());
 
@@ -131,19 +117,20 @@ public class MainActivity extends AppCompatActivity
         ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
 
         dropDownMenu.setBackground(backgroundColor);
-        // dropDownMenu.setPopupBackgroundResource(R.color.popUPColorlightRed);
+
         dropDownMenu.setOnItemSelectedListener(this);
+
         // Create an ArrayAdapter using the string array and a default dropDownMenu layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
+
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Apply the adapter to the dropDownMenu
         dropDownMenu.setAdapter(adapter);
 
         getObstaclesFromServer();
-
-
 
     }
 
@@ -190,7 +177,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
         parent.getItemAtPosition(position);
         setChosenBarrier(id);
 
@@ -202,7 +188,6 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.obstacle_editor_fragment_container, ObstacleDetailsFragment.newInstance()).commit();
-
 
     }
 
