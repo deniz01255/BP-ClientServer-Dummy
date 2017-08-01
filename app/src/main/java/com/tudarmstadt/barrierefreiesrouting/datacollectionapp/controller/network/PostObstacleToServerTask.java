@@ -1,34 +1,20 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import bp.common.model.IObstacle;
-import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,8 +23,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.map;
 
 
 /**

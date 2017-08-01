@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,28 +9,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.operators.DefaultMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 
-import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
-import bp.common.model.Stairs;
 
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.AttributeFragmentFactory.insertAttributeFragments;
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.ObstacleToViewConverter.convertObstacleToAttributeMap;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
 public class ObstacleDetailsFragment extends Fragment  {
 

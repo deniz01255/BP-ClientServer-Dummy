@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -20,8 +20,6 @@ public class ObstacleAttribute<T> implements Observer {
     public ObstacleAttribute(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
     }
-
-
 
     @Override
     public void update(Observable o, Object arg) {

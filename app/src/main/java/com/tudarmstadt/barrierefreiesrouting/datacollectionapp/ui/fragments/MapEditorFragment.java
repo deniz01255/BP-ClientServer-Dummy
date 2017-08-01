@@ -1,27 +1,16 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Guideline;
 import android.support.v4.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.overlays.GroundOverlay;
-import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
-import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 
-import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -31,7 +20,6 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -40,13 +28,9 @@ import java.util.ArrayList;
 import bp.common.model.Obstacle;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad.CloseToRoadChecker;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.operators.DefaultMapOperator;
-
-import bp.common.model.Stairs;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
 
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
@@ -79,8 +63,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activeMapOperator = new DefaultMapOperator();
-
-
     }
 
     @Override
@@ -113,7 +95,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         mLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
                 map.getController().animateTo(mLocationOverlay.getMyLocation());
-
             }
         });
 
@@ -158,20 +139,13 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        System.out.println("..");
-
         return activeMapOperator.singleTapConfirmedHelper(p, getActivity(), this);
-
     }
-
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        System.out.println("..");
-
         return activeMapOperator.longPressHelper(p,getActivity(),this);
     }
-
 
 
     public void addObstacle(OverlayItem overlayItem) {

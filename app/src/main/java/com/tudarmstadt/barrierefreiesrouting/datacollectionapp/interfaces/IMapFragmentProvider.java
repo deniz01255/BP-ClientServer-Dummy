@@ -1,8 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
-
-import bp.common.model.Obstacle;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 /**
  * Created by Vincent on 27.06.2017.

@@ -1,17 +1,13 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
 import android.app.Activity;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 import bp.common.model.annotations.EditableAttribute;
 

@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
 
-    tools:context="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments.TextAttributeFragment"
+    tools:context=".ui.fragments.attributeEditFragments.TextAttributeFragment"
     >
     <LinearLayout
         android:id="@+id/LinearLayout04"

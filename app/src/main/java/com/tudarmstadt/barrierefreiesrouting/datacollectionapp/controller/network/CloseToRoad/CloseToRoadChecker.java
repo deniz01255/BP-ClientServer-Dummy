@@ -1,29 +1,19 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.CloseToRoad;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 import bp.common.model.Stairs;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

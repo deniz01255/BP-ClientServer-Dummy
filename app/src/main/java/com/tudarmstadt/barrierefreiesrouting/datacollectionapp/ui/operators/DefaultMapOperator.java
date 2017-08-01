@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -7,10 +7,10 @@ import android.support.constraint.Guideline;
 import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.CloseToRoad.CloseToRoadChecker;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.network.PostObstacleToServerTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.CloseToRoad.CloseToRoadChecker;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 
 import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -40,7 +40,7 @@ public class DefaultMapOperator implements IMapOperator {
 
     @Override
     public boolean longPressHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment) {
-        final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
+        final Stairs newObstacle = new Stairs("Beschreibung", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
         //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
         //  return true;
         // PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
@@ -103,12 +103,12 @@ public class DefaultMapOperator implements IMapOperator {
             }
 
             for (int i=0; i<road.mNodes.size(); i++){
-                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
+                final Stairs newObstacle = new Stairs("Beschreibung", road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
                 PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
             }
 
             for (int i=0; i<road.mRouteHigh.size(); i++){
-                final Stairs newObstacle = new Stairs("Chabos wissen wo die Treppe steht", road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
+                final Stairs newObstacle = new Stairs("Beschreibung", road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
                 PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
             }
 

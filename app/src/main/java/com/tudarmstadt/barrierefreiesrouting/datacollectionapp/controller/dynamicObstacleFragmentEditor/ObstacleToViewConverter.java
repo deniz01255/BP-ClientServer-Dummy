@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
 import android.content.Context;
 
@@ -59,9 +59,7 @@ public class ObstacleToViewConverter {
 
     public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(Obstacle obstacle, Context ctx){
 
-
         HashMap<String, ObstacleAttribute<?>>  map = new HashMap<String, ObstacleAttribute<?>>();
-
 
         Class<?> current = obstacle.getClass();
         while(current.getSuperclass() != null){

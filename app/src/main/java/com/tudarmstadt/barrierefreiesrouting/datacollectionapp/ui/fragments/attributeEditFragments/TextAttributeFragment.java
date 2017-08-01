@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.fragments.attributeEditFragments;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,43 +11,38 @@ import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
-import org.w3c.dom.Text;
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CheckBoxAttributeFragment.OnFragmentInteractionListener} interface
+ * {@link TextAttributeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CheckBoxAttributeFragment#newInstance} factory method to
+ * Use the {@link TextAttributeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CheckBoxAttributeFragment extends Fragment {
-
+public class TextAttributeFragment extends Fragment {
 
     private static final String LABEL_PARAM = "labelParam";
 
-    // TODO: Rename and change types of parameters
     private String mLabelParam;
-
 
     private OnFragmentInteractionListener mListener;
 
-    public CheckBoxAttributeFragment() {
+    public TextAttributeFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static CheckBoxAttributeFragment newInstance(String labelName) {
-        CheckBoxAttributeFragment fragment = new CheckBoxAttributeFragment();
+
+    public static TextAttributeFragment newInstance(String labelName) {
+        TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
         args.putString(LABEL_PARAM, labelName);
+
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mLabelParam = getArguments().getString(LABEL_PARAM);
@@ -59,11 +54,12 @@ public class CheckBoxAttributeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_check_box_attribute, container, false);
+        View v = inflater.inflate(R.layout.fragment_text_attribute, container, false);
 
-        TextView label = (TextView) v.findViewById(R.id.checkbox_attribute_label);
+        TextView label = (TextView) v.findViewById(R.id.text_attribute_label);
 
         label.setText(mLabelParam);
+
 
 
         return v;
@@ -92,6 +88,7 @@ public class CheckBoxAttributeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
