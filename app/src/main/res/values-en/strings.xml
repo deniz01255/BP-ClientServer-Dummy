@@ -1,11 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Data Collection</string>
-
-
     <string name="error_server_not_found">Error: Server not found</string>
     <string name="default_description">No description available</string>
-    <string name="action_barrier_added">Barrier added</string>
+    <string name="action_barrier_added">Barrier Added</string>
     <string name="action_barrier_loaded">Barriers loaded</string>
-
-
 </resources>

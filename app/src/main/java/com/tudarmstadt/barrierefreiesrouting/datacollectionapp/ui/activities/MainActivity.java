@@ -52,27 +52,13 @@ public class MainActivity extends AppCompatActivity
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider, IMapFragmentProvider {
-    public Activity mActivity = this;
-    // variables for taken the income of the frontend
-    private EditText et;
-    private Button dispCurrentPosBUTTON, addBarrierBUTTON;
-    public TextView tv;
 
-
-
-    private ItemizedOverlayWithFocus<OverlayItem> barriersOverlay;
-    private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
     private long selectedBarrier;
-    private String barrier;
     private MapEditorFragment mapEditorFragment;
     private ObstacleDetailsFragment obstacleDetailsFragment = null;
 
     public MapEditorFragment getMapEditorFragment(){ return mapEditorFragment;}
-
-    String responseString = "";
-
-    final StringBuilder scriptUrlString = new StringBuilder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +68,7 @@ public class MainActivity extends AppCompatActivity
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
         if (findViewById(R.id.map_fragment_container) != null) {
-
             if (savedInstanceState != null) {
                 return;
             }
@@ -108,10 +92,7 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-        Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner2);
-        ColorDrawable backgroundColor = new ColorDrawable(0xAAAA6666);
-
-        dropDownMenu.setBackground(backgroundColor);
+        Spinner dropDownMenu = (Spinner) findViewById(R.id.spinner);
 
         dropDownMenu.setOnItemSelectedListener(this);
 
@@ -126,15 +107,6 @@ public class MainActivity extends AppCompatActivity
         dropDownMenu.setAdapter(adapter);
 
         getObstaclesFromServer();
-
-    }
-
-
-    private void createOverlayItemOnMap(Obstacle obs) {
-
-        OverlayItem overlayItem = new OverlayItem(obs.getName(), "Chabo", new GeoPoint(obs.getLongitude(), obs.getLatitude()));
-        overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-        barriersOverlay.addItem(overlayItem);
 
     }
 
@@ -159,11 +131,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void setChosenBarrier(long barrier){
-        selectedBarrier = barrier;
-    }
-
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -173,7 +140,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         parent.getItemAtPosition(position);
-        setChosenBarrier(id);
+        selectedBarrier = id;
 
         Guideline editorTopLine = (Guideline) findViewById(R.id.horizontalEditGuideline);
         ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
@@ -188,7 +155,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     @Override

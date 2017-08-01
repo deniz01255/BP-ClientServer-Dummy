@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class DownloadObstaclesTask{
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers/stairs")
+                .url( RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
                 .build();
 
         client.newCall(request)
@@ -73,13 +74,12 @@ public class DownloadObstaclesTask{
                             @Override
                             public void run() {
                                 for (Stairs obstacle : finalObstacleList) {
-                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Importierte Barriere", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                                    OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                     overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
                                     mapEditorFragment.mOverlay.addItem(overlayItem);
-
                                 }
-                                Toast.makeText(activity.getBaseContext(), "Barriers loaded",
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(activity.getBaseContext(), activity.getString(R.string.action_barrier_loaded),
+                                        Toast.LENGTH_SHORT).show();
                                 mapEditorFragment.map.invalidate();
                             }
                         });

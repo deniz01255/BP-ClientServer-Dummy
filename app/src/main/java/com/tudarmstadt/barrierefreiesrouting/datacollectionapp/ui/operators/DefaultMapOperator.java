@@ -40,22 +40,20 @@ public class DefaultMapOperator implements IMapOperator {
 
     @Override
     public boolean longPressHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment) {
-        final Stairs newObstacle = new Stairs("Beschreibung", p.getLongitude(), p.getLatitude(), 10, 10, false) ;
-        //if (DownloadObstaclesTask.PostNewObstacle(getActivity(), this, newObstacle))
-        //  return true;
-        // PostObstacleToServerTask.PostStairs(getActivity(), this, newObstacle);
 
+        // TODO: refactor this code
         // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
 
+        // TODO: highlight the correct Road!!
         GeoPoint startPoint = new GeoPoint( 49.87683721424917,8.653078681454645);
         GeoPoint endPoint = new GeoPoint(49.87547201057107, 8.653020858764648);
 
-        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-        waypoints.add(startPoint);
-        waypoints.add(endPoint);
-        CloseToRoadChecker.DownloadStairs(activity,p,mapEditorFragment);
+        ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
+        roadPoints.add(startPoint);
+        roadPoints.add(endPoint);
+        CloseToRoadChecker.CloseToRoadChecker(activity,p,mapEditorFragment);
 
-        new UpdateRoadTask().execute(waypoints,mapEditorFragment,activity);
+        new UpdateRoadTask().execute(roadPoints,mapEditorFragment,activity);
         return true;
     }
 
@@ -100,15 +98,16 @@ public class DefaultMapOperator implements IMapOperator {
 
             if(road.mStatus != Road.STATUS_OK) {
                 Toast.makeText(activity, "Error when loading the road - status=" + road.mStatus, Toast.LENGTH_SHORT).show();
+                return;
             }
 
             for (int i=0; i<road.mNodes.size(); i++){
-                final Stairs newObstacle = new Stairs("Beschreibung", road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
+                final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
                 PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
             }
 
             for (int i=0; i<road.mRouteHigh.size(); i++){
-                final Stairs newObstacle = new Stairs("Beschreibung", road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
+                final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
                 PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
             }
 

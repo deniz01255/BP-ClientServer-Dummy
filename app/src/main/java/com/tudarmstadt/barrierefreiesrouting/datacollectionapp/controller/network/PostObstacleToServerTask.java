@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 
@@ -48,7 +49,7 @@ public class PostObstacleToServerTask {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://routing.vincinator.de/routing/barriers/stairs")
+                .url( RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
                 .post(body)
                 .build();
 
@@ -61,7 +62,7 @@ public class PostObstacleToServerTask {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(activity, "Fehler",
+                                Toast.makeText(activity, R.string.error_server_not_found,
                                         Toast.LENGTH_LONG).show();
                             }
                         });
@@ -72,9 +73,9 @@ public class PostObstacleToServerTask {
                             @Override
                             public void run() {
 
-                                Toast.makeText(activity, "Barriere hinzugefügt",
-                                        Toast.LENGTH_LONG).show();
-                                 OverlayItem overlayItem = new OverlayItem(obstacle.getName(), "Long press is kacke", new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                                Toast.makeText(activity, activity.getString(R.string.action_barrier_added),
+                                        Toast.LENGTH_SHORT).show();
+                                 OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                  overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
                                 mapEditorFragment.mOverlay.addItem(overlayItem);
                                 mapEditorFragment.refresh();

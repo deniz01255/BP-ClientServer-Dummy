@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobile Datenerfassung</string>
+    <string name="error_server_not_found">Fehler: Server nicht gefunden</string>
+    <string name="default_description">Keine Beschreibung Verfügbar</string>
+    <string name="action_barrier_added">Barriere hinzugefügt</string>
+    <string name="action_barrier_loaded">Barrieren geladen</string>
+</resources>
