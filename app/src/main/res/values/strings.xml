@@ -6,6 +6,7 @@
     <string name="default_description">No description available</string>
     <string name="action_barrier_added">Barrier added</string>
     <string name="action_barrier_loaded">Barriers loaded</string>
+    <string name="help_place_an_obstacle">Place an Obstacle</string>
 
 
 </resources>

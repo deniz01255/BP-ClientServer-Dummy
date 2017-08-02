@@ -5,4 +5,5 @@
     <string name="default_description">Keine Beschreibung Verfügbar</string>
     <string name="action_barrier_added">Barriere hinzugefügt</string>
     <string name="action_barrier_loaded">Barrieren geladen</string>
+    <string name="help_place_an_obstacle">Platziere eine Barriere</string>
 </resources>

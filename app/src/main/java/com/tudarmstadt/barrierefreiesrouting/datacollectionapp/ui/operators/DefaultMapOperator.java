@@ -60,11 +60,6 @@ public class DefaultMapOperator implements IMapOperator {
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment) {
 
-        Guideline editorTopLine = (Guideline) activity.findViewById(R.id.horizontalEditGuideline);
-        ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) editorTopLine.getLayoutParams();
-
-        lp.guidePercent = 0.7f;
-        editorTopLine.setLayoutParams(lp);
 
         return true;
     }
