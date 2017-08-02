@@ -1,7 +1,7 @@
 ## Notes
 
-Before setting up or Running this application please check your
-internet connection, as well as Check for login Data in Slack on
-specific Channel "loginServer".
+## Nützliche Links 
 
-IMPORTANT! For running the application, the login in data where not needed.
+- http://overpass-turbo.eu/
+- https://stackoverflow.com/questions/20322823/how-to-get-all-roads-around-a-given-location-in-openstreetmap
+- https://material.io/components/
