@@ -53,6 +53,10 @@ public class DefaultMapOperator implements IMapOperator {
         roadPoints.add(endPoint);
         CloseToRoadChecker.CloseToRoadChecker(activity,p,mapEditorFragment);
 
+        final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), p.getLongitude(), p.getLatitude(), 10, 10, false) ;
+
+        PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
+
         new UpdateRoadTask().execute(roadPoints,mapEditorFragment,activity);
         return true;
     }
@@ -96,16 +100,6 @@ public class DefaultMapOperator implements IMapOperator {
                 return;
             }
 
-            for (int i=0; i<road.mNodes.size(); i++){
-                final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), road.mNodes.get(i).mLocation.getLongitude(), road.mNodes.get(i).mLocation.getLatitude(), 10, 10, false) ;
-                PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
-            }
-
-            for (int i=0; i<road.mRouteHigh.size(); i++){
-                final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), road.mRouteHigh.get(i).getLongitude(), road.mRouteHigh.get(i).getLatitude(), 10, 10, false) ;
-                PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
-            }
-
             activity.runOnUiThread(new Runnable() {
 
                 @Override
@@ -118,7 +112,6 @@ public class DefaultMapOperator implements IMapOperator {
                     mapEditorFragment.map.invalidate();
                 }
             });
-            //updateUIWithRoad(result);
         }
     }
 
