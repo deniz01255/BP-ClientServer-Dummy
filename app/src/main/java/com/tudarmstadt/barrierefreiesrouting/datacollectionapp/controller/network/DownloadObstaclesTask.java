@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
-
 import android.app.Activity;
 import android.widget.Toast;
 
@@ -10,6 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -22,22 +24,21 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
-
 /**
  * Created by deniz on 12.05.17.
  */
-public class DownloadObstaclesTask{
+public class DownloadObstaclesTask {
 
     private OkHttpClient client = new OkHttpClient();
-    public DownloadObstaclesTask() {}
 
-    public static void DownloadStairs(final Activity activity, final MapEditorFragment mapEditorFragment){
+    public DownloadObstaclesTask() {
+    }
+
+    public static void DownloadStairs(final Activity activity, final MapEditorFragment mapEditorFragment) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url( RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
+                .url(RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
                 .build();
 
         client.newCall(request)
@@ -63,9 +64,10 @@ public class DownloadObstaclesTask{
                         List<Stairs> obstacleList = new LinkedList<Stairs>();
                         if (!response.isSuccessful())
                             return;
-                        try{
-                            obstacleList = mapper.readValue(res, new TypeReference<List<Stairs>>() {});
-                        }catch(Exception e){
+                        try {
+                            obstacleList = mapper.readValue(res, new TypeReference<List<Stairs>>() {
+                            });
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -87,6 +89,5 @@ public class DownloadObstaclesTask{
                     }
                 });
     }
-
 
 }

@@ -4,13 +4,11 @@
     <item
         android:id="@+id/miCompose"
         android:icon="@drawable/barrier_stairs"
-        app:showAsAction="never"
-        android:title="Settings">
-    </item>
+        android:title="Settings"
+        app:showAsAction="never"></item>
     <item
         android:id="@+id/miProfile"
         android:icon="@drawable/barrier_stairs"
-        app:showAsAction="never"
-        android:title="Help">
-    </item>
+        android:title="Help"
+        app:showAsAction="never"></item>
 </menu>

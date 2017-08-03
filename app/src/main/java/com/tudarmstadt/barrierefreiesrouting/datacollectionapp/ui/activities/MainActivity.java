@@ -32,18 +32,20 @@ import bp.common.model.Ramp;
 import bp.common.model.Stairs;
 import bp.common.model.TightPassage;
 import bp.common.model.Unevenness;
+
 public class MainActivity extends AppCompatActivity
-implements
+        implements
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider, IMapFragmentProvider {
-
 
     private long selectedBarrier;
     private MapEditorFragment mapEditorFragment;
     private ObstacleDetailsFragment obstacleDetailsFragment = null;
 
-    public MapEditorFragment getMapEditorFragment(){ return mapEditorFragment;}
+    public MapEditorFragment getMapEditorFragment() {
+        return mapEditorFragment;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,7 @@ implements
             mapEditorFragment.mLocationOverlay.enableFollowLocation();
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -132,7 +135,7 @@ implements
     @Override
     public Obstacle getObstacle() {
 
-        switch(String.valueOf(selectedBarrier)){
+        switch (String.valueOf(selectedBarrier)) {
             case "0":
                 return new Stairs();
             case "1":
@@ -144,7 +147,7 @@ implements
             case "4":
                 return new FastTrafficLight();
             case "5":
-                return new Elevator("test",0,9,"1","5");
+                return new Elevator("test", 0, 9, "1", "5");
             case "6":
                 return new TightPassage();
             default:
@@ -156,6 +159,5 @@ implements
     public void getObstaclesFromServer() {
         DownloadObstaclesTask.DownloadStairs(this, mapEditorFragment);
     }
-
 
 }

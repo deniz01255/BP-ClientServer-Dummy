@@ -31,7 +31,6 @@ public class TextAttributeFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     public static TextAttributeFragment newInstance(String labelName) {
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
@@ -60,8 +59,6 @@ public class TextAttributeFragment extends Fragment {
 
         label.setText(mLabelParam);
 
-
-
         return v;
     }
 
@@ -88,7 +85,6 @@ public class TextAttributeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

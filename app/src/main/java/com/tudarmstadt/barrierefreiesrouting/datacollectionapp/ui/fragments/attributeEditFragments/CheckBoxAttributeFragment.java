@@ -21,12 +21,10 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
  */
 public class CheckBoxAttributeFragment extends Fragment {
 
-
     private static final String LABEL_PARAM = "labelParam";
 
     // TODO: Rename and change types of parameters
     private String mLabelParam;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,7 +60,6 @@ public class CheckBoxAttributeFragment extends Fragment {
         TextView label = (TextView) v.findViewById(R.id.checkbox_attribute_label);
 
         label.setText(mLabelParam);
-
 
         return v;
     }

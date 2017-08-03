@@ -15,9 +15,6 @@ import bp.common.model.annotations.EditableAttribute;
 
 public class ObstacleToViewConverter {
 
-    interface Converter {
-        ObstacleAttribute<?> convert(Object value, Context ctx);
-    }
     private static Map<Class, Converter> converterForClass = new HashMap<>();
 
     static {
@@ -55,21 +52,21 @@ public class ObstacleToViewConverter {
                 return oa;
             }
         });
-    };
+    }
 
-    public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(Obstacle obstacle, Context ctx){
+    public static Map<String, ObstacleAttribute<?>> convertObstacleToAttributeMap(Obstacle obstacle, Context ctx) {
 
-        HashMap<String, ObstacleAttribute<?>>  map = new HashMap<String, ObstacleAttribute<?>>();
+        HashMap<String, ObstacleAttribute<?>> map = new HashMap<String, ObstacleAttribute<?>>();
 
         Class<?> current = obstacle.getClass();
-        while(current.getSuperclass() != null){
+        while (current.getSuperclass() != null) {
             Field[] fieldsOfObstacle = current.getDeclaredFields();
 
-            for (Field f : fieldsOfObstacle ) {
-                if(converterForClass.get(f.getType()) != null)
+            for (Field f : fieldsOfObstacle) {
+                if (converterForClass.get(f.getType()) != null)
                     try {
                         f.setAccessible(true);
-                        if(f.getAnnotation(EditableAttribute.class) != null)
+                        if (f.getAnnotation(EditableAttribute.class) != null)
                             map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle), ctx));
 
                     } catch (Exception e) {
@@ -79,10 +76,13 @@ public class ObstacleToViewConverter {
             current = current.getSuperclass();
         }
 
-
-
         return map;
     }
 
+    ;
+
+    interface Converter {
+        ObstacleAttribute<?> convert(Object value, Context ctx);
+    }
 
 }

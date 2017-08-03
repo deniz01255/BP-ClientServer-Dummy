@@ -21,5 +21,4 @@ public interface INearestRoadsOverlayBuilder {
      */
     INearestRoadsOverlayBuilder setTypes(final String typeExpression);
 
-
 }

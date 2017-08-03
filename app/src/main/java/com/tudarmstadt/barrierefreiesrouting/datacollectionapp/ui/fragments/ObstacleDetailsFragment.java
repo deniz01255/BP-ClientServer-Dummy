@@ -12,21 +12,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-
 
 import bp.common.model.Obstacle;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
-public class ObstacleDetailsFragment extends Fragment  {
+public class ObstacleDetailsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private LinearLayout myLayout;
@@ -39,8 +37,6 @@ public class ObstacleDetailsFragment extends Fragment  {
 
     private ObstacleViewModel obstacleViewModel;
 
-
-
     public ObstacleDetailsFragment() {
     }
 
@@ -50,8 +46,6 @@ public class ObstacleDetailsFragment extends Fragment  {
 
         fragment.setArguments(args);
 
-
-
         return fragment;
     }
 
@@ -59,16 +53,15 @@ public class ObstacleDetailsFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v =  inflater.inflate(R.layout.fragment_obstacle_details, container, false);
+        View v = inflater.inflate(R.layout.fragment_obstacle_details, container, false);
 
-        obstacleToEdit = ((IObstacleProvider)getActivity()).getObstacle();
+        obstacleToEdit = ((IObstacleProvider) getActivity()).getObstacle();
 
         LinearLayout.LayoutParams defaultLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         LinearLayout.LayoutParams commitButtonLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -81,31 +74,27 @@ public class ObstacleDetailsFragment extends Fragment  {
         heading.setText("Edit " + obstacleToEdit.getTypeName());
 
         // Heading at the Top
-        ((LinearLayout)pl).addView(heading);
-
+        ((LinearLayout) pl).addView(heading);
 
         obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getContext()), obstacleToEdit);
-
 
         // Edit Fragments between heading and Commit Button
         insertAttributeFragments(this, obstacleViewModel);
 
-
         Button commitButton = new Button(getContext());
         commitButton.setLayoutParams(commitButtonLinearLayoutParams);
         commitButton.setText("Commit");
-
 
         commitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //obstacleViewModel.commit(getActivity(), ((IMapFragmentProvider) getActivity()).getMapEditorFragment());
                 Toast.makeText(getContext(), "Obstacle saved", Toast.LENGTH_LONG);
-             }
+            }
         });
 
         // Commit Button to the bottom
-        ((LinearLayout)pl).addView(commitButton);
+        ((LinearLayout) pl).addView(commitButton);
 
         return v;
     }
@@ -132,7 +121,6 @@ public class ObstacleDetailsFragment extends Fragment  {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

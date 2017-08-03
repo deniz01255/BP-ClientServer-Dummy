@@ -49,7 +49,6 @@ public class NumberAttributeFragment extends Fragment {
 
         label.setText(mLabelParam);
 
-
         return v;
     }
 
@@ -76,7 +75,6 @@ public class NumberAttributeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

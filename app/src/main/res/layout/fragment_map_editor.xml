@@ -2,15 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".ui.fragments.MapEditorFragment"
     android:background="#00AA00"
-    >
+    tools:context=".ui.fragments.MapEditorFragment">
 
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        />
+        android:layout_height="fill_parent" />
 
 
 </FrameLayout>

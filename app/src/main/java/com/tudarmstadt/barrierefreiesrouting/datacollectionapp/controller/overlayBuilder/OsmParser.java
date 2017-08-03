@@ -14,12 +14,11 @@ import java.util.LinkedList;
 
 public class OsmParser extends DefaultHandler {
 
-    private HashMap<Long,Node> nodes = new HashMap<>();
+    boolean bNd = false;
+    private HashMap<Long, Node> nodes = new HashMap<>();
     private LinkedList<Road> roads = new LinkedList<>();
     private Road currentRoad;
     private Node currentNode;
-
-    boolean bNd = false;
 
     @Override
     public void startElement(String uri,
@@ -33,11 +32,11 @@ public class OsmParser extends DefaultHandler {
             double lon = Double.parseDouble(attributes.getValue("lon"));
             currentNode.geoPoint = new GeoPoint(lat, lon);
 
-        }else if(qName.equalsIgnoreCase("way")){
+        } else if (qName.equalsIgnoreCase("way")) {
             currentRoad = new Road();
             currentRoad.id = Long.parseLong(attributes.getValue("id"));
 
-        }else if(qName.equalsIgnoreCase("nd")){
+        } else if (qName.equalsIgnoreCase("nd")) {
             currentRoad.getRoadPoints().add(
                     nodes.get(Long.parseLong(attributes.getValue("ref"))).geoPoint
 
@@ -51,7 +50,7 @@ public class OsmParser extends DefaultHandler {
         if (qName.equalsIgnoreCase("node")) {
             nodes.put(currentNode.id, currentNode);
 
-        }else if(qName.equalsIgnoreCase("way")){
+        } else if (qName.equalsIgnoreCase("way")) {
             roads.add(currentRoad);
         }
     }
@@ -59,7 +58,6 @@ public class OsmParser extends DefaultHandler {
     @Override
     public void characters(char ch[],
                            int start, int length) throws SAXException {
-
 
     }
 

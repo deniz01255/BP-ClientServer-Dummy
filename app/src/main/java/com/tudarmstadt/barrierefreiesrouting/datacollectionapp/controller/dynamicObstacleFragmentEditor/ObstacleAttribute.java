@@ -9,10 +9,8 @@ import java.util.Observer;
 
 public class ObstacleAttribute<T> implements Observer {
 
-    public String viewId;
-
     public final Class<T> typeParameterClass;
-
+    public String viewId;
     public T value;
 
     public String name;

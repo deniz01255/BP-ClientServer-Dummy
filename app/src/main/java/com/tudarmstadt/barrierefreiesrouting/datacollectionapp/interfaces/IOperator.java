@@ -10,7 +10,4 @@ public interface IOperator {
 
     boolean dispose();
 
-
-
-
 }

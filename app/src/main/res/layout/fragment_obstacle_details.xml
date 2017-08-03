@@ -5,17 +5,15 @@
     tools:context=".ui.fragments.ObstacleDetailsFragment">
 
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/editor_attribute_list_container"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.activities.EditAttributesActivity"
-            android:orientation="vertical">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/editor_attribute_list_container"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.activities.EditAttributesActivity">
 
 
-
-        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>

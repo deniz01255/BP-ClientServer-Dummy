@@ -4,13 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.osmdroid.api.IMapController;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
 
+import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -27,23 +30,15 @@ import java.util.ArrayList;
 
 import bp.common.model.Obstacle;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
-
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
-
 
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
+    public ItemizedOverlayWithFocus<OverlayItem> mOverlay;
     private MapEventsOverlay evOverlay;
     private RoadManager roadManager;
-
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-    public ItemizedOverlayWithFocus<OverlayItem> mOverlay;
-
     private OnFragmentInteractionListener mListener;
     private IMapOperator activeMapOperator;
 
@@ -58,7 +53,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +63,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map_editor, container, false);
-        MainActivity activity = (MainActivity)getActivity() ;
+        MainActivity activity = (MainActivity) getActivity();
 
         Context context = activity.getApplicationContext();
 
@@ -81,7 +75,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
         this.evOverlay = new MapEventsOverlay(this);
         map.getOverlays().add(evOverlay);
-        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context),map);
+        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context), map);
         this.mLocationOverlay.enableMyLocation();
         mLocationOverlay.setDrawAccuracyEnabled(false);
         map.getOverlays().add(this.mLocationOverlay);
@@ -114,7 +108,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
 
-
         v.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         return v;
@@ -144,23 +137,20 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        return activeMapOperator.longPressHelper(p,(MainActivity) getActivity(),this);
+        return activeMapOperator.longPressHelper(p, (MainActivity) getActivity(), this);
     }
-
 
     public void addObstacle(OverlayItem overlayItem) {
         mOverlay.addItem(overlayItem);
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-
-    public void refresh(){
+    public void refresh() {
         map.invalidate();
 
     }
 
-
+    public interface OnFragmentInteractionListener {
+        void onFragmentInteraction(Uri uri);
+    }
 
 }

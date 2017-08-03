@@ -11,12 +11,11 @@ import org.osmdroid.util.GeoPoint;
 public class DefaultNearestRoadsDirector {
     INearestRoadsOverlayBuilder builder;
 
-
-    public DefaultNearestRoadsDirector(final INearestRoadsOverlayBuilder builder){
+    public DefaultNearestRoadsDirector(final INearestRoadsOverlayBuilder builder) {
         this.builder = builder;
     }
 
-    public NearestRoadsOverlay construct(GeoPoint p){
+    public NearestRoadsOverlay construct(GeoPoint p) {
 
         return builder
                 .setCenter(p)

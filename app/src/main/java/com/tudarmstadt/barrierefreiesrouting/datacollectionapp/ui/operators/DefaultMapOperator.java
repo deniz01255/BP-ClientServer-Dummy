@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.OverpassAPI;
@@ -15,13 +14,12 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.xml.sax.InputSource;
@@ -29,9 +27,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -49,18 +45,16 @@ import okhttp3.Response;
 
 public class DefaultMapOperator implements IMapOperator {
 
-    OverpassAPI overpassAPI = new OverpassAPI();
     protected NearestRoadsOverlay roadsOverlay;
     protected MapEditorFragment mapEditorFragment;
-
+    OverpassAPI overpassAPI = new OverpassAPI();
     private Context context;
     private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
 
-    public DefaultMapOperator(Context context){
+    public DefaultMapOperator(Context context) {
 
         this.context = context;
     }
-
 
     @Override
     public boolean init() {
@@ -76,12 +70,11 @@ public class DefaultMapOperator implements IMapOperator {
     public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
         this.mapEditorFragment = mapEditorFragment;
-        DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder( context));
+        DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder(context));
         roadsOverlay = roadsDirector.construct(p);
 
         GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(context);
         AsyncTask<Object, Object, Response> execute = task.execute(roadsOverlay.center, roadsOverlay.radius);
-
 
         return true;
     }
@@ -92,8 +85,8 @@ public class DefaultMapOperator implements IMapOperator {
         return true;
     }
 
-    protected void processRoads(Response response){
-        if(response != null && response.isSuccessful()){
+    protected void processRoads(Response response) {
+        if (response != null && response.isSuccessful()) {
             mapEditorFragment.map.getOverlays().removeAll(currentRoadOverlays);
             currentRoadOverlays.clear();
             try {
@@ -108,7 +101,7 @@ public class DefaultMapOperator implements IMapOperator {
 
                 roadsOverlay.nearestRoads = parser.getRoads();
 
-                for(Road r : roadsOverlay.nearestRoads){
+                for (Road r : roadsOverlay.nearestRoads) {
 
                     Polyline polyline = new Polyline();
                     polyline.setPoints(r.getRoadPoints());
@@ -116,11 +109,19 @@ public class DefaultMapOperator implements IMapOperator {
                     polyline.setWidth(20);
                     polyline.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
                     polyline.setTitle("Polyline tapped!");
+                    polyline.setOnClickListener(new Polyline.OnClickListener() {
 
-                   currentRoadOverlays.add(polyline);
+                        @Override
+                        public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
+
+                            return false;
+                        }
+                    });
+
+                    currentRoadOverlays.add(polyline);
 
                 }
-                for(Polyline p : currentRoadOverlays){
+                for (Polyline p : currentRoadOverlays) {
                     mapEditorFragment.map.getOverlays().add(p);
 
                 }
@@ -136,20 +137,19 @@ public class DefaultMapOperator implements IMapOperator {
 
             System.out.print(response.body());
             return;
-        }else{
+        } else {
             System.out.print("....");
 
             return;
         }
     }
+
     class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
         Intent myIntent = new Intent(context, MainActivity.class);
-
+        ProgressDialog progressDialog;
         private MainActivity activity;
 
-        ProgressDialog progressDialog;
-
-        GetHighwaysFromOverpassAPITask(MainActivity activity){
+        GetHighwaysFromOverpassAPITask(MainActivity activity) {
 
             this.activity = activity;
             progressDialog = new ProgressDialog(activity);
@@ -173,7 +173,7 @@ public class DefaultMapOperator implements IMapOperator {
             RequestBody body = RequestBody.create(MediaType.parse("text/plain"), OverpassAPI.getNearestHighwaysPayload(p, radius));
 
             Request request = new Request.Builder()
-                    .url( OverpassAPI.baseURL + OverpassAPI.stairsResource)
+                    .url(OverpassAPI.baseURL + OverpassAPI.stairsResource)
                     .method("POST", body)
                     .build();
 

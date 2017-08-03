@@ -2,7 +2,6 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import java.util.List;
 
-import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
 
 /**
@@ -12,6 +11,5 @@ import bp.common.model.Obstacle;
 public interface IAsyncDownloadObstaclesResponse {
 
     void processDownloadedObstacles(List<Obstacle> obstacles);
-
 
 }

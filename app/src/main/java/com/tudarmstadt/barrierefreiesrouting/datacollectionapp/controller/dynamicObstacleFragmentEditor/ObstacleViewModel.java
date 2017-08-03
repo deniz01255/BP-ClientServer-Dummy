@@ -21,23 +21,23 @@ public class ObstacleViewModel {
 
     private Obstacle mObstacleData;
 
-    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, Obstacle obstacle){
+    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, Obstacle obstacle) {
         attributesMap = attributes;
         mObstacleData = obstacle;
     }
 
-    public void commit(Activity activity, MapEditorFragment mapEditorFragment){
+    public void commit(Activity activity, MapEditorFragment mapEditorFragment) {
 
         Field[] obstacleFields = mObstacleData.getClass().getDeclaredFields();
 
-        for (Field field : obstacleFields){
+        for (Field field : obstacleFields) {
 
             String tag = field.getAnnotation(EditableAttribute.class).value();
 
-            if(attributesMap.get(tag) != null){
+            if (attributesMap.get(tag) != null) {
 
                 try {
-                    field.set(mObstacleData, attributesMap.get(tag) );
+                    field.set(mObstacleData, attributesMap.get(tag));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -45,9 +45,5 @@ public class ObstacleViewModel {
             }
         }
 
-    }
-
-    public Obstacle getmObstacleData() {
-        return mObstacleData;
     }
 }

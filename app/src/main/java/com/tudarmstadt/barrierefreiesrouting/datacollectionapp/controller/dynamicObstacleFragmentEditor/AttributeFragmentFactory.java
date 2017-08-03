@@ -11,35 +11,30 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 
 import java.util.Map;
 
-
 /**
  * Created by Vincent on 27.06.2017.
  */
 public class AttributeFragmentFactory {
     private static final int CONTENT_VIEW_ID = 10101010;
 
-    public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel){
+    public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel) {
 
         Map<String, ObstacleAttribute<?>> obstacle = obstacleViewModel.attributesMap;
 
-        for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet())
-        {
-            if(entry.getValue().typeParameterClass == Double.TYPE){
-                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()) , entry.getKey());
-            }
-            else if(entry.getValue().typeParameterClass == Integer.TYPE){
-                CommitFragment(fragment,  NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
-            }
-            else if(entry.getValue().typeParameterClass == String.class){
+        for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet()) {
+            if (entry.getValue().typeParameterClass == Double.TYPE) {
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+            } else if (entry.getValue().typeParameterClass == Integer.TYPE) {
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+            } else if (entry.getValue().typeParameterClass == String.class) {
                 CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
-            }
-            else if(entry.getValue().typeParameterClass == Boolean.TYPE){
+            } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
                 CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             }
         }
     }
 
-    private static void CommitFragment(Fragment parentFragment, Fragment newFragment ,String tag) {
+    private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
         FragmentManager fragMan = parentFragment.getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
         fragTransaction.add(R.id.editor_attribute_list_container, newFragment, tag);
