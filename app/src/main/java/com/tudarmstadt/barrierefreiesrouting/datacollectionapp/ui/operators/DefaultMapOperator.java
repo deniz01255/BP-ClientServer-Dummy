@@ -7,6 +7,7 @@ import android.support.constraint.Guideline;
 import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.OverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.CloseToRoad.CloseToRoadChecker;
@@ -26,6 +27,8 @@ import bp.common.model.Stairs;
  */
 
 public class DefaultMapOperator implements IMapOperator {
+
+    OverpassAPI overpassAPI = new OverpassAPI();
 
 
     @Override
@@ -79,22 +82,13 @@ public class DefaultMapOperator implements IMapOperator {
         public MapEditorFragment mapEditorFragment;
 
         protected Road doInBackground(Object... params) {
-            waypoints = (ArrayList<GeoPoint>)params[0];
-            activity = (Activity)params[2];
-            mapEditorFragment = (MapEditorFragment)params[1];
 
-            //roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
-            //roadManager.addRequestOption("routeType=pedestrian");
-            graphHopperRoadManager = new GraphHopperRoadManager("3eaff35e-11cf-437f-b17b-570ae07759fc",true);
-
-            graphHopperRoadManager.addRequestOption("vehicle=foot");
 
             return graphHopperRoadManager.getRoad(waypoints);
         }
         @Override
         protected void onPostExecute(Road result) {
             road = result;
-
             if(road.mStatus != Road.STATUS_OK) {
                 Toast.makeText(activity, "Error when loading the road - status=" + road.mStatus, Toast.LENGTH_SHORT).show();
                 return;
