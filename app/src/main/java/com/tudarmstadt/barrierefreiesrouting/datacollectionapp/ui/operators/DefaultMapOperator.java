@@ -1,17 +1,16 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Guideline;
 import android.widget.Toast;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.OverpassAPI;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.DefaultNearestRoadsDirector;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.CloseToRoad.CloseToRoadChecker;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 
 import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -20,8 +19,6 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
-import bp.common.model.Stairs;
-
 /**
  * Created by Vincent on 31.07.2017.
  */
@@ -29,6 +26,12 @@ import bp.common.model.Stairs;
 public class DefaultMapOperator implements IMapOperator {
 
     OverpassAPI overpassAPI = new OverpassAPI();
+    private Context context;
+
+    public DefaultMapOperator(Context context){
+
+        this.context = context;
+    }
 
 
     @Override
@@ -42,30 +45,18 @@ public class DefaultMapOperator implements IMapOperator {
     }
 
     @Override
-    public boolean longPressHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment) {
+    public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
-        // TODO: refactor this code
-        // RoadManager roadManager = new MapQuestRoadManager("P9eWLsqG8k7C30Gcl2jzeAqHByyl5bZz");
 
-        // TODO: highlight the correct Road!!
-        GeoPoint startPoint = new GeoPoint( 49.87683721424917,8.653078681454645);
-        GeoPoint endPoint = new GeoPoint(49.87547201057107, 8.653020858764648);
+        DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder( context));
 
-        ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
-        roadPoints.add(startPoint);
-        roadPoints.add(endPoint);
-        CloseToRoadChecker.CloseToRoadChecker(activity,p,mapEditorFragment);
+        roadsDirector.construct(p);
 
-        final Stairs newObstacle = new Stairs(activity.getString(R.string.default_description), p.getLongitude(), p.getLatitude(), 10, 10, false) ;
-
-        PostObstacleToServerTask.PostStairs(activity, mapEditorFragment, newObstacle);
-
-        new UpdateRoadTask().execute(roadPoints,mapEditorFragment,activity);
         return true;
     }
 
     @Override
-    public boolean singleTapConfirmedHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment) {
+    public boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
 
         return true;

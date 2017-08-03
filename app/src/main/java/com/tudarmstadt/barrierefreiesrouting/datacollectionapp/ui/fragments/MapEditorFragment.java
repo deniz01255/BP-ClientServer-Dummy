@@ -62,7 +62,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activeMapOperator = new DefaultMapOperator();
+        activeMapOperator = new DefaultMapOperator(getActivity());
     }
 
     @Override
@@ -139,12 +139,12 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        return activeMapOperator.singleTapConfirmedHelper(p, getActivity(), this);
+        return activeMapOperator.singleTapConfirmedHelper(p, (MainActivity) getActivity(), this);
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        return activeMapOperator.longPressHelper(p,getActivity(),this);
+        return activeMapOperator.longPressHelper(p,(MainActivity) getActivity(),this);
     }
 
 

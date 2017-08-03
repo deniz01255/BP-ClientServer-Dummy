@@ -1,7 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import android.app.Activity;
+import android.content.Context;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
@@ -13,9 +15,9 @@ import org.osmdroid.util.GeoPoint;
 
 public interface IMapOperator extends IOperator {
 
-    boolean longPressHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment);
+    boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
 
-    boolean singleTapConfirmedHelper(GeoPoint p, Activity activity, MapEditorFragment mapEditorFragment);
+    boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
 
 
 }

@@ -12,12 +12,14 @@ public class DefaultNearestRoadsDirector {
     INearestRoadsOverlayBuilder builder;
 
 
-    DefaultNearestRoadsDirector(final INearestRoadsOverlayBuilder builder){
+    public DefaultNearestRoadsDirector(final INearestRoadsOverlayBuilder builder){
         this.builder = builder;
     }
 
     public NearestRoadsOverlay construct(GeoPoint p){
-        return builder.setApiUrlEndpoint("http://overpass-api.de/api/interpreter")
+
+        System.out.print("");
+        return builder
                 .setCenter(p)
                 .setRadius(100)
                 .setTypes("^(.*)$")
