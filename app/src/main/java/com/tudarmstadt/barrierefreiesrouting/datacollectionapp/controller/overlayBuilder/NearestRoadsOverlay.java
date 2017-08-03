@@ -18,7 +18,6 @@ public class NearestRoadsOverlay {
      */
     public LinkedList<Road> nearestRoads;
 
-
     /**
      * The User provides this point. It is the center point of the circle of nearest roads.
      */

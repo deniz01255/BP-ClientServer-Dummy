@@ -10,15 +10,26 @@ import java.util.ArrayList;
 
 public class Road {
 
-    /**
-     * All GeoPoints that form the Road.
-     */
-    public ArrayList<GeoPoint> roadPoints;
+
+    public long id;
+
+    private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
 
 
     /**
      * The name of the road to display in the details view of the road.
      */
     public String name = "has no name";
+
+    /**
+     * All GeoPoints that form the Road.
+     */
+    public ArrayList<GeoPoint> getRoadPoints() {
+        return roadPoints;
+    }
+
+    public void setRoadPoints(ArrayList<GeoPoint> roadPoints) {
+        this.roadPoints = roadPoints;
+    }
 
 }

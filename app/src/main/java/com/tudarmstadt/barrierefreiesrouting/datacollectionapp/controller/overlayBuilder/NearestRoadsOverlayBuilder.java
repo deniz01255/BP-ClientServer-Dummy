@@ -18,6 +18,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -40,6 +42,7 @@ public class NearestRoadsOverlayBuilder  implements INearestRoadsOverlayBuilder 
     private NearestRoadsOverlay roadsOverlay;
     private MainActivity context;
     protected Response response = null;
+    protected LinkedList<Road> roads = null;
 
     public NearestRoadsOverlayBuilder(MainActivity context){
         this.context = context;
@@ -51,47 +54,11 @@ public class NearestRoadsOverlayBuilder  implements INearestRoadsOverlayBuilder 
 
         //http://overpass-api.de/api/interpreter
 
-        GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask( context);
-        AsyncTask<Object, Object, Response> execute = task.execute(this.roadsOverlay.center, this.roadsOverlay.radius);
-
-
+        roadsOverlay.nearestRoads = new LinkedList<>();
 
         return roadsOverlay;
     }
 
-
-
-
-    protected void processRoads(Response response){
-        if(response.isSuccessful()){
-            try {
-                SAXParserFactory factory = SAXParserFactory.newInstance();
-                SAXParser saxParser = factory.newSAXParser();
-
-                OsmParser parser = new OsmParser();
-                String ss = response.body().string();
-                InputSource source = new InputSource(new StringReader(ss));
-
-                saxParser.parse(source, parser);
-
-            } catch (SAXException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e) {
-                e.printStackTrace();
-            }
-
-            System.out.print(response.body());
-            return;
-        }else{
-
-            System.out.print("....");
-
-
-            return;
-        }
-    }
 
 
     @Override
@@ -114,61 +81,6 @@ public class NearestRoadsOverlayBuilder  implements INearestRoadsOverlayBuilder 
     }
 
 
-    class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
-        Intent myIntent = new Intent(context, MainActivity.class);
 
-        private MainActivity activity;
-
-        ProgressDialog progressDialog;
-
-        GetHighwaysFromOverpassAPITask(MainActivity activity){
-
-            this.activity = activity;
-            progressDialog = new ProgressDialog(activity);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            this.progressDialog.setMessage("Progress start");
-            this.progressDialog.show();
-        }
-
-        @Override
-        protected Response doInBackground(Object... params) {
-
-            GeoPoint p = (GeoPoint) params[0];
-            int radius = (int) params[1];
-            DownloadObstaclesTask task = new DownloadObstaclesTask();
-            OkHttpClient client = new OkHttpClient();
-
-            RequestBody body = RequestBody.create(MediaType.parse("text/plain"), OverpassAPI.getNearestHighwaysPayload(p, radius));
-
-            Request request = new Request.Builder()
-                    .url( OverpassAPI.baseURL + OverpassAPI.stairsResource)
-                    .method("POST", body)
-                    .build();
-
-            Response response = null;
-            try {
-                response = client.newCall(request).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(Response result) {
-            super.onPostExecute(result);
-
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-            processRoads(result);
-
-        }
-    }
 
 }
