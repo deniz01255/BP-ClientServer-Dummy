@@ -29,7 +29,7 @@ public class OverpassAPI {
 
     public static String getNearestHighwaysPayload(GeoPoint p, int radius){
 
-        String payload = "(way(around:" + radius + "," + p.getLatitude() + "," + p.getLongitude()+ ")[highway~\"^(.*)$\"][name];>;);out;";
+        String payload = "(way(around:" + radius + "," + p.getLatitude() + "," + p.getLongitude()+ ")[highway~\"^(.*)$\"];>;);out;";
 
         return payload;
     }

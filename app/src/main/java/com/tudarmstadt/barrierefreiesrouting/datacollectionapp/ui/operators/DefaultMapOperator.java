@@ -3,8 +3,11 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.OverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.DefaultNearestRoadsDirector;
@@ -20,6 +23,7 @@ import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -79,19 +83,17 @@ public class DefaultMapOperator implements IMapOperator {
         AsyncTask<Object, Object, Response> execute = task.execute(roadsOverlay.center, roadsOverlay.radius);
 
 
-
         return true;
     }
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
-
         return true;
     }
 
     protected void processRoads(Response response){
-        if(response.isSuccessful()){
+        if(response != null && response.isSuccessful()){
             mapEditorFragment.map.getOverlays().removeAll(currentRoadOverlays);
             currentRoadOverlays.clear();
             try {
@@ -107,19 +109,21 @@ public class DefaultMapOperator implements IMapOperator {
                 roadsOverlay.nearestRoads = parser.getRoads();
 
                 for(Road r : roadsOverlay.nearestRoads){
-                    RoadManager roadManager = new OSRMRoadManager(context);
 
-                    org.osmdroid.bonuspack.routing.Road road = roadManager.getRoad( r.getRoadPoints());
-                    Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                    Polyline polyline = new Polyline();
+                    polyline.setPoints(r.getRoadPoints());
+                    polyline.setColor(Color.RED);
+                    polyline.setWidth(20);
+                    polyline.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+                    polyline.setTitle("Polyline tapped!");
 
-                    currentRoadOverlays.add(roadOverlay);
+                   currentRoadOverlays.add(polyline);
 
                 }
                 for(Polyline p : currentRoadOverlays){
                     mapEditorFragment.map.getOverlays().add(p);
 
                 }
-
                 mapEditorFragment.map.invalidate();
 
             } catch (SAXException e) {
@@ -133,9 +137,7 @@ public class DefaultMapOperator implements IMapOperator {
             System.out.print(response.body());
             return;
         }else{
-
             System.out.print("....");
-
 
             return;
         }
