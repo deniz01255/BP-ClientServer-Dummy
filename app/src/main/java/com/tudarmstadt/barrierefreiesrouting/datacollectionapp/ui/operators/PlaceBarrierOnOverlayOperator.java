@@ -30,7 +30,7 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
     private OverlayItem overlayItem;
     private ItemizedOverlayWithFocus setNewObstaclePositionOverlay;
-    
+
     public PlaceBarrierOnOverlayOperator(ItemizedOverlayWithFocus setNewObstaclePositionOverlay, OverlayItem overlayItem) {
 
         this.overlayItem = overlayItem;
@@ -94,8 +94,14 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
      */
     private Point getClosesPointOnLine(Point pointA, Point pointB, Point pointC) {
 
-        // Get XY Coordinates
-        //https://stackoverflow.com/questions/1369512/converting-longitude-latitude-to-x-y-on-a-map-with-calibration-points
+        /**
+         a = y1-y2,
+         b = x2-x1,
+         c = (x1-x2)*y1 + (y2-y1)*x1
+         */
+        double a = pointA.y - pointB.y;
+        double b = pointB.x - pointA.x;
+        double c = (pointA.x - pointB.x)*pointA.y + (pointB.y - pointA.y) * pointA.x;
 
         // Point to Line distance
         //http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
