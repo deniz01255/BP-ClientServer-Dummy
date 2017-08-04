@@ -6,17 +6,17 @@ import org.osmdroid.util.GeoPoint;
  * Created by Vincent on 03.08.2017.
  */
 
-public class OverpassAPI {
+public class RamplerOverpassAPI {
 
     /**
      * The base URL where to send the api requests. Append the path to the proper API resource
      */
-    public static String baseURL = "http://overpass-api.de";
+    public static String baseURL = "http://overpass.osm.rambler.ru";
 
     /**
      * The Path to the Stairs Resource on the routing server
      */
-    public static String stairsResource = "/api/interpreter";
+    public static String stairsResource = "/cgi/interpreter";
 
     /**
      * If the api key requires an apikey, load the api key to this variable.

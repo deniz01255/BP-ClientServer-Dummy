@@ -8,7 +8,8 @@ import android.os.AsyncTask;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.OverpassAPI;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.MainOverpassAPI;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RamplerOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.DefaultNearestRoadsDirector;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlay;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
@@ -19,11 +20,9 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.Mai
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -49,7 +48,7 @@ public class DefaultMapOperator implements IMapOperator {
 
     protected NearestRoadsOverlay roadsOverlay;
     protected MapEditorFragment mapEditorFragment;
-    OverpassAPI overpassAPI = new OverpassAPI();
+    MainOverpassAPI overpassAPI = new MainOverpassAPI();
     private Context context;
     private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
 
@@ -174,19 +173,23 @@ public class DefaultMapOperator implements IMapOperator {
             DownloadObstaclesTask task = new DownloadObstaclesTask();
             OkHttpClient client = new OkHttpClient();
 
-            RequestBody body = RequestBody.create(MediaType.parse("text/plain"), OverpassAPI.getNearestHighwaysPayload(p, radius));
+            RequestBody body = RequestBody.create(MediaType.parse("text/plain"), RamplerOverpassAPI.getNearestHighwaysPayload(p, radius));
 
             Request request = new Request.Builder()
-                    .url(OverpassAPI.baseURL + OverpassAPI.stairsResource)
+                    .url(RamplerOverpassAPI.baseURL + RamplerOverpassAPI.stairsResource)
                     .method("POST", body)
                     .build();
 
             Response response = null;
             try {
                 response = client.newCall(request).execute();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
+            }
+
+            if(!response.isSuccessful()){
+                System.out.print("..");
             }
             return response;
         }
