@@ -14,6 +14,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.Mai
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -107,6 +108,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
+        GraphHopperRoadManager graphHopperRoadManager = new GraphHopperRoadManager("", false);
 
         v.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

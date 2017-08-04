@@ -20,6 +20,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import org.xml.sax.InputSource;
@@ -69,6 +71,11 @@ public class DefaultMapOperator implements IMapOperator {
     @Override
     public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
+        int indexOfItemizedOverlayWithFocus = mapEditorFragment.map.getOverlays().indexOf(mapEditorFragment.mOverlay);
+
+        ItemizedOverlayWithFocus<OverlayItem> mm = (ItemizedOverlayWithFocus<OverlayItem>) mapEditorFragment.map.getOverlays().get(indexOfItemizedOverlayWithFocus);
+        mm.removeAllItems();
+
         this.mapEditorFragment = mapEditorFragment;
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder(context));
         roadsOverlay = roadsDirector.construct(p);
@@ -101,22 +108,19 @@ public class DefaultMapOperator implements IMapOperator {
 
                 roadsOverlay.nearestRoads = parser.getRoads();
 
+                if(roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
+                    return;
+
+                OverlayItem newOverlayItem = new OverlayItem("No Name", "No Title", roadsOverlay.nearestRoads.getFirst().getRoadPoints().get(0));
+                newOverlayItem.setMarker(mapEditorFragment.map.getContext().getResources().getDrawable(R.mipmap.ramppic));
+
                 for (Road r : roadsOverlay.nearestRoads) {
 
                     Polyline polyline = new Polyline();
                     polyline.setPoints(r.getRoadPoints());
-                    polyline.setColor(Color.RED);
-                    polyline.setWidth(20);
-                    polyline.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
-                    polyline.setTitle("Polyline tapped!");
-                    polyline.setOnClickListener(new Polyline.OnClickListener() {
-
-                        @Override
-                        public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-
-                            return false;
-                        }
-                    });
+                    polyline.setColor(Color.BLACK);
+                    polyline.setWidth(16);
+                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment.mOverlay, newOverlayItem));
 
                     currentRoadOverlays.add(polyline);
 
