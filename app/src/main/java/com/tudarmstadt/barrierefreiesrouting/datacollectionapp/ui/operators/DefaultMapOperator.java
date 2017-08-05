@@ -136,8 +136,9 @@ public class DefaultMapOperator implements IMapOperator {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
+            }catch (Exception e) {
+                e.printStackTrace();
             }
-
             System.out.print(response.body());
             return;
         } else {

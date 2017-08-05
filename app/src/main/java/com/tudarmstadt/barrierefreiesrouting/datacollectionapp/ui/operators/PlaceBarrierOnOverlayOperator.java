@@ -13,6 +13,7 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.Polyline.OnClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class does not implement an Operator Interface - Not beautiful..
@@ -46,6 +47,10 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
         OverlayItem newOverlayItem = new OverlayItem(overlayItem.getTitle(), overlayItem.getTitle(), getClosesPointOnPolyLine(mapView, polyline, finalPoint));
 
+
+        if(newOverlayItem == null)
+            return false;
+
         overlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
 
         setNewObstaclePositionOverlay.addItem(newOverlayItem);
@@ -67,7 +72,8 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
         GeoPoint start = null;
         GeoPoint end = null;
-        GeoPoint closestGeoPointOnLine = null;
+        GeoPoint candidate = null;
+        Point candidatePoint = null;
 
         for (int curIndex = 0; curIndex + 1 < polyline.getPoints().size(); curIndex++) {
             start = polyline.getPoints().get(curIndex);
@@ -80,37 +86,60 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
             Point pointB = mapView.getProjection().toPixelsFromProjected(projectedPointEnd, null);
 
             // calc closest point on line between start and end
-            Point closestPointOnLine = getClosesPointOnLine(pointA, pointB, point);
 
-            closestGeoPointOnLine = (GeoPoint) mapView.getProjection().fromPixels(closestPointOnLine.x, closestPointOnLine.y);
+            if(isProjectedPointOnLineSegment(pointA, pointB, point, 0.1)){
+                Point closestPointOnLine = getClosestPointOnLine(pointA, pointB, point);
+                if(candidate == null || getDistance(candidatePoint, point) < getDistance(closestPointOnLine, point) ){
+                    candidatePoint = closestPointOnLine;
+                    candidate = (GeoPoint) mapView.getProjection().fromPixels(closestPointOnLine.x, closestPointOnLine.y);
+                }
+            }
 
         }
+        return candidate;
+    }
 
-        return closestGeoPointOnLine;
+    public double getDistance(Point a, Point b){
+        try{
+            return Math.sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y) );
+
+        }catch (Exception e){
+            return 0;
+        }
+    }
+
+    public boolean isProjectedPointOnLineSegment(Point v1, Point v2, Point p, double tolerance)
+    {
+        Point e1 = new Point(v2.x - v1.x, v2.y - v1.y);
+        int recAreaToTest = dot(e1, e1);
+
+        Point e2 = new Point(p.x - v1.x, p.y - v1.y);
+        double value = dot(e1, e2);
+        return ((value > 0+tolerance || value > 0 - tolerance) && (value < recAreaToTest - tolerance || value < recAreaToTest + tolerance) );
     }
 
     /**
      * Search closest point between the line from pointA to pointB and pointC
      */
-    private Point getClosesPointOnLine(Point pointA, Point pointB, Point pointC) {
+    private Point getClosestPointOnLine(Point v1, Point v2, Point p) {
 
-        /**
-         a = y1-y2,
-         b = x2-x1,
-         c = (x1-x2)*y1 + (y2-y1)*x1
-         */
-        double a = pointA.y - pointB.y;
-        double b = pointB.x - pointA.x;
-        double c = (pointA.x - pointB.x)*pointA.y + (pointB.y - pointA.y) * pointA.x;
+        // get dot product of e1, e2
+        Point e1 = new Point(v2.x - v1.x, v2.y - v1.y);
+        Point e2 = new Point(p.x - v1.x, p.y - v1.y);
+        double valDp = dot(e1, e2);
 
-        // Point to Line distance
-        //http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
+        double lenLineE1 = Math.sqrt(e1.x * e1.x + e1.y * e1.y);
+        double lenLineE2 = Math.sqrt(e2.x * e2.x + e2.y * e2.y);
+        double cos = valDp / (lenLineE1 * lenLineE2);
 
-        // closest point to another point
-        // https://math.stackexchange.com/questions/717746/closest-point-on-a-line-to-another-point
-
-        return pointA;
-
+        double projLenOfLine = cos * lenLineE2;
+        Point p2 = new Point((int)(v1.x + (projLenOfLine * e1.x) / lenLineE1),
+                (int)(v1.y + (projLenOfLine * e1.y) / lenLineE1));
+        return p2;
     }
+    
 
+    private int dot(Point v1, Point v2){
+        return v1.x * v2.x + v1.y * v2.y;
+    }
 }
