@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
@@ -107,11 +109,11 @@ public class DefaultMapOperator implements IMapOperator {
 
                 roadsOverlay.nearestRoads = parser.getRoads();
 
-                if(roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
+                if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
                     return;
 
-                OverlayItem newOverlayItem = new OverlayItem("No Name", "No Title", roadsOverlay.nearestRoads.getFirst().getRoadPoints().get(0));
-                newOverlayItem.setMarker(mapEditorFragment.map.getContext().getResources().getDrawable(R.mipmap.ramppic));
+               // OverlayItem newOverlayItem = new OverlayItem("No Name", "No Title", roadsOverlay.nearestRoads.getFirst().getRoadPoints().get(0));
+               //
 
                 for (Road r : roadsOverlay.nearestRoads) {
 
@@ -119,7 +121,7 @@ public class DefaultMapOperator implements IMapOperator {
                     polyline.setPoints(r.getRoadPoints());
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(16);
-                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment.mOverlay, newOverlayItem));
+                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment.mOverlay));
 
                     currentRoadOverlays.add(polyline);
 
@@ -136,10 +138,14 @@ public class DefaultMapOperator implements IMapOperator {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             System.out.print(response.body());
+            View contextView = mapEditorFragment.map.findViewById(R.id.map);
+
+            Snackbar.make(contextView, R.string.server_response_roads_loaded, Snackbar.LENGTH_SHORT)
+                    .show();
             return;
         } else {
             System.out.print("....");
@@ -189,7 +195,7 @@ public class DefaultMapOperator implements IMapOperator {
                 return null;
             }
 
-            if(!response.isSuccessful()){
+            if (!response.isSuccessful()) {
                 System.out.print("..");
             }
             return response;

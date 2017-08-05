@@ -7,6 +7,8 @@
     <string name="action_barrier_added">Barrier added</string>
     <string name="action_barrier_loaded">Barriers loaded</string>
     <string name="help_place_an_obstacle">Place an Obstacle</string>
+    <string name="action_barrier_placed">Obstacle placed</string>
+    <string name="server_response_roads_loaded">Nearby streets loaded</string>
 
 
 </resources>

@@ -6,4 +6,6 @@
     <string name="action_barrier_added">Barriere hinzugefügt</string>
     <string name="action_barrier_loaded">Barrieren geladen</string>
     <string name="help_place_an_obstacle">Platziere eine Barriere</string>
+    <string name="action_barrier_placed">Barriere platziert</string>
+    <string name="server_response_roads_loaded">Straßen in der nähe geladen</string>
 </resources>
