@@ -48,13 +48,14 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
             GeoPoint obstacleGeoPoint = getClosesPointOnPolyLine(mapView, polyline, finalPoint);
-            if(obstacleGeoPoint == null)
+            if (obstacleGeoPoint == null)
                 return false;
             OverlayItem newOverlayItem = new OverlayItem("", "", obstacleGeoPoint);
             if (newOverlayItem == null)
                 return false;
 
-            newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
+            // TODO: Das Icon soll eindeutiger einer Position zugeordnet werden können.
+            // newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
 
             setNewObstaclePositionOverlay.addItem(newOverlayItem);
 
@@ -99,7 +100,7 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
                 if (isProjectedPointOnLineSegment(pointA, pointB, point)) {
                     Point closestPointOnLine = getClosestPointOnLine(pointA, pointB, point);
 
-                    if (candidate == null || (getDistance(candidatePoint, point) < getDistance(closestPointOnLine, point))) {
+                    if (candidate == null || (getDistance(candidatePoint, point) > getDistance(closestPointOnLine, point))) {
                         candidatePoint = closestPointOnLine;
                         candidate = (GeoPoint) mapView.getProjection().fromPixels(closestPointOnLine.x, closestPointOnLine.y);
                     }
@@ -114,19 +115,20 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
     }
 
     public double getDistance(Point a, Point b) {
-        double temp = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
-        double result = Math.sqrt(temp);
-        return result;
+        double temp = Math.pow(a.x - b.x,2) + Math.pow(a.y - b.y,2);
+        return Math.sqrt(temp);
 
     }
+
     public boolean isProjectedPointOnLineSegment(Point v1, Point v2, Point p) {
         Point e1 = new Point(v2.x - v1.x, v2.y - v1.y);
         int recAreaToTest = dot(e1, e1);
 
         Point e2 = new Point(p.x - v1.x, p.y - v1.y);
         double value = dot(e1, e2);
-        return (value > 0  && value < recAreaToTest);
+        return (value > 0 && value < recAreaToTest);
     }
+
     public boolean isProjectedPointOnLineSegment(Point v1, Point v2, Point p, double tolerance) {
         Point e1 = new Point(v2.x - v1.x, v2.y - v1.y);
         int recAreaToTest = dot(e1, e1);
