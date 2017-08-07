@@ -57,22 +57,34 @@ public class DefaultMapOperator implements IMapOperator {
     public DefaultMapOperator(Context context) {
 
         this.context = context;
+        this.init();
     }
 
     @Override
     public boolean init() {
+
         return true;
     }
 
     @Override
     public boolean dispose() {
+        if(mapEditorFragment != null && mapEditorFragment.placeNewObstacleOverlay != null){
+            mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        }
+        if(currentRoadOverlays != null && mapEditorFragment != null){
+            mapEditorFragment.map.getOverlays().removeAll(currentRoadOverlays);
+        }
+
+        if(mapEditorFragment != null){
+            mapEditorFragment.map.invalidate();
+        }
         return true;
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
-        int indexOfItemizedOverlayWithFocus = mapEditorFragment.map.getOverlays().indexOf(mapEditorFragment.mOverlay);
+        int indexOfItemizedOverlayWithFocus = mapEditorFragment.map.getOverlays().indexOf(mapEditorFragment.obstacleOverlay);
 
         ItemizedOverlayWithFocus<OverlayItem> mm = (ItemizedOverlayWithFocus<OverlayItem>) mapEditorFragment.map.getOverlays().get(indexOfItemizedOverlayWithFocus);
         mm.removeAllItems();
@@ -83,6 +95,8 @@ public class DefaultMapOperator implements IMapOperator {
 
         GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(context);
         AsyncTask<Object, Object, Response> execute = task.execute(roadsOverlay.center, roadsOverlay.radius);
+
+
 
         return true;
     }
@@ -121,7 +135,7 @@ public class DefaultMapOperator implements IMapOperator {
                     polyline.setPoints(r.getRoadPoints());
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(16);
-                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment.mOverlay));
+                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment));
 
                     currentRoadOverlays.add(polyline);
 

@@ -1,26 +1,35 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.dialogs.ObstacleDetailDialog;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
 
 import org.osmdroid.config.Configuration;
 
@@ -42,6 +51,8 @@ public class MainActivity extends AppCompatActivity
     private long selectedBarrier;
     private MapEditorFragment mapEditorFragment;
     private ObstacleDetailsFragment obstacleDetailsFragment = null;
+
+
 
     public MapEditorFragment getMapEditorFragment() {
         return mapEditorFragment;
@@ -80,6 +91,37 @@ public class MainActivity extends AppCompatActivity
         // Get access to the custom title view
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mTitle.setText(R.string.help_place_an_obstacle);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_get_near_roads:
+
+                                if(mapEditorFragment.activeMapOperator != null){
+                                    mapEditorFragment.activeMapOperator.dispose();
+                                }
+                                mapEditorFragment.activeMapOperator = new DefaultMapOperator(getApplicationContext());
+                                break;
+                            case R.id.action_place_obstacle:
+
+
+
+                                break;
+                            case R.id.action_get_details:
+
+
+                                ObstacleDetailDialog yourDialogFragment = ObstacleDetailDialog.newInstance();
+                                yourDialogFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
+                                break;
+                        }
+                        return false;
+                    }
+                });
 
         getObstaclesFromServer();
 
@@ -152,7 +194,6 @@ public class MainActivity extends AppCompatActivity
                 return new TightPassage();
             default:
                 return new Stairs();
-
         }
     }
 

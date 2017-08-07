@@ -1,5 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments;
 
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,13 +36,19 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
-    public ItemizedOverlayWithFocus<OverlayItem> mOverlay;
+    public ItemizedOverlayWithFocus<OverlayItem> obstacleOverlay;
+    public ItemizedOverlayWithFocus<OverlayItem> placeNewObstacleOverlay;
+
+
+
+
+
     private MapEventsOverlay evOverlay;
     private RoadManager roadManager;
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
-    private IMapOperator activeMapOperator;
+    public IMapOperator activeMapOperator;
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
@@ -93,7 +100,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             }
         });
 
-        mOverlay = new ItemizedOverlayWithFocus<>(activity, items,
+        obstacleOverlay = new ItemizedOverlayWithFocus<>(activity, items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
@@ -106,8 +113,8 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                     }
                 });
 
-        mOverlay.setFocusItemsOnTap(true);
-        map.getOverlays().add(mOverlay);
+        obstacleOverlay.setFocusItemsOnTap(true);
+        map.getOverlays().add(obstacleOverlay);
         GraphHopperRoadManager graphHopperRoadManager = new GraphHopperRoadManager("", false);
 
         v.setLayoutParams(new ViewGroup.LayoutParams(
@@ -143,7 +150,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     }
 
     public void addObstacle(OverlayItem overlayItem) {
-        mOverlay.addItem(overlayItem);
+        obstacleOverlay.addItem(overlayItem);
     }
 
     public void refresh() {

@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -27,21 +28,21 @@ import org.osmdroid.views.overlay.Polyline.OnClickListener;
 
 public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
-    private ItemizedOverlayWithFocus setNewObstaclePositionOverlay;
+    private MapEditorFragment mapEditor;
 
-    public PlaceBarrierOnOverlayOperator(ItemizedOverlayWithFocus setNewObstaclePositionOverlay) {
+    public PlaceBarrierOnOverlayOperator(MapEditorFragment mapEditor) {
 
-        this.setNewObstaclePositionOverlay = setNewObstaclePositionOverlay;
+        this.mapEditor = mapEditor;
     }
 
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
 
-        if (setNewObstaclePositionOverlay != null) {
-            mapView.getOverlays().remove(setNewObstaclePositionOverlay);
+        if (mapEditor.placeNewObstacleOverlay != null) {
+            mapView.getOverlays().remove(mapEditor.placeNewObstacleOverlay);
         }
-        if (!mapView.getOverlays().contains(setNewObstaclePositionOverlay)) {
-            setNewObstaclePositionOverlay.removeAllItems();
+        if (!mapView.getOverlays().contains(mapEditor.placeNewObstacleOverlay)) {
+            mapEditor.placeNewObstacleOverlay.removeAllItems();
         }
 
         try {
@@ -57,10 +58,10 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
             // TODO: Das Icon soll eindeutiger einer Position zugeordnet werden können.
             // newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
 
-            setNewObstaclePositionOverlay.addItem(newOverlayItem);
+            mapEditor.placeNewObstacleOverlay.addItem(newOverlayItem);
 
             // Workaround: display the tempOverlay on top
-            mapView.getOverlays().add(setNewObstaclePositionOverlay);
+            mapView.getOverlays().add(mapEditor.placeNewObstacleOverlay);
 
             mapView.invalidate();
 

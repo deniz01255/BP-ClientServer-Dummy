@@ -1,9 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +40,11 @@ public class ObstacleDetailsFragment extends Fragment {
     public ObstacleDetailsFragment() {
     }
 
-    public static ObstacleDetailsFragment newInstance() {
+    public static ObstacleDetailsFragment newInstance(Obstacle obstacle) {
         ObstacleDetailsFragment fragment = new ObstacleDetailsFragment();
         Bundle args = new Bundle();
 
+        fragment.obstacleToEdit = obstacle;
         fragment.setArguments(args);
 
         return fragment;
@@ -59,7 +60,7 @@ public class ObstacleDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_obstacle_details, container, false);
+        View v = inflater.inflate(R.layout.obstacle_details_dialog, container, false);
 
         obstacleToEdit = ((IObstacleProvider) getActivity()).getObstacle();
 
@@ -68,7 +69,7 @@ public class ObstacleDetailsFragment extends Fragment {
 
         View pl = v.findViewById(R.id.editor_attribute_list_container);
 
-        TextView heading = new TextView(getContext());
+        TextView heading = new TextView(getActivity());
 
         heading.setLayoutParams(defaultLinearLayoutParams);
         heading.setText("Edit " + obstacleToEdit.getTypeName());
@@ -76,12 +77,12 @@ public class ObstacleDetailsFragment extends Fragment {
         // Heading at the Top
         ((LinearLayout) pl).addView(heading);
 
-        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getContext()), obstacleToEdit);
+        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
 
         // Edit Fragments between heading and Commit Button
         insertAttributeFragments(this, obstacleViewModel);
 
-        Button commitButton = new Button(getContext());
+        Button commitButton = new Button(getActivity());
         commitButton.setLayoutParams(commitButtonLinearLayoutParams);
         commitButton.setText("Commit");
 
@@ -89,7 +90,7 @@ public class ObstacleDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //obstacleViewModel.commit(getActivity(), ((IMapFragmentProvider) getActivity()).getMapEditorFragment());
-                Toast.makeText(getContext(), "Obstacle saved", Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), "Obstacle saved", Toast.LENGTH_LONG);
             }
         });
 

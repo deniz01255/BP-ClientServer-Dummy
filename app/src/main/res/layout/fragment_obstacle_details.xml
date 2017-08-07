@@ -11,7 +11,9 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.activities.EditAttributesActivity">
+        android:background="@color/colorPrimaryLight"
+
+         tools:context=".ui.activities.EditAttributesActivity">
 
 
     </LinearLayout>

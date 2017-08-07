@@ -9,6 +9,11 @@
     <string name="help_place_an_obstacle">Place an Obstacle</string>
     <string name="action_barrier_placed">Obstacle placed</string>
     <string name="server_response_roads_loaded">Nearby streets loaded</string>
+    <string name="navigation_get_near_roads">Get Nearby Roads</string>
+    <string name="navigation_place_obstacle">Place Obstacle</string>
+    <string name="navigation_get_details">Get Details</string>
+    <string name="action_obstacle_details_dialog_send">Save Obstacle</string>
+    <string name="action_obstacle_details_dialog_cancel">Cancel</string>
 
 
 </resources>

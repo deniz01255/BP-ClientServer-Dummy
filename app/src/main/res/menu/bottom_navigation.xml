@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_get_near_roads"
+        android:enabled="true"
+        android:icon="@drawable/barrier_stairs"
+        android:title="@string/navigation_get_near_roads"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_place_obstacle"
+        android:enabled="false"
+        android:icon="@drawable/barrier_stairs"
+        android:title="@string/navigation_place_obstacle"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_get_details"
+        android:enabled="true"
+        android:icon="@drawable/barrier_stairs"
+        android:title="@string/navigation_get_details"
+        app:showAsAction="ifRoom" />
+</menu>

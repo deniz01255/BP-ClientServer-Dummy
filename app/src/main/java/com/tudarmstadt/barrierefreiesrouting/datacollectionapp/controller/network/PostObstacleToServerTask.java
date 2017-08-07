@@ -75,7 +75,7 @@ public class PostObstacleToServerTask {
                                         Toast.LENGTH_SHORT).show();
                                 OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                 overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
-                                mapEditorFragment.mOverlay.addItem(overlayItem);
+                                mapEditorFragment.obstacleOverlay.addItem(overlayItem);
                                 mapEditorFragment.refresh();
 
                             }

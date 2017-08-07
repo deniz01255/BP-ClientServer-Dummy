@@ -78,7 +78,7 @@ public class DownloadObstaclesTask {
                                 for (Stairs obstacle : finalObstacleList) {
                                     OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                     overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
-                                    mapEditorFragment.mOverlay.addItem(overlayItem);
+                                    mapEditorFragment.obstacleOverlay.addItem(overlayItem);
                                 }
                                 Toast.makeText(activity.getBaseContext(), activity.getString(R.string.action_barrier_loaded),
                                         Toast.LENGTH_SHORT).show();
