@@ -1,12 +1,14 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
@@ -94,22 +97,30 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.action_get_near_roads:
+                            case R.id.nav_action_get_near_roads:
 
                                 if(mapEditorFragment.activeMapOperator != null){
                                     mapEditorFragment.activeMapOperator.dispose();
                                 }
                                 mapEditorFragment.activeMapOperator = new DefaultMapOperator(getApplicationContext());
                                 break;
-                            case R.id.action_place_obstacle:
+                            case R.id.nav_action_place_obstacle:
 
-
+                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                alertDialog.setTitle("Info");
+                                alertDialog.setMessage("Click on the lines to place an obstacle");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
 
                                 break;
-                            case R.id.action_get_details:
+                            case R.id.nav_action_get_details:
 
-
-                                ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance(getObstacle());
+                                ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance();
                                 obstacleDetailsFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
                                 break;
                         }

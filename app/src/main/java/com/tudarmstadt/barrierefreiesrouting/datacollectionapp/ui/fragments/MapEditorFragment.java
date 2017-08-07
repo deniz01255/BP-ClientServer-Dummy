@@ -158,10 +158,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         return activeMapOperator.longPressHelper(p, (MainActivity) getActivity(), this);
     }
 
-    public void addObstacle(OverlayItem overlayItem) {
-        obstacleOverlay.addItem(overlayItem);
-    }
-
     public void refresh() {
         map.invalidate();
 

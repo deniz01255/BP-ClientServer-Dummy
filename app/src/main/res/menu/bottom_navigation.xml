@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_get_near_roads"
+        android:id="@+id/nav_action_get_near_roads"
         android:enabled="true"
         android:icon="@drawable/barrier_stairs"
         android:title="@string/navigation_get_near_roads"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_place_obstacle"
+        android:id="@+id/nav_action_place_obstacle"
         android:enabled="false"
         android:icon="@drawable/barrier_stairs"
         android:title="@string/navigation_place_obstacle"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_get_details"
+        android:id="@+id/nav_action_get_details"
         android:enabled="true"
         android:icon="@drawable/barrier_stairs"
         android:title="@string/navigation_get_details"

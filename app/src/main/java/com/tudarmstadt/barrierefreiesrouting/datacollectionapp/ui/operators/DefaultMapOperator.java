@@ -22,8 +22,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.Mai
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -45,7 +43,6 @@ import okhttp3.Response;
 /**
  * Created by Vincent on 31.07.2017.
  */
-
 public class DefaultMapOperator implements IMapOperator {
 
     protected NearestRoadsOverlay roadsOverlay;
@@ -75,19 +72,14 @@ public class DefaultMapOperator implements IMapOperator {
     @Override
     public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
 
-        int indexOfItemizedOverlayWithFocus = mapEditorFragment.map.getOverlays().indexOf(mapEditorFragment.obstacleOverlay);
-
-        ItemizedOverlayWithFocus<OverlayItem> mm = (ItemizedOverlayWithFocus<OverlayItem>) mapEditorFragment.map.getOverlays().get(indexOfItemizedOverlayWithFocus);
-        mm.removeAllItems();
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         this.mapEditorFragment = mapEditorFragment;
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder(context));
         roadsOverlay = roadsDirector.construct(p);
 
         GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(context);
-        AsyncTask<Object, Object, Response> execute = task.execute(roadsOverlay.center, roadsOverlay.radius);
-
-
+        task.execute(roadsOverlay.center, roadsOverlay.radius);
 
         return true;
     }
@@ -117,15 +109,13 @@ public class DefaultMapOperator implements IMapOperator {
                 if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
                     return;
 
-               // OverlayItem newOverlayItem = new OverlayItem("No Name", "No Title", roadsOverlay.nearestRoads.getFirst().getRoadPoints().get(0));
-               //
-
                 for (Road r : roadsOverlay.nearestRoads) {
 
                     Polyline polyline = new Polyline();
                     polyline.setPoints(r.getRoadPoints());
                     polyline.setColor(Color.BLACK);
-                    polyline.setWidth(16);
+                    polyline.setWidth(18);
+
                     polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment));
 
                     currentRoadOverlays.add(polyline);
@@ -143,17 +133,14 @@ public class DefaultMapOperator implements IMapOperator {
                 e.printStackTrace();
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            System.out.print(response.body());
-            View contextView = mapEditorFragment.getActivity().findViewById(R.id.placeSnackBar);
 
+            View contextView = mapEditorFragment.getActivity().findViewById(R.id.placeSnackBar);
             Snackbar.make(contextView, R.string.server_response_roads_loaded, Snackbar.LENGTH_SHORT)
                     .show();
+
             return;
         } else {
-            System.out.print("....");
 
             return;
         }
