@@ -33,9 +33,8 @@ public class ObstacleDetailDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //read the int from args
 
-        View view = inflater.inflate(R.layout.obstacle_details_dialog, null);
-
-       // getFragmentManager().beginTransaction().replace(R.id.map_fragment_container, new ObstacleDetailsFragment()).commit();
+        View view = inflater.inflate(R.layout.obstacle_details_dialog, container);
+        getChildFragmentManager().beginTransaction().replace(R.id.details_fragment_container, new ObstacleDetailsFragment()).commit();
 
 
         return view;

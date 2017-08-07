@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity
 
     private long selectedBarrier;
     private MapEditorFragment mapEditorFragment;
-    private ObstacleDetailsFragment obstacleDetailsFragment = null;
 
 
 
