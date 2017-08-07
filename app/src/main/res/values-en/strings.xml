@@ -11,4 +11,5 @@
     <string name="navigation_get_near_roads">Get Nearby Roads</string>
     <string name="navigation_place_obstacle">Place Obstacle</string>
     <string name="navigation_get_details">Get Details</string>
+    <string name="action_roads_overlay_loaded">Nearby streets loaded</string>
 </resources>

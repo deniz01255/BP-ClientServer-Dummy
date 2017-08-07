@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments;
 
-
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.Mai
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.GraphHopperRoadManager;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -38,10 +36,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public MapView map;
     public ItemizedOverlayWithFocus<OverlayItem> obstacleOverlay;
     public ItemizedOverlayWithFocus<OverlayItem> placeNewObstacleOverlay;
-
-
-
-
 
     private MapEventsOverlay evOverlay;
     private RoadManager roadManager;
@@ -112,10 +106,22 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                         return false;
                     }
                 });
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(activity, items,
+                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int i, OverlayItem overlayItem) {
+                        return false;
+                    }
+                });
 
         obstacleOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(obstacleOverlay);
-        GraphHopperRoadManager graphHopperRoadManager = new GraphHopperRoadManager("", false);
+        map.getOverlays().add(placeNewObstacleOverlay);
 
         v.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

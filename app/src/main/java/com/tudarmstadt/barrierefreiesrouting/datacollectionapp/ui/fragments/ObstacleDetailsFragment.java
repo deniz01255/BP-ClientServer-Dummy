@@ -103,8 +103,7 @@ public class ObstacleDetailsFragment extends DialogFragment {
 
         // Commit Button to the bottom
         ((LinearLayout) pl).addView(commitButton);
-        v.invalidate();
-        pl.invalidate();
+
 
         return v;
     }
@@ -115,11 +114,10 @@ public class ObstacleDetailsFragment extends DialogFragment {
         dialog.getWindow().requestFeature(Window.FEATURE_CONTEXT_MENU);
 
 
-        dialog.setCancelable(true);
-
-
 
         return dialog;
+
+
     }
 
     @Override

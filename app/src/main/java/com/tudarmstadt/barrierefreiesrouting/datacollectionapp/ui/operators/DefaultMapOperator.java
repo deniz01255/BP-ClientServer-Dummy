@@ -68,16 +68,7 @@ public class DefaultMapOperator implements IMapOperator {
 
     @Override
     public boolean dispose() {
-        if(mapEditorFragment != null && mapEditorFragment.placeNewObstacleOverlay != null){
-            mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-        }
-        if(currentRoadOverlays != null && mapEditorFragment != null){
-            mapEditorFragment.map.getOverlays().removeAll(currentRoadOverlays);
-        }
 
-        if(mapEditorFragment != null){
-            mapEditorFragment.map.invalidate();
-        }
         return true;
     }
 
@@ -156,7 +147,7 @@ public class DefaultMapOperator implements IMapOperator {
                 e.printStackTrace();
             }
             System.out.print(response.body());
-            View contextView = mapEditorFragment.map.findViewById(R.id.map);
+            View contextView = mapEditorFragment.getActivity().findViewById(R.id.placeSnackBar);
 
             Snackbar.make(contextView, R.string.server_response_roads_loaded, Snackbar.LENGTH_SHORT)
                     .show();

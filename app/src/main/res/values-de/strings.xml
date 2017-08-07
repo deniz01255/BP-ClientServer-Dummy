@@ -9,4 +9,5 @@
     <string name="action_barrier_placed">Barriere platziert</string>
     <string name="server_response_roads_loaded">Straßen in der nähe geladen</string>
     <string name="navigation_get_near_roads">Hole Straßen</string>
+    <string name="action_roads_overlay_loaded">Straßen in der Nähe geladen</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 
 import android.graphics.Point;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -41,7 +42,7 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
         if (mapEditor.placeNewObstacleOverlay != null) {
             mapView.getOverlays().remove(mapEditor.placeNewObstacleOverlay);
         }
-        if (!mapView.getOverlays().contains(mapEditor.placeNewObstacleOverlay)) {
+        if (mapEditor.placeNewObstacleOverlay != null && !mapView.getOverlays().contains(mapEditor.placeNewObstacleOverlay)) {
             mapEditor.placeNewObstacleOverlay.removeAllItems();
         }
 
@@ -65,10 +66,11 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
             mapView.invalidate();
 
-            View contextView = mapView.findViewById(R.id.map);
+            Snackbar.make(mapEditor.getActivity().findViewById(R.id.placeSnackBar), R.string.action_barrier_placed, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
-            Snackbar.make(contextView, R.string.action_barrier_placed, Snackbar.LENGTH_SHORT)
-                    .show();
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
