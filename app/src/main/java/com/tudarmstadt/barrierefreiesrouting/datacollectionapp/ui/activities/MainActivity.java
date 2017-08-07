@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,17 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.dialogs.ObstacleDetailDialog;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
@@ -114,8 +109,8 @@ public class MainActivity extends AppCompatActivity
                             case R.id.action_get_details:
 
 
-                                ObstacleDetailDialog yourDialogFragment = ObstacleDetailDialog.newInstance();
-                                yourDialogFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
+                                ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance(getObstacle());
+                                obstacleDetailsFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
                                 break;
                         }
                         return false;

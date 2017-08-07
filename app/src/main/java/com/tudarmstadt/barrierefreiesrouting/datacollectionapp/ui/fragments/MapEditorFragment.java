@@ -70,7 +70,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_map_editor, container, false);
+        View v = inflater.inflate(R.layout.map_editor_fragment, container, false);
         MainActivity activity = (MainActivity) getActivity();
 
         Context context = activity.getApplicationContext();

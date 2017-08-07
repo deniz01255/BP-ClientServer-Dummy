@@ -37,7 +37,7 @@ public class AttributeFragmentFactory {
     }
 
     private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
-        FragmentManager fragMan = parentFragment.getFragmentManager();
+        FragmentManager fragMan = parentFragment.getChildFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
         fragTransaction.add(R.id.editor_attribute_list_container, newFragment, tag);
         fragTransaction.commit();

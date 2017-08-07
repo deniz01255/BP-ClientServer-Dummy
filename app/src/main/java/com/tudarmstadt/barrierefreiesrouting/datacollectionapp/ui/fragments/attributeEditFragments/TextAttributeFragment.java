@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.att
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,11 +54,11 @@ public class TextAttributeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_text_attribute, container, false);
+        View v = inflater.inflate(R.layout.attribute_fragment_text, container, false);
 
-        TextView label = (TextView) v.findViewById(R.id.text_attribute_label);
+        TextInputLayout label = (TextInputLayout) v.findViewById(R.id.input_label);
 
-        label.setText(mLabelParam);
+        label.setHint(mLabelParam);
 
         return v;
     }
