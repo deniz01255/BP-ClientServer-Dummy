@@ -86,8 +86,11 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         GeoPoint startPoint = new GeoPoint(49.8728, 8.6512);
         mapController = map.getController();
         mapController.setCenter(startPoint);
+        map.setMaxZoomLevel(21);
 
-        map.getController().setZoom(20);
+        map.getController().setZoom(19);
+        map.setTilesScaledToDpi(true);
+
         mLocationOverlay.runOnFirstFix(new Runnable() {
             public void run() {
                 map.getController().animateTo(mLocationOverlay.getMyLocation());
