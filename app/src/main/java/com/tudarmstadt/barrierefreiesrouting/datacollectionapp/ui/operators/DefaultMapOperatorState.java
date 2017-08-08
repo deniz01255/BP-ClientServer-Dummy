@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.MainOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RamplerOverpassAPI;
@@ -48,21 +49,32 @@ public class DefaultMapOperatorState implements IOperatorState {
     protected NearestRoadsOverlay roadsOverlay;
     protected MapEditorFragment mapEditorFragment;
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
+    private MainActivity mainActivity;
     private Context context;
     private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
+    private PlaceBarrierOnOverlayOperatorState placeBarrierOnOverlayOperatorState;
 
-    public DefaultMapOperatorState(Context context) {
-
+    public DefaultMapOperatorState(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        // Prepare the next state
+        placeBarrierOnOverlayOperatorState = new PlaceBarrierOnOverlayOperatorState(mainActivity, mapEditorFragment);
         this.context = context;
-        this.init();
     }
 
+    /**
+     * This will be called from the StateHandler
+     * @return
+     */
     @Override
     public boolean init() {
 
         return true;
     }
 
+    /**
+     * This will be called from the StateHandler
+     * @return
+     */
     @Override
     public boolean dispose() {
 
@@ -70,7 +82,7 @@ public class DefaultMapOperatorState implements IOperatorState {
     }
 
     @Override
-    public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
+    public boolean longPressHelper(GeoPoint p, MainActivity mainActivity, MapEditorFragment mapEditorFragment) {
 
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
@@ -78,8 +90,10 @@ public class DefaultMapOperatorState implements IOperatorState {
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder());
         roadsOverlay = roadsDirector.construct(p);
 
-        GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(context);
+        GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(mainActivity);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
+
+        mainActivity.getStateHandler().setupNextState(placeBarrierOnOverlayOperatorState);
 
         return true;
     }
@@ -116,7 +130,7 @@ public class DefaultMapOperatorState implements IOperatorState {
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
 
-                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperatorState(mapEditorFragment));
+                    polyline.setOnClickListener(placeBarrierOnOverlayOperatorState);
 
                     currentRoadOverlays.add(polyline);
 
@@ -138,10 +152,8 @@ public class DefaultMapOperatorState implements IOperatorState {
             View contextView = mapEditorFragment.getActivity().findViewById(R.id.placeSnackBar);
             Snackbar.make(contextView, R.string.server_response_roads_loaded, Snackbar.LENGTH_SHORT)
                     .show();
-
             return;
         } else {
-
             return;
         }
     }
@@ -156,14 +168,12 @@ public class DefaultMapOperatorState implements IOperatorState {
             this.activity = activity;
             progressDialog = new ProgressDialog(activity);
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             this.progressDialog.setMessage("Lade Straßen in der nähe..");
             this.progressDialog.show();
         }
-
         @Override
         protected Response doInBackground(Object... params) {
 
@@ -188,7 +198,8 @@ public class DefaultMapOperatorState implements IOperatorState {
             }
 
             if (!response.isSuccessful()) {
-                System.out.print("..");
+                //TODO: handle unsuccessful server responses
+                System.out.print("This line exists only for break pointability ;P ... Server responded not successfully");
             }
             return response;
         }

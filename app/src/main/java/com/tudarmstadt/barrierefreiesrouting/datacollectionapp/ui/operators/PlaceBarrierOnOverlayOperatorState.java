@@ -31,9 +31,11 @@ import org.osmdroid.views.overlay.Polyline.OnClickListener;
 
 public class PlaceBarrierOnOverlayOperatorState implements OnClickListener, IOperatorState {
 
+    private MainActivity mainActivity;
     private MapEditorFragment mapEditor;
 
-    public PlaceBarrierOnOverlayOperatorState(MapEditorFragment mapEditor) {
+    public PlaceBarrierOnOverlayOperatorState(MainActivity mainActivity, MapEditorFragment mapEditor) {
+        this.mainActivity = mainActivity;
         this.mapEditor = mapEditor;
     }
     @Override

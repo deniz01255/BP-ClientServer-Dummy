@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TextView mTitle;
 
-    private StateHandler statehandler;
+    private StateHandler stateHandler = new StateHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         if (findViewById(R.id.map_fragment_container) != null) {
             if (savedInstanceState != null)
                 return;
-            mapEditorFragment = new MapEditorFragment();
+            mapEditorFragment = MapEditorFragment.newInstance(this);
             mapEditorFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
@@ -90,25 +91,13 @@ public class MainActivity extends AppCompatActivity
                         switch (item.getItemId()) {
                             case R.id.nav_action_get_near_roads:
 
-                                if (mapEditorFragment.activeMapOperator != null) {
-                                    mapEditorFragment.activeMapOperator.dispose();
-                                }
-                                mapEditorFragment.activeMapOperator = new DefaultMapOperatorState(getApplicationContext());
-                                mTitle.setText(R.string.help_get_nearest_roads);
+                                stateHandler.setupNextState(new DefaultMapOperatorState((MainActivity) getApplicationContext()));
 
                                 break;
                             case R.id.nav_action_place_obstacle:
-                                mTitle.setText(R.string.help_place_an_obstacle);
-                                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                                alertDialog.setTitle("Info");
-                                alertDialog.setMessage("Click on the lines to place an obstacle");
-                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();
+
+                                //stateHandler.setupNextState(new DefaultMapOperatorState((MainActivity) getApplicationContext()));
+
 
                                 break;
                             case R.id.nav_action_get_details:
@@ -192,4 +181,7 @@ public class MainActivity extends AppCompatActivity
         DownloadObstaclesTask.DownloadStairs(this, mapEditorFragment);
     }
 
+    public StateHandler getStateHandler() {
+        return stateHandler;
+    }
 }

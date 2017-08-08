@@ -43,15 +43,17 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
     public IOperatorState activeMapOperator;
+    private MainActivity mainActivity;
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
     }
 
-    public static MapEditorFragment newInstance(Obstacle obs) {
+    public static MapEditorFragment newInstance(MainActivity mainActivity) {
         MapEditorFragment fragment = new MapEditorFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        fragment.setMainActivity(mainActivity);
         return fragment;
     }
 
@@ -150,17 +152,16 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        return activeMapOperator.singleTapConfirmedHelper(p, (MainActivity) getActivity(), this);
+        return mainActivity.getStateHandler().getActiveOperator().singleTapConfirmedHelper(p, mainActivity, this);
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        return activeMapOperator.longPressHelper(p, (MainActivity) getActivity(), this);
+        return mainActivity.getStateHandler().getActiveOperator().longPressHelper(p, mainActivity, this);
     }
 
-    public void refresh() {
-        map.invalidate();
-
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
     public interface OnFragmentInteractionListener {

@@ -1,6 +1,11 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate;
 
+import android.content.Context;
+import android.view.MenuItem;
+
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
 
 /**
  * Created by Vincent on 08.08.2017.
@@ -9,12 +14,14 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOpera
 public class StateHandler {
 
     private IOperatorState activeOperator;
+    private Context context;
 
-    private String title;
+    private String AppBarTitle = "";
 
 
-    public StateHandler(){
-
+    public StateHandler(MainActivity context){
+        this.context = context;
+        activeOperator = new DefaultMapOperatorState(context);
     }
     public void setupNextState(IOperatorState nextState){
 
@@ -31,4 +38,5 @@ public class StateHandler {
     public void replaceActiveOperator(IOperatorState activeOperator) {
         this.activeOperator = activeOperator;
     }
+
 }
