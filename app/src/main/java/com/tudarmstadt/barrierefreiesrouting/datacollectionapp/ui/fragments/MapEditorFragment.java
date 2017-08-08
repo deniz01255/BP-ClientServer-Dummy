@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
 
 import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -28,8 +27,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 
-import bp.common.model.Obstacle;
-
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     public MyLocationNewOverlay mLocationOverlay;
@@ -38,11 +35,9 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public ItemizedOverlayWithFocus<OverlayItem> placeNewObstacleOverlay;
 
     private MapEventsOverlay evOverlay;
-    private RoadManager roadManager;
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
-    public IOperatorState activeMapOperator;
     private MainActivity mainActivity;
 
     // Leerer Constructor wird benötigt
@@ -60,7 +55,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activeMapOperator = new DefaultMapOperatorState(getActivity());
     }
 
     @Override
@@ -111,7 +105,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                         return false;
                     }
                 });
-        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(activity, items,
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(mainActivity,items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {

@@ -1,14 +1,12 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,7 +24,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.Obst
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
 
 import org.osmdroid.config.Configuration;
 
@@ -46,8 +44,10 @@ public class MainActivity extends AppCompatActivity
         , IObstacleProvider {
 
     private long selectedBarrier;
-    private MapEditorFragment mapEditorFragment;
-    private Toolbar toolbar;
+    public MapEditorFragment mapEditorFragment;
+    public Toolbar toolbar;
+    public BottomNavigationView navigationToolbar;
+
     private TextView mTitle;
 
     private StateHandler stateHandler = new StateHandler(this);
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        navigationToolbar= (BottomNavigationView) findViewById(R.id.bottom_navigation);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -91,15 +92,10 @@ public class MainActivity extends AppCompatActivity
                         switch (item.getItemId()) {
                             case R.id.nav_action_get_near_roads:
 
-                                stateHandler.setupNextState(new DefaultMapOperatorState((MainActivity) getApplicationContext()));
+                                stateHandler.setupNextState(new PlaceObstacleOperatorState(MainActivity.this));
 
                                 break;
-                            case R.id.nav_action_place_obstacle:
 
-                                //stateHandler.setupNextState(new DefaultMapOperatorState((MainActivity) getApplicationContext()));
-
-
-                                break;
                             case R.id.nav_action_get_details:
 
                                 ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance();
@@ -109,15 +105,26 @@ public class MainActivity extends AppCompatActivity
                         return false;
                     }
                 });
-
         getObstaclesFromServer();
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_toolbar_clear_all:
+                getStateHandler().getClearAllOperator().clearAll();
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     public void onResume() {

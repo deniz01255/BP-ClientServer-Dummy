@@ -1,11 +1,16 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate;
 
-import android.content.Context;
-import android.view.MenuItem;
-
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.ClearAllOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Polyline;
+
+import java.util.ArrayList;
+
+import bp.common.model.Obstacle;
 
 /**
  * Created by Vincent on 08.08.2017.
@@ -14,20 +19,46 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.Defa
 public class StateHandler {
 
     private IOperatorState activeOperator;
-    private Context context;
+    private ClearAllOperator clearAllOperator;
+
+    private MainActivity mainActivity;
+
+    private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
+
+    private Obstacle newObstacle;
+    private GeoPoint newObstaclePosition;
 
     private String AppBarTitle = "";
 
+    public StateHandler(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        activeOperator = new PlaceObstacleOperatorState(mainActivity);
+        clearAllOperator = new ClearAllOperator(mainActivity);
 
-    public StateHandler(MainActivity context){
-        this.context = context;
-        activeOperator = new DefaultMapOperatorState(context);
     }
-    public void setupNextState(IOperatorState nextState){
 
+    public void setupNextState(IOperatorState nextState) {
+        mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
         activeOperator.dispose();
         activeOperator = nextState;
+
+        updateNavigationBarState();
+        AppBarTitle = nextState.getTopBarTitle();
+        mainActivity.toolbar.setTitle(AppBarTitle);
         activeOperator.init();
+
+    }
+
+    public void updateNavigationBarState() {
+
+        if (newObstaclePosition != null) {
+            mainActivity.navigationToolbar.getMenu().getItem(1).setEnabled(true);
+            mainActivity.navigationToolbar.invalidate();
+
+        } else {
+            mainActivity.navigationToolbar.getMenu().getItem(1).setEnabled(false);
+            mainActivity.navigationToolbar.invalidate();
+        }
 
     }
 
@@ -39,4 +70,27 @@ public class StateHandler {
         this.activeOperator = activeOperator;
     }
 
+    public Obstacle getNewObstacle() {
+        return newObstacle;
+    }
+
+    public void setNewObstacle(Obstacle newObstacle) {
+        this.newObstacle = newObstacle;
+    }
+
+    public ArrayList<Polyline> getCurrentRoadOverlays() {
+        return currentRoadOverlays;
+    }
+
+    public GeoPoint getNewObstaclePosition() {
+        return newObstaclePosition;
+    }
+
+    public void setNewObstaclePosition(GeoPoint newObstaclePosition) {
+        this.newObstaclePosition = newObstaclePosition;
+    }
+
+    public ClearAllOperator getClearAllOperator() {
+        return clearAllOperator;
+    }
 }

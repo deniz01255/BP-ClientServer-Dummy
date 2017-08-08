@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_toolbar_clear_all"
+        android:title="@string/action_clear_all"
+        android:orderInCategory="100"
+        android:icon="@drawable/barrier_stairs"
+        app:showAsAction="ifRoom" />
+
+
+    <item
         android:id="@+id/miCompose"
         android:icon="@drawable/barrier_stairs"
         android:title="Settings"

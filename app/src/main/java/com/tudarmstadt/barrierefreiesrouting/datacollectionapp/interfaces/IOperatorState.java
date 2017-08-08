@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.NavigationBarState;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -20,5 +21,9 @@ public interface IOperatorState {
     boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
 
     boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
+
+    NavigationBarState getNavigationState();
+
+    String getTopBarTitle();
 
 }

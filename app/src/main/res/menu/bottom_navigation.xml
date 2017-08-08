@@ -9,12 +9,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/nav_action_place_obstacle"
-        android:enabled="false"
-        android:icon="@drawable/barrier_stairs"
-        android:title="@string/navigation_place_obstacle"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/nav_action_get_details"
         android:enabled="false"
         android:icon="@drawable/barrier_stairs"
