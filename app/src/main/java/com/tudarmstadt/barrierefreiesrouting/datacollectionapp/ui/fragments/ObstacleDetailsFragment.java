@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,19 @@ import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.OverlayItem;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
@@ -60,7 +68,7 @@ public class ObstacleDetailsFragment extends DialogFragment {
 
         View v = inflater.inflate(R.layout.dialog_fragment_obstacle_details, container, false);
 
-        Obstacle obstacleToEdit = ((IObstacleProvider) getActivity()).getObstacle();
+        final Obstacle obstacleToEdit = ((IObstacleProvider) getActivity()).getObstacle();
 
         LinearLayout.LayoutParams commitButtonLinearLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -81,7 +89,19 @@ public class ObstacleDetailsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //obstacleViewModel.commit(getActivity(), ((IMapFragmentProvider) getActivity()).getMapEditorFragment());
-                Toast.makeText(getActivity(), "Obstacle saved", Toast.LENGTH_LONG);
+                PostObstacleToServerTask.PostStairs((Stairs) obstacleToEdit);
+
+                Toast.makeText(getActivity(), getActivity().getString(R.string.action_barrier_added),
+                        Toast.LENGTH_SHORT).show();
+                OverlayItem overlayItem = new OverlayItem(obstacleToEdit.getName(), getActivity().getString(R.string.default_description), new GeoPoint(obstacleToEdit.getLatitude(), obstacleToEdit.getLongitude()));
+                overlayItem.setMarker(getActivity().getResources().getDrawable(R.mipmap.ramppic));
+
+
+                View contextView = getActivity().findViewById(R.id.placeSnackBar);
+                Snackbar.make(contextView, R.string.server_response_posted_new_obstacle, Snackbar.LENGTH_SHORT)
+                        .show();
+
+                getDialog().cancel();
             }
         });
 

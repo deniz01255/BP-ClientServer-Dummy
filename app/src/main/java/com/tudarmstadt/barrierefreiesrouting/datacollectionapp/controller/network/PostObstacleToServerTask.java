@@ -32,7 +32,7 @@ public class PostObstacleToServerTask {
 
     }
 
-    public static void PostStairs(final Activity activity, final MapEditorFragment mapEditorFragment, final Stairs obstacle) {
+    public static void PostStairs(final Stairs obstacle) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
         try {
@@ -55,31 +55,9 @@ public class PostObstacleToServerTask {
                     @Override
                     public void onFailure(final Call call, IOException e) {
                         // Error
-
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, R.string.error_server_not_found,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        });
                     }
-
                     @Override
                     public void onResponse(Call call, final Response response) throws IOException {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                Toast.makeText(activity, activity.getString(R.string.action_barrier_added),
-                                        Toast.LENGTH_SHORT).show();
-                                OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
-                                overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
-                                mapEditorFragment.obstacleOverlay.addItem(overlayItem);
-                                mapEditorFragment.refresh();
-
-                            }
-                        });
 
                     }
                 });

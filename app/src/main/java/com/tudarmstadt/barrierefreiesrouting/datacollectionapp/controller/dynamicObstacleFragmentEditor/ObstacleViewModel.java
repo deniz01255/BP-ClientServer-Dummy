@@ -25,4 +25,11 @@ public class ObstacleViewModel {
         mObstacleData = obstacle;
     }
 
+    public Obstacle getObstacleData() {
+        return mObstacleData;
+    }
+
+    public void setObstacleData(Obstacle mObstacleData) {
+        this.mObstacleData = mObstacleData;
+    }
 }

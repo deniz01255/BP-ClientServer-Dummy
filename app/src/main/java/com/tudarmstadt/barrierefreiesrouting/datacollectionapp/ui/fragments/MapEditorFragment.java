@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -42,7 +42,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
-    public IMapOperator activeMapOperator;
+    public IOperatorState activeMapOperator;
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
@@ -58,7 +58,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activeMapOperator = new DefaultMapOperator(getActivity());
+        activeMapOperator = new DefaultMapOperatorState(getActivity());
     }
 
     @Override

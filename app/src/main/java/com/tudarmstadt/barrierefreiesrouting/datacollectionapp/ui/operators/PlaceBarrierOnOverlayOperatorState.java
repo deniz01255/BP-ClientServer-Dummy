@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
@@ -19,7 +21,7 @@ import org.osmdroid.views.overlay.Polyline.OnClickListener;
  * This class does not implement an Operator Interface - Not beautiful..
  * This is just the onClick Listener for the overlay.
  * In fact, one can argue that we need both Operators at the same time..
- * Naming this class PlaceBarrierOnOverlayOperator leads to a less cluttered file structure..
+ * Naming this class PlaceBarrierOnOverlayOperatorState leads to a less cluttered file structure..
  * In addition, semantically this behaves like an operator for the user.
  * <p>
  * Previous Step: get nearest roads
@@ -27,18 +29,26 @@ import org.osmdroid.views.overlay.Polyline.OnClickListener;
  * Next Step: get Details for Obstacle
  */
 
-public class PlaceBarrierOnOverlayOperator implements OnClickListener {
+public class PlaceBarrierOnOverlayOperatorState implements OnClickListener, IOperatorState {
 
     private MapEditorFragment mapEditor;
 
-    public PlaceBarrierOnOverlayOperator(MapEditorFragment mapEditor) {
-
+    public PlaceBarrierOnOverlayOperatorState(MapEditorFragment mapEditor) {
         this.mapEditor = mapEditor;
+    }
+    @Override
+    public boolean init() {
+        return false;
     }
 
     @Override
-    public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
+    public boolean dispose() {
+        return false;
+    }
 
+
+    @Override
+    public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
         if (mapEditor.placeNewObstacleOverlay != null) {
             mapView.getOverlays().remove(mapEditor.placeNewObstacleOverlay);
         }
@@ -52,6 +62,7 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
             GeoPoint obstacleGeoPoint = getClosesPointOnPolyLine(mapView, polyline, finalPoint);
             if (obstacleGeoPoint == null)
                 return false;
+
             OverlayItem newOverlayItem = new OverlayItem("", "", obstacleGeoPoint);
             if (newOverlayItem == null)
                 return false;
@@ -161,5 +172,17 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
 
     private int dot(Point v1, Point v2) {
         return v1.x * v2.x + v1.y * v2.y;
+    }
+
+
+
+    @Override
+    public boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
+        return false;
+    }
+
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
+        return false;
     }
 }

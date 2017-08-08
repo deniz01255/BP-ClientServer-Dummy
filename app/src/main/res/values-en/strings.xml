@@ -10,7 +10,8 @@
     <string name="server_response_roads_loaded">Nearby streets loaded</string>
     <string name="navigation_get_near_roads">Get Nearby Roads</string>
     <string name="navigation_place_obstacle">Place Obstacle</string>
-    <string name="navigation_get_details">Get Details</string>
+    <string name="navigation_get_details">Details</string>
     <string name="action_roads_overlay_loaded">Nearby streets loaded</string>
     <string name="help_get_nearest_roads">Long press on the approximate location</string>
+    <string name="server_response_posted_new_obstacle">Obstacle saved</string>
 </resources>

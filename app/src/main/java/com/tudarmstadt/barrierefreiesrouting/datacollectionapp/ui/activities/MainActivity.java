@@ -25,7 +25,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.Obst
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.DefaultMapOperatorState;
 
 import org.osmdroid.config.Configuration;
 
@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private MapEditorFragment mapEditorFragment;
     private Toolbar toolbar;
     private TextView mTitle;
+
+    private StateHandler statehandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                                 if (mapEditorFragment.activeMapOperator != null) {
                                     mapEditorFragment.activeMapOperator.dispose();
                                 }
-                                mapEditorFragment.activeMapOperator = new DefaultMapOperator(getApplicationContext());
+                                mapEditorFragment.activeMapOperator = new DefaultMapOperatorState(getApplicationContext());
                                 mTitle.setText(R.string.help_get_nearest_roads);
 
                                 break;

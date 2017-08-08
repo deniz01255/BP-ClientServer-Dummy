@@ -11,4 +11,7 @@
     <string name="navigation_get_near_roads">Hole Straßen</string>
     <string name="action_roads_overlay_loaded">Straßen in der Nähe geladen</string>
     <string name="help_get_nearest_roads">Auf ungefähre Position länger drücken</string>
+    <string name="server_response_posted_new_obstacle">Barriere gespeichert</string>
+    <string name="navigation_place_obstacle">Platziere Hinderniss</string>
+    <string name="navigation_get_details">Details</string>
 </resources>

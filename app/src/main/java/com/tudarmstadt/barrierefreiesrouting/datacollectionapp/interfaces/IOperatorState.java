@@ -6,10 +6,16 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Created by Vincent on 31.07.2017.
+ * Operators are used by the User (or a Service) in order to change the application state.
+ *
+ * Operators are initialized before they are ready for usage.
+ * Before a new Operator can start, the currently active Operator must be disposed.
  */
+public interface IOperatorState {
 
-public interface IMapOperator extends IOperator {
+    boolean init();
+
+    boolean dispose();
 
     boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
 

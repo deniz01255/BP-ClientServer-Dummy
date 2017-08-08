@@ -16,8 +16,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlay;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -43,7 +43,7 @@ import okhttp3.Response;
 /**
  * Created by Vincent on 31.07.2017.
  */
-public class DefaultMapOperator implements IMapOperator {
+public class DefaultMapOperatorState implements IOperatorState {
 
     protected NearestRoadsOverlay roadsOverlay;
     protected MapEditorFragment mapEditorFragment;
@@ -51,7 +51,7 @@ public class DefaultMapOperator implements IMapOperator {
     private Context context;
     private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
 
-    public DefaultMapOperator(Context context) {
+    public DefaultMapOperatorState(Context context) {
 
         this.context = context;
         this.init();
@@ -116,7 +116,7 @@ public class DefaultMapOperator implements IMapOperator {
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
 
-                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperator(mapEditorFragment));
+                    polyline.setOnClickListener(new PlaceBarrierOnOverlayOperatorState(mapEditorFragment));
 
                     currentRoadOverlays.add(polyline);
 
