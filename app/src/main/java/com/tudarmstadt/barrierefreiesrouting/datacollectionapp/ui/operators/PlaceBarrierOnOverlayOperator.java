@@ -69,8 +69,6 @@ public class PlaceBarrierOnOverlayOperator implements OnClickListener {
             Snackbar.make(mapEditor.getActivity().findViewById(R.id.placeSnackBar), R.string.action_barrier_placed, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.LinkedList;
@@ -20,8 +22,14 @@ public class NearestRoadsOverlay {
      */
     public GeoPoint center;
 
+    /**
+     * Radius of the search query for the nearest roads.
+     */
     public int radius;
 
+    /**
+     * Filters the types of roads to create overlays for.
+     */
     public String highwayTypes;
 
 }

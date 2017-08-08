@@ -1,16 +1,17 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.INearestRoadsOverlayBuilder;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 
 import org.osmdroid.util.GeoPoint;
-
 import java.util.LinkedList;
-
 import okhttp3.Response;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * Builds a new NearestRoadsOverlay.
+ *
+ * Use DefaultNearestRoadsDirector if you just want to create an roads overlay or create a own
+ * implementation that uses this Builder to create own Overlay types.
  */
 
 public class NearestRoadsOverlayBuilder implements INearestRoadsOverlayBuilder {
@@ -18,20 +19,14 @@ public class NearestRoadsOverlayBuilder implements INearestRoadsOverlayBuilder {
     protected Response response = null;
     protected LinkedList<Road> roads = null;
     private NearestRoadsOverlay roadsOverlay;
-    private MainActivity context;
 
-    public NearestRoadsOverlayBuilder(MainActivity context) {
-        this.context = context;
+    public NearestRoadsOverlayBuilder() {
         roadsOverlay = new NearestRoadsOverlay();
     }
 
     @Override
     public NearestRoadsOverlay build() {
-
-        //http://overpass-api.de/api/interpreter
-
         roadsOverlay.nearestRoads = new LinkedList<>();
-
         return roadsOverlay;
     }
 
@@ -44,7 +39,6 @@ public class NearestRoadsOverlayBuilder implements INearestRoadsOverlayBuilder {
     @Override
     public INearestRoadsOverlayBuilder setCenter(GeoPoint center) {
         this.roadsOverlay.center = center;
-
         return this;
     }
 

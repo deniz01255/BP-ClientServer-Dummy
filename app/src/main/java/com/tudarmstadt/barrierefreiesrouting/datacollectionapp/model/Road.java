@@ -1,13 +1,12 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * Used for parsing the response from overpass api
  */
-
 public class Road {
 
     public long id;
@@ -22,10 +21,6 @@ public class Road {
      */
     public ArrayList<GeoPoint> getRoadPoints() {
         return roadPoints;
-    }
-
-    public void setRoadPoints(ArrayList<GeoPoint> roadPoints) {
-        this.roadPoints = roadPoints;
     }
 
 }

@@ -16,11 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IMapFragmentProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsFragment;
@@ -44,50 +42,41 @@ public class MainActivity extends AppCompatActivity
         implements
         AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
-        , IObstacleProvider, IMapFragmentProvider {
+        , IObstacleProvider {
 
     private long selectedBarrier;
     private MapEditorFragment mapEditorFragment;
-
-
-
-    public MapEditorFragment getMapEditorFragment() {
-        return mapEditorFragment;
-    }
+    private Toolbar toolbar;
+    private TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         if (findViewById(R.id.map_fragment_container) != null) {
-            if (savedInstanceState != null) {
+            if (savedInstanceState != null)
                 return;
-            }
-
             mapEditorFragment = new MapEditorFragment();
             mapEditorFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.map_fragment_container, mapEditorFragment).commit();
-
         }
 
-        /* Inside the activity */
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Remove default title text
+
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        // Get access to the custom title view
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText(R.string.help_place_an_obstacle);
+        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        mTitle.setText(R.string.help_get_nearest_roads);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
@@ -99,13 +88,15 @@ public class MainActivity extends AppCompatActivity
                         switch (item.getItemId()) {
                             case R.id.nav_action_get_near_roads:
 
-                                if(mapEditorFragment.activeMapOperator != null){
+                                if (mapEditorFragment.activeMapOperator != null) {
                                     mapEditorFragment.activeMapOperator.dispose();
                                 }
                                 mapEditorFragment.activeMapOperator = new DefaultMapOperator(getApplicationContext());
+                                mTitle.setText(R.string.help_get_nearest_roads);
+
                                 break;
                             case R.id.nav_action_place_obstacle:
-
+                                mTitle.setText(R.string.help_place_an_obstacle);
                                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                                 alertDialog.setTitle("Info");
                                 alertDialog.setMessage("Click on the lines to place an obstacle");
@@ -132,17 +123,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    // Menu icons are inflated just as they were with actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     public void onResume() {
         super.onResume();
-
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         Context context = getApplicationContext();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
@@ -164,15 +152,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
         parent.getItemAtPosition(position);
         selectedBarrier = id;
-
     }
 
     @Override
@@ -181,7 +166,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Obstacle getObstacle() {
-
         switch (String.valueOf(selectedBarrier)) {
             case "0":
                 return new Stairs();

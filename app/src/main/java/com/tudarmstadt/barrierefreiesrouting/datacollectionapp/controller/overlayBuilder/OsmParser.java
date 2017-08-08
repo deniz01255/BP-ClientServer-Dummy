@@ -1,5 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Node;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+
 import org.osmdroid.util.GeoPoint;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -9,9 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * Parse the Response from the overpass api to a list of roads (and nodes).
  */
-
 public class OsmParser extends DefaultHandler {
 
     boolean bNd = false;

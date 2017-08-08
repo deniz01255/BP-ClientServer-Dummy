@@ -15,6 +15,7 @@
     <string name="action_obstacle_details_dialog_send">Save Obstacle</string>
     <string name="action_obstacle_details_dialog_cancel">Cancel</string>
     <string name="action_roads_overlay_loaded">Nearby streets loaded</string>
+    <string name="help_get_nearest_roads">Long press on the approximate location</string>
 
 
 </resources>

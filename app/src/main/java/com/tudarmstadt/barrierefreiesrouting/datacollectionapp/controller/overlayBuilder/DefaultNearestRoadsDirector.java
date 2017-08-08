@@ -5,10 +5,12 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.INeare
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * Creates an OverlayBuilder with the default parameters.
+ *
+ * Custom NearestRoadsOverlays can be created analog to this Default calss.
  */
-
 public class DefaultNearestRoadsDirector {
+
     INearestRoadsOverlayBuilder builder;
 
     public DefaultNearestRoadsDirector(final INearestRoadsOverlayBuilder builder) {
@@ -16,7 +18,6 @@ public class DefaultNearestRoadsDirector {
     }
 
     public NearestRoadsOverlay construct(GeoPoint p) {
-
         return builder
                 .setCenter(p)
                 .setRadius(10)

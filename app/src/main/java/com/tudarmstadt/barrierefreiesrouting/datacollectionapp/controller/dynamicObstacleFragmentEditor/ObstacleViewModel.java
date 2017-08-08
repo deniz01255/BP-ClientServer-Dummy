@@ -1,22 +1,21 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
-import android.app.Activity;
-
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 import bp.common.model.Obstacle;
-import bp.common.model.annotations.EditableAttribute;
 
 /**
- * Created by Vincent on 27.06.2017.
+ * The ObstacleViewModel stores model data of the Obstacle, that is used to display (model->view)
+ * the Obstacle and to store the changes (view -> model).
+ *
+ * The Attributes are loaded on runtime.
  */
-
 public class ObstacleViewModel {
 
+    /**
+     * The attributes mapped to the attributeName
+     */
     public Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
 
     private Obstacle mObstacleData;
@@ -26,24 +25,4 @@ public class ObstacleViewModel {
         mObstacleData = obstacle;
     }
 
-    public void commit(Activity activity, MapEditorFragment mapEditorFragment) {
-
-        Field[] obstacleFields = mObstacleData.getClass().getDeclaredFields();
-
-        for (Field field : obstacleFields) {
-
-            String tag = field.getAnnotation(EditableAttribute.class).value();
-
-            if (attributesMap.get(tag) != null) {
-
-                try {
-                    field.set(mObstacleData, attributesMap.get(tag));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-
-    }
 }

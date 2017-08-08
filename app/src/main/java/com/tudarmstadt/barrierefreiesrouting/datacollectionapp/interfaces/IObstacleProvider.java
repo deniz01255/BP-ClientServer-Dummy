@@ -3,10 +3,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 import bp.common.model.Obstacle;
 
 /**
- * Created by Vincent on 27.06.2017.
+ * Implement this interface if you want to provide obstacles
  */
-
 public interface IObstacleProvider {
-
-    public Obstacle getObstacle();
+    Obstacle getObstacle();
 }
