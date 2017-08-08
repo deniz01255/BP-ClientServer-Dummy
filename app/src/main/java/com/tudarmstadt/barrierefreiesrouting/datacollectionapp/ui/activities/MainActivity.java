@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        mTitle.setText(R.string.help_get_nearest_roads);
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
@@ -97,7 +95,6 @@ public class MainActivity extends AppCompatActivity
                                 break;
 
                             case R.id.nav_action_get_details:
-
                                 ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance();
                                 obstacleDetailsFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
                                 break;
@@ -106,6 +103,9 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
         getObstaclesFromServer();
+
+        // Initialize state maschine with first State.
+        stateHandler.setupNextState(new PlaceObstacleOperatorState(this));
     }
 
     @Override

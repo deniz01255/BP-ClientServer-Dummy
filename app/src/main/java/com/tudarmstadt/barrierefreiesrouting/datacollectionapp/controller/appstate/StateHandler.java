@@ -1,5 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate;
 
+import android.widget.TextView;
+
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.ClearAllOperator;
@@ -32,19 +35,22 @@ public class StateHandler {
 
     public StateHandler(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
-        activeOperator = new PlaceObstacleOperatorState(mainActivity);
         clearAllOperator = new ClearAllOperator(mainActivity);
-
     }
 
     public void setupNextState(IOperatorState nextState) {
-        mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-        activeOperator.dispose();
+        if(mainActivity.mapEditorFragment != null && mainActivity.mapEditorFragment.placeNewObstacleOverlay != null)
+            mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+
+        if(activeOperator != null)
+            activeOperator.dispose();
+
         activeOperator = nextState;
 
         updateNavigationBarState();
         AppBarTitle = nextState.getTopBarTitle();
         mainActivity.toolbar.setTitle(AppBarTitle);
+
         activeOperator.init();
 
     }

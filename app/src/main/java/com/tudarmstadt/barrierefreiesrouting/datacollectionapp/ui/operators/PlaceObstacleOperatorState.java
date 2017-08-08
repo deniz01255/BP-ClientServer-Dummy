@@ -260,6 +260,9 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
                     mapEditorFragment.map.getOverlays().add(p);
 
                 }
+                mapEditorFragment.map.getOverlays().remove(mainActivity.mapEditorFragment.placeNewObstacleOverlay);
+                mapEditorFragment.map.getOverlays().add(mainActivity.mapEditorFragment.placeNewObstacleOverlay);
+
                 mapEditorFragment.map.invalidate();
 
             } catch (SAXException e) {
