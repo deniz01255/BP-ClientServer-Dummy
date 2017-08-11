@@ -40,6 +40,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     private StateHandler mapStateHandler = new StateHandler(this);
 
+
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
     }

@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ste
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,23 +21,34 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 
 public class SelectObstacleTypeFragment extends Fragment implements Step, AdapterView.OnItemSelectedListener{
 
-
+    private static View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.stepfragment_select_obstacle, container, false);
 
-        View v = inflater.inflate(R.layout.stepfragment_select_obstacle, container, false);
+            Spinner spinner = (Spinner) view.findViewById(R.id.spinner_obstacle_selection);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.spinner_obstacle_selection);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
+            spinner.setAdapter(adapter);
 
 
-        return v;
+        } catch (InflateException e) {
+
+        }
+
+
+
+        return view;
     }
 
     @Override

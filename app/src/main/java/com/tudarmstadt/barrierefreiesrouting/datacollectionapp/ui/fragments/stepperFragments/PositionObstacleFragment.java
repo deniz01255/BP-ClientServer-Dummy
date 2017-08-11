@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class PositionObstacleFragment extends Fragment implements Step {
 
 
     private MapEditorFragment mapEditorFragment;
+    private static View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,12 +37,21 @@ public class PositionObstacleFragment extends Fragment implements Step {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.stepfragment_place_obstacle, container, false);
 
-        View v = inflater.inflate(R.layout.stepfragment_place_obstacle, container, false);
 
+        } catch (InflateException e) {
 
+        }
 
-        return v;
+        return view;
     }
 
 
