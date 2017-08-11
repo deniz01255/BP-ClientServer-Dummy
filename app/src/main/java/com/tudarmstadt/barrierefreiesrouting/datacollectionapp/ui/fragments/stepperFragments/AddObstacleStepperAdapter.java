@@ -23,19 +23,15 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public Step createStep(@IntRange(from = 0L) int position) {
-        Bundle b = new Bundle();
         switch (position) {
             case 0:
-                return (Step) getStep(position, new PositionObstacleFragment());
-            case 1:
                 return (Step) getStep(position, new SelectObstacleTypeFragment());
-            case 2:
+            case 1:
                 return (Step) getStep(position, new AttributesEditorFragment());
-            case 3:
+            case 2:
                 return (Step) getStep(position, new OverviewSendFragment());
         }
         return null;
-
     }
 
     @NonNull
@@ -48,6 +44,6 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }

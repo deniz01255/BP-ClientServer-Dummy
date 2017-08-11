@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
@@ -29,12 +30,7 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
-
-
         private StepperLayout mStepperLayout;
-
-
-
 
 
 
@@ -44,12 +40,16 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         setContentView(R.layout.activity_place_obstacle);
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
         mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getSupportFragmentManager(), this));
+        mStepperLayout.setListener(this);
+
     }
 
 
         @Override
         public void onCompleted (View view){
-        finish();
+            Toast.makeText(this, "onCompleted!", Toast.LENGTH_SHORT).show();
+            this.finish();
+
     }
 
         @Override
