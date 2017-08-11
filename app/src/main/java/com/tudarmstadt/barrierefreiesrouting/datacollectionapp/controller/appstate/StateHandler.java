@@ -47,9 +47,6 @@ public class StateHandler {
 
         activeOperator = nextState;
 
-        AppBarTitle = nextState.getTopBarTitle();
-        mainActivity.toolbar.setTitle(AppBarTitle);
-
         activeOperator.init();
 
     }

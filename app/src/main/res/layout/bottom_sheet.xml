@@ -18,15 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp" />
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:id="@+id/spinner_obstacle_selection"
 
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        android:textColor="@android:color/white"
-        />
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
