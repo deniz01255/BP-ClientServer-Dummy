@@ -1,6 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import android.app.Activity;
+
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.NavigationBarState;
 
@@ -18,9 +20,9 @@ public interface IOperatorState {
 
     boolean dispose();
 
-    boolean longPressHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
+    boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment);
 
-    boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment);
+    boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment);
 
     NavigationBarState getNavigationState();
 

@@ -9,9 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -38,17 +37,17 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     private IMapController mapController;
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
-    private MainActivity mainActivity;
+
+    private StateHandler mapStateHandler = new StateHandler(this);
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
     }
 
-    public static MapEditorFragment newInstance(MainActivity mainActivity) {
+    public static MapEditorFragment newInstance() {
         MapEditorFragment fragment = new MapEditorFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fragment.setMainActivity(mainActivity);
         return fragment;
     }
 
@@ -61,9 +60,8 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_editor_fragment, container, false);
-        mainActivity = (MainActivity) getActivity();
 
-        Context context = mainActivity.getApplicationContext();
+        Context context = getActivity().getApplicationContext();
 
         map = (MapView) v.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -93,7 +91,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             }
         });
 
-        obstacleOverlay = new ItemizedOverlayWithFocus<>(mainActivity, items,
+        obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
@@ -105,7 +103,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                         return false;
                     }
                 });
-        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(mainActivity,items,
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {
@@ -146,17 +144,18 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        return mainActivity.getStateHandler().getActiveOperator().singleTapConfirmedHelper(p, mainActivity, this);
+        return mapStateHandler.getActiveOperator().singleTapConfirmedHelper(p, getActivity(), this);
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        return mainActivity.getStateHandler().getActiveOperator().longPressHelper(p, mainActivity, this);
+        return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
     }
 
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public StateHandler getStateHandler() {
+        return mapStateHandler;
     }
+
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

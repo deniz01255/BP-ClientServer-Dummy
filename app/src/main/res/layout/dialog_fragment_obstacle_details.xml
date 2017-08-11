@@ -4,12 +4,6 @@
     android:layout_height="match_parent">
 
 
-    <com.stepstone.stepper.StepperLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/stepperLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:ms_stepperType="progress_bar" />
 
 
 </ScrollView>

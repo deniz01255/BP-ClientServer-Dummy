@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.stepstone.stepper.Step;
@@ -22,20 +23,31 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public Step createStep(@IntRange(from = 0L) int position) {
+        Bundle b = new Bundle();
+        switch (position) {
+            case 0:
+                return (Step) getStep(position, new PositionObstacleFragment());
+            case 1:
+                return (Step) getStep(position, new SelectObstacleTypeFragment());
+            case 2:
+                return (Step) getStep(position, new AttributesEditorFragment());
+            case 3:
+                return (Step) getStep(position, new OverviewSendFragment());
+        }
+        return null;
 
+    }
 
-
-        final SelectObstacleTypeFragment step = new SelectObstacleTypeFragment();
+    @NonNull
+    private Fragment getStep(@IntRange(from = 0L) int position, Fragment fragment) {
         Bundle b = new Bundle();
         b.putInt("First", position);
-        step.setArguments(b);
-
-
-        return step;
+        fragment.setArguments(b);
+        return fragment;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 }

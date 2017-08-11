@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.allOf;
 public class GetBackToMainActivityFromDetails {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<BrowseMapActivity> mActivityTestRule = new ActivityTestRule<>(BrowseMapActivity.class);
 
     @Test
     public void getBackToMainActivityFromDetails() {

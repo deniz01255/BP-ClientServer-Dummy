@@ -1,25 +1,11 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
-import android.app.Activity;
-import android.widget.Toast;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.MainNomatimAPI;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
-
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
-import bp.common.model.Stairs;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -37,7 +23,7 @@ public class GetLocationsFromQueryTask {
     public GetLocationsFromQueryTask() {
     }
 
-    public static void GetLocationSuggestions(final MainActivity activity, MapEditorFragment mapEditorFragment, final String query) {
+    public static void GetLocationSuggestions(final BrowseMapActivity activity, MapEditorFragment mapEditorFragment, final String query) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()

@@ -1,10 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-
-import org.osmdroid.util.GeoPoint;
 
 /**
  * Created by Vincent on 08.08.2017.
@@ -12,30 +9,30 @@ import org.osmdroid.util.GeoPoint;
 
 public class ClearAllOperator {
 
-    private MainActivity mainActivity;
+    private MapEditorFragment mapEditorFragment;
 
-    public ClearAllOperator(MainActivity mainActivity){
+    public ClearAllOperator(MapEditorFragment mapEditorFragment){
 
-        this.mainActivity = mainActivity;
+        this.mapEditorFragment = mapEditorFragment;
     }
 
     public void clearAll(){
         // Go back to place obstacle OperatorState
-        mainActivity.getStateHandler().replaceActiveOperator(new PlaceObstacleOperatorState(mainActivity));
+        mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceObstacleOperatorState(mapEditorFragment));
 
         // reset the position
-        mainActivity.getStateHandler().setNewObstaclePosition(null);
+        mapEditorFragment.getStateHandler().setNewObstaclePosition(null);
         // reset the obstacle
-        mainActivity.getStateHandler().setNewObstacle(null);
+        mapEditorFragment.getStateHandler().setNewObstacle(null);
 
         // remove temporary edit obstacle items on the road overlay
-        mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         // remove the roads overlay
-        mainActivity.mapEditorFragment.map.getOverlays().removeAll(mainActivity.getStateHandler().getCurrentRoadOverlays());
+        mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
 
 
-        mainActivity.mapEditorFragment.map.invalidate();
+        mapEditorFragment.map.invalidate();
     }
 
 

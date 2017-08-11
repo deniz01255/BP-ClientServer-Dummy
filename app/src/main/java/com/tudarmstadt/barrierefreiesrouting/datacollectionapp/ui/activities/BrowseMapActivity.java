@@ -1,36 +1,30 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
@@ -44,27 +38,21 @@ import bp.common.model.Stairs;
 import bp.common.model.TightPassage;
 import bp.common.model.Unevenness;
 
-public class MainActivity extends AppCompatActivity
+public class BrowseMapActivity extends AppCompatActivity
         implements
-        AdapterView.OnItemSelectedListener, ObstacleDetailsEditorFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
+        AdapterView.OnItemSelectedListener,  MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
     private long selectedBarrier;
     public MapEditorFragment mapEditorFragment;
-    public ObstacleDetailsEditorFragment obstacleDetailsEditorFragment;
-    public BottomNavigationView navigationToolbar;
-    private TextView mTitle;
 
-    private StateHandler stateHandler = new StateHandler(this);
-
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_browser_map);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -72,22 +60,12 @@ public class MainActivity extends AppCompatActivity
         if (findViewById(R.id.map_fragment_container) != null) {
             if (savedInstanceState != null)
                 return;
-            mapEditorFragment = MapEditorFragment.newInstance(this);
+            mapEditorFragment = MapEditorFragment.newInstance();
             mapEditorFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.map_fragment_container, mapEditorFragment).commit();
         }
-        if (findViewById(R.id.edit_details_container) != null) {
-            if (savedInstanceState != null)
-                return;
-            obstacleDetailsEditorFragment = ObstacleDetailsEditorFragment.newInstance();
-            obstacleDetailsEditorFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.edit_details_container, obstacleDetailsEditorFragment).commit();
-        }
-
-
 
         // get the bottom sheet view
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
@@ -100,17 +78,23 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
             }
-
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
 
 
-        getObstaclesFromServer();
+        FloatingActionButton addObstacleButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
 
-        // Initialize state maschine with first State.
-        stateHandler.setupNextState(new PlaceObstacleOperatorState(this));
+        addObstacleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
@@ -119,15 +103,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPlaceSelected(Place place) {
                 mapEditorFragment.map.getController().setCenter(new GeoPoint(place.getLatLng().latitude, place.getLatLng().longitude));
-
             }
-
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i("", "An error occurred: " + status);
             }
         });
+
+        getObstaclesFromServer();
 
 
     }
@@ -193,12 +175,6 @@ public class MainActivity extends AppCompatActivity
     public void getObstaclesFromServer() {
         DownloadObstaclesTask.DownloadStairs(this, mapEditorFragment);
     }
-
-    public StateHandler getStateHandler() {
-        return stateHandler;
-    }
-
-
 
 
 }

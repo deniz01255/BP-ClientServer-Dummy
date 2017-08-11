@@ -14,6 +14,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynami
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 
 import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
@@ -31,7 +32,7 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
         View v = inflater.inflate(R.layout.stepfragment_attributes_edit, container, false);
 
-        final Obstacle obstacleToEdit = ((IObstacleProvider) getActivity()).getObstacle();
+        final Obstacle obstacleToEdit = new Stairs();
 
         obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
 

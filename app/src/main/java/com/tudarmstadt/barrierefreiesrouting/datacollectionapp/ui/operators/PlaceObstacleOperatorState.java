@@ -1,5 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -17,7 +18,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
@@ -58,10 +58,8 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
     protected NearestRoadsOverlay roadsOverlay;
     protected MapEditorFragment mapEditorFragment;
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
-    private MainActivity mainActivity;
 
-    public PlaceObstacleOperatorState(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public PlaceObstacleOperatorState(MapEditorFragment mapEditorFragment) {
     }
 
     @Override
@@ -81,12 +79,12 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     @Override
     public String getTopBarTitle() {
-        return mainActivity.getString(R.string.navigation_place_obstacle);
+        return "Not Set yet! Bad boy...";
     }
 
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-        mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         try {
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
@@ -102,16 +100,15 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
             // TODO: Das Icon soll eindeutiger einer Position zugeordnet werden können.
             // newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
 
-            mainActivity.mapEditorFragment.placeNewObstacleOverlay.addItem(newOverlayItem);
+            mapEditorFragment.placeNewObstacleOverlay.addItem(newOverlayItem);
 
             // Workaround: display the tempOverlay on top
-            //mapView.getOverlays().add( mainActivity.getStateHandler().getPlaceNewObstacleOverlay());
-            mainActivity.getStateHandler().setNewObstaclePosition(obstacleGeoPoint);
+            mapView.getOverlays().add( mapEditorFragment.getStateHandler().getPlaceNewObstacleOverlay());
+            mapEditorFragment.getStateHandler().setNewObstaclePosition(obstacleGeoPoint);
 
             mapView.invalidate();
 
-            Snackbar.make(mainActivity.findViewById(R.id.placeSnackBar), R.string.action_barrier_placed, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,27 +205,27 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
     }
 
     @Override
-    public boolean longPressHelper(GeoPoint p, MainActivity mainActivity, MapEditorFragment mapEditorFragment) {
+    public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
 
         this.mapEditorFragment = mapEditorFragment;
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder());
         roadsOverlay = roadsDirector.construct(p);
 
-        PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask task = new PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask(mainActivity);
+        PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask task = new PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask(context);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
 
         return true;
     }
 
     @Override
-    public boolean singleTapConfirmedHelper(GeoPoint p, MainActivity context, MapEditorFragment mapEditorFragment) {
+    public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
         return false;
     }
 
     protected void processRoads(Response response) {
         if (response != null && response.isSuccessful()) {
-            mapEditorFragment.map.getOverlays().removeAll(mainActivity.getStateHandler().getCurrentRoadOverlays());
-            mainActivity.getStateHandler().getCurrentRoadOverlays().clear();
+           // mapEditorFragment.map.getOverlays().removeAll(browseMapActivity.getStateHandler().getCurrentRoadOverlays());
+           // browseMapActivity.getStateHandler().getCurrentRoadOverlays().clear();
             try {
                 SAXParserFactory factory = SAXParserFactory.newInstance();
                 SAXParser saxParser = factory.newSAXParser();
@@ -252,15 +249,15 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
                     polyline.setWidth(18);
                     polyline.setOnClickListener(this);
 
-                    mainActivity.getStateHandler().getCurrentRoadOverlays().add(polyline);
+             //       browseMapActivity.getStateHandler().getCurrentRoadOverlays().add(polyline);
 
                 }
-                for (Polyline p : mainActivity.getStateHandler().getCurrentRoadOverlays()) {
+             /*   for (Polyline p : browseMapActivity.getStateHandler().getCurrentRoadOverlays()) {
                     mapEditorFragment.map.getOverlays().add(p);
 
-                }
-                mapEditorFragment.map.getOverlays().remove(mainActivity.mapEditorFragment.placeNewObstacleOverlay);
-                mapEditorFragment.map.getOverlays().add(mainActivity.mapEditorFragment.placeNewObstacleOverlay);
+                }*/
+                mapEditorFragment.map.getOverlays().remove(mapEditorFragment.placeNewObstacleOverlay);
+                mapEditorFragment.map.getOverlays().add(mapEditorFragment.placeNewObstacleOverlay);
 
                 mapEditorFragment.map.invalidate();
 
@@ -283,11 +280,9 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
-        private MainActivity activity;
 
-        GetHighwaysFromOverpassAPITask(MainActivity activity) {
+        GetHighwaysFromOverpassAPITask(Activity activity ) {
 
-            this.activity = activity;
             progressDialog = new ProgressDialog(activity);
         }
 

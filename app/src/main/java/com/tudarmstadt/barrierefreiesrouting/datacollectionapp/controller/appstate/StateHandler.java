@@ -1,14 +1,14 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate;
 
-import android.widget.TextView;
+import android.app.Activity;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.ClearAllOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
 
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class StateHandler {
     private IOperatorState activeOperator;
     private ClearAllOperator clearAllOperator;
 
-    private MainActivity mainActivity;
+    private MapEditorFragment mapEditorFragment;
 
     private ArrayList<Polyline> currentRoadOverlays = new ArrayList<>();
 
@@ -33,14 +33,14 @@ public class StateHandler {
 
     private String AppBarTitle = "";
 
-    public StateHandler(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        clearAllOperator = new ClearAllOperator(mainActivity);
+    public StateHandler(MapEditorFragment mapEditorFragment) {
+        clearAllOperator = new ClearAllOperator(mapEditorFragment);
+        this.mapEditorFragment = mapEditorFragment;
     }
 
     public void setupNextState(IOperatorState nextState) {
-        if(mainActivity.mapEditorFragment != null && mainActivity.mapEditorFragment.placeNewObstacleOverlay != null)
-            mainActivity.mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        if(mapEditorFragment != null && mapEditorFragment.placeNewObstacleOverlay != null)
+            mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         if(activeOperator != null)
             activeOperator.dispose();
@@ -82,5 +82,9 @@ public class StateHandler {
 
     public ClearAllOperator getClearAllOperator() {
         return clearAllOperator;
+    }
+
+    public Overlay getPlaceNewObstacleOverlay() {
+        return mapEditorFragment.placeNewObstacleOverlay;
     }
 }
