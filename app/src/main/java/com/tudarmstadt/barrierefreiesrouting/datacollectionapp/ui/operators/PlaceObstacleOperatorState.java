@@ -107,7 +107,6 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
             // Workaround: display the tempOverlay on top
             //mapView.getOverlays().add( mainActivity.getStateHandler().getPlaceNewObstacleOverlay());
             mainActivity.getStateHandler().setNewObstaclePosition(obstacleGeoPoint);
-            mainActivity.getStateHandler().updateNavigationBarState();
 
             mapView.invalidate();
 

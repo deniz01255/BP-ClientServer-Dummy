@@ -47,7 +47,6 @@ public class StateHandler {
 
         activeOperator = nextState;
 
-        updateNavigationBarState();
         AppBarTitle = nextState.getTopBarTitle();
         mainActivity.toolbar.setTitle(AppBarTitle);
 
@@ -55,18 +54,6 @@ public class StateHandler {
 
     }
 
-    public void updateNavigationBarState() {
-
-        if (newObstaclePosition != null) {
-            mainActivity.navigationToolbar.getMenu().getItem(1).setEnabled(true);
-            mainActivity.navigationToolbar.invalidate();
-
-        } else {
-            mainActivity.navigationToolbar.getMenu().getItem(1).setEnabled(false);
-            mainActivity.navigationToolbar.invalidate();
-        }
-
-    }
 
     public IOperatorState getActiveOperator() {
         return activeOperator;

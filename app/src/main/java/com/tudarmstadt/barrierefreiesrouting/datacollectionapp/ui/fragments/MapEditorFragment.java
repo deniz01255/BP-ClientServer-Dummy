@@ -61,9 +61,9 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_editor_fragment, container, false);
-        MainActivity activity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
 
-        Context context = activity.getApplicationContext();
+        Context context = mainActivity.getApplicationContext();
 
         map = (MapView) v.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -93,7 +93,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             }
         });
 
-        obstacleOverlay = new ItemizedOverlayWithFocus<>(activity, items,
+        obstacleOverlay = new ItemizedOverlayWithFocus<>(mainActivity, items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {

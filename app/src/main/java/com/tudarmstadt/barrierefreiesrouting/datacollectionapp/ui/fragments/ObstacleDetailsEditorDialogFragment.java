@@ -8,19 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.MainActivity;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -34,7 +36,7 @@ import bp.common.model.Stairs;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
-public class ObstacleDetailsFragment extends DialogFragment {
+public class ObstacleDetailsEditorDialogFragment extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private OnFragmentInteractionListener mListener;
     private LinearLayout myLayout;
@@ -45,11 +47,11 @@ public class ObstacleDetailsFragment extends DialogFragment {
 
     private ObstacleViewModel obstacleViewModel;
 
-    public ObstacleDetailsFragment() {
+    public ObstacleDetailsEditorDialogFragment() {
     }
 
-    public static ObstacleDetailsFragment newInstance() {
-        ObstacleDetailsFragment fragment = new ObstacleDetailsFragment();
+    public static ObstacleDetailsEditorDialogFragment newInstance() {
+        ObstacleDetailsEditorDialogFragment fragment = new ObstacleDetailsEditorDialogFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -74,7 +76,7 @@ public class ObstacleDetailsFragment extends DialogFragment {
 
         View pl = v.findViewById(R.id.editor_attribute_list_container);
 
-        getDialog().setTitle("Edit " + obstacleToEdit.getTypeName());
+        getDialog().setTitle(getString(R.string.label_new_barrier));
 
         obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
 
@@ -106,7 +108,10 @@ public class ObstacleDetailsFragment extends DialogFragment {
         });
 
         // Commit Button to the bottom
-        ((LinearLayout) pl).addView(commitButton);
+        //((LinearLayout) pl).addView(commitButton);
+
+
+
 
         return v;
     }
@@ -151,6 +156,16 @@ public class ObstacleDetailsFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public interface OnFragmentInteractionListener {

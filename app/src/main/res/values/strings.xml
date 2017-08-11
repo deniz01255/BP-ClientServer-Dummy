@@ -18,6 +18,13 @@
     <string name="help_get_nearest_roads">Place Obstacle</string>
     <string name="server_response_posted_new_obstacle">Obstacle saved</string>
     <string name="action_clear_all">Clear All</string>
-
+    <string name="label_new_barrier">New Obstacle</string>
+    <string name="obstacle_label_ramp">Ramp</string>
+    <string name="obstacle_label_elevator">Elevator</string>
+    <string name="obstacle_label_tight_passage">Tight Passage</string>
+    <string name="obstacle_label_stairs">Stairs</string>
+    <string name="obstacle_label_construction">Construction</string>
+    <string name="obstacle_label_fast_traffic_light">Fast traffic Light</string>
+    <string name="obstacle_label_unevenness">Unevenness</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,17 +8,17 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBar;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -27,15 +26,13 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.GetLocationsFromQueryTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsEditorDialogFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
@@ -55,12 +52,13 @@ import bp.common.model.Unevenness;
 
 public class MainActivity extends AppCompatActivity
         implements
-        AdapterView.OnItemSelectedListener, ObstacleDetailsFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
+        AdapterView.OnItemSelectedListener, ObstacleDetailsEditorDialogFragment.OnFragmentInteractionListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
     private long selectedBarrier;
     public MapEditorFragment mapEditorFragment;
+    public ObstacleDetailsViewerFragment obstacleDetailsEditorDialogFragment;
     public Toolbar toolbar;
     public BottomNavigationView navigationToolbar;
 
@@ -88,9 +86,16 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.map_fragment_container, mapEditorFragment).commit();
         }
+        if (findViewById(R.id.edit_details_container) != null) {
+            if (savedInstanceState != null)
+                return;
+            obstacleDetailsEditorDialogFragment = ObstacleDetailsViewerFragment.newInstance();
+            obstacleDetailsEditorDialogFragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.edit_details_container, obstacleDetailsEditorDialogFragment).commit();
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        navigationToolbar= (BottomNavigationView) findViewById(R.id.bottom_navigation);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -98,28 +103,33 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
-                findViewById(R.id.bottom_navigation);
+        // get the bottom sheet view
+        LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.nav_action_get_near_roads:
+        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(rlBottomLayout);
 
-                                stateHandler.setupNextState(new PlaceObstacleOperatorState(MainActivity.this));
+        bottomSheetBehavior.setHideable(false);
 
-                                break;
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
 
-                            case R.id.nav_action_get_details:
-                                ObstacleDetailsFragment obstacleDetailsFragment = ObstacleDetailsFragment.newInstance();
-                                obstacleDetailsFragment.show(getSupportFragmentManager().beginTransaction(), "DialogFragment");
-                                break;
-                        }
-                        return false;
-                    }
-                });
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_obstacle_selection);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
         getObstaclesFromServer();
 
         // Initialize state maschine with first State.
@@ -141,7 +151,6 @@ public class MainActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_search_location:
-
 
                 try {
                     Intent intent =

@@ -34,7 +34,6 @@ public class ClearAllOperator {
         // remove the roads overlay
         mainActivity.mapEditorFragment.map.getOverlays().removeAll(mainActivity.getStateHandler().getCurrentRoadOverlays());
 
-        mainActivity.getStateHandler().updateNavigationBarState();
 
         mainActivity.mapEditorFragment.map.invalidate();
     }

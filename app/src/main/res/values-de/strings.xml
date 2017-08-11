@@ -14,4 +14,11 @@
     <string name="server_response_posted_new_obstacle">Barriere gespeichert</string>
     <string name="navigation_place_obstacle">Platziere Hinderniss</string>
     <string name="navigation_get_details">Details</string>
+    <string name="obstacle_label_construction">Baustelle</string>
+    <string name="obstacle_label_elevator">Fahrstuhl</string>
+    <string name="obstacle_label_fast_traffic_light">Schnelle Ampel</string>
+    <string name="obstacle_label_ramp">Rampe</string>
+    <string name="obstacle_label_stairs">Treppe</string>
+    <string name="obstacle_label_tight_passage">Enger Durchgang</string>
+    <string name="obstacle_label_unevenness">Unebenheit</string>
 </resources>
