@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
                     .add(R.id.edit_details_container, obstacleDetailsEditorDialogFragment).commit();
         }
 
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -139,7 +140,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
 
         return true;
     }
