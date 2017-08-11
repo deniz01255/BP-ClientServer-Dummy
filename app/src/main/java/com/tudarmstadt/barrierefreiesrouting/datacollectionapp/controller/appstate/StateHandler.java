@@ -6,6 +6,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOpera
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.ClearAllOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Overlay;
@@ -36,13 +37,14 @@ public class StateHandler {
     public StateHandler(MapEditorFragment mapEditorFragment) {
         clearAllOperator = new ClearAllOperator(mapEditorFragment);
         this.mapEditorFragment = mapEditorFragment;
+        activeOperator = new PlaceObstacleOperatorState(mapEditorFragment);
     }
 
     public void setupNextState(IOperatorState nextState) {
-        if(mapEditorFragment != null && mapEditorFragment.placeNewObstacleOverlay != null)
+        if (mapEditorFragment != null && mapEditorFragment.placeNewObstacleOverlay != null)
             mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
-        if(activeOperator != null)
+        if (activeOperator != null)
             activeOperator.dispose();
 
         activeOperator = nextState;

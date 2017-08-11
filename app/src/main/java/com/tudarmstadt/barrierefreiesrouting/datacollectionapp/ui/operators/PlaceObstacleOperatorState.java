@@ -224,8 +224,8 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     protected void processRoads(Response response) {
         if (response != null && response.isSuccessful()) {
-           // mapEditorFragment.map.getOverlays().removeAll(browseMapActivity.getStateHandler().getCurrentRoadOverlays());
-           // browseMapActivity.getStateHandler().getCurrentRoadOverlays().clear();
+            mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
+            mapEditorFragment.getStateHandler().getCurrentRoadOverlays().clear();
             try {
                 SAXParserFactory factory = SAXParserFactory.newInstance();
                 SAXParser saxParser = factory.newSAXParser();
@@ -249,13 +249,13 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
                     polyline.setWidth(18);
                     polyline.setOnClickListener(this);
 
-             //       browseMapActivity.getStateHandler().getCurrentRoadOverlays().add(polyline);
+                   mapEditorFragment.getStateHandler().getCurrentRoadOverlays().add(polyline);
 
                 }
-             /*   for (Polyline p : browseMapActivity.getStateHandler().getCurrentRoadOverlays()) {
+                for (Polyline p : mapEditorFragment.getStateHandler().getCurrentRoadOverlays()) {
                     mapEditorFragment.map.getOverlays().add(p);
 
-                }*/
+                }
                 mapEditorFragment.map.getOverlays().remove(mapEditorFragment.placeNewObstacleOverlay);
                 mapEditorFragment.map.getOverlays().add(mapEditorFragment.placeNewObstacleOverlay);
 
@@ -269,9 +269,7 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
                 e.printStackTrace();
             }
 
-            View contextView = mapEditorFragment.getActivity().findViewById(R.id.placeSnackBar);
-            Snackbar.make(contextView, R.string.server_response_roads_loaded, Snackbar.LENGTH_SHORT)
-                    .show();
+
             return;
         } else {
             return;

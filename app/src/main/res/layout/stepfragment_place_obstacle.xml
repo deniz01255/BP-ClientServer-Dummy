@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/map_fragment_container_linear_layout"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/map_fragment_container"
-        android:layout_width="match_parent"
+    <fragment android:name="com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment"
+        android:id="@+id/headlines_fragment"
+        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_width="match_parent" />
 
 </LinearLayout>
