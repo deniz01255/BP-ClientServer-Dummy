@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +14,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.stepstone.stepper.StepperLayout;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
 
 
 /**
  *
  */
 
-public class ObstacleDetailsEditorFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class ObstacleDetailsEditorFragment extends Fragment  {
 
     private OnFragmentInteractionListener mListener;
 
-
     public ObstacleDetailsEditorFragment() {
     }
-
+    private StepperLayout mStepperLayout;
     public static ObstacleDetailsEditorFragment newInstance() {
         ObstacleDetailsEditorFragment fragment = new ObstacleDetailsEditorFragment();
         Bundle args = new Bundle();
@@ -39,7 +41,11 @@ public class ObstacleDetailsEditorFragment extends Fragment implements AdapterVi
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
+
     }
 
     @Override
@@ -48,13 +54,11 @@ public class ObstacleDetailsEditorFragment extends Fragment implements AdapterVi
 
         View v = inflater.inflate(R.layout.dialog_fragment_obstacle_details, container, false);
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.spinner_obstacle_selection);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.BARRIER_TYPES, android.R.layout.simple_spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mStepperLayout = (StepperLayout) v.findViewById(R.id.stepperLayout);
+        mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getChildFragmentManager(), getActivity()));
 
-        spinner.setAdapter(adapter);
+
 
 
         return v;
@@ -86,15 +90,8 @@ public class ObstacleDetailsEditorFragment extends Fragment implements AdapterVi
         mListener = null;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);

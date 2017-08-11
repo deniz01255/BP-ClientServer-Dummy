@@ -4,8 +4,8 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://jitpack.io" }
-        maven { url 'https://maven.google.com' }
         jcenter()
+
 
     }
     dependencies {
@@ -25,6 +25,7 @@ allprojects {
         flatDir {
             dirs 'libs'
         }
+        maven { url "https://maven.google.com" }
     }
 }
 
