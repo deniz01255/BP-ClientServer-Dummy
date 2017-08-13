@@ -18,18 +18,9 @@ public class ObstacleViewModel {
      */
     public Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
 
-    private Obstacle mObstacleData;
 
-    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes, Obstacle obstacle) {
+    public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes) {
         attributesMap = attributes;
-        mObstacleData = obstacle;
     }
 
-    public Obstacle getObstacleData() {
-        return mObstacleData;
-    }
-
-    public void setObstacleData(Obstacle mObstacleData) {
-        this.mObstacleData = mObstacleData;
-    }
 }

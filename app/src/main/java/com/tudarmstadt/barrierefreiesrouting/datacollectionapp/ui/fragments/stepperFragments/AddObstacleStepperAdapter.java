@@ -28,8 +28,10 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
                 return (Step) getStep(position, new SelectObstacleTypeFragment());
             case 1:
                 return (Step) getStep(position, new AttributesEditorFragment());
-            case 2:
+            case 2:{
                 return (Step) getStep(position, new OverviewSendFragment());
+
+            }
         }
         return null;
     }

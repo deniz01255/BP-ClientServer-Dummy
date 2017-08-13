@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
@@ -26,23 +28,23 @@ public class AttributeFragmentFactory {
      * @param fragment the fragment container, where to insert the attributes
      * @param obstacleViewModel contains the attributes mapping
      */
-    public static void insertAttributeEditFragments(Fragment fragment, ObstacleViewModel obstacleViewModel) {
+    public static void insertAttributeEditFragments(Fragment fragment) {
 
-        Map<String, ObstacleAttribute<?>> obstacle = obstacleViewModel.attributesMap;
+        Map<String, ObstacleAttribute<?>> obstacleAttributeMap = ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap;
 
-        for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet()) {
+        for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacleAttributeMap.entrySet()) {
             if (entry.getValue().typeParameterClass == Double.TYPE) {
-                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             } else if (entry.getValue().typeParameterClass == Integer.TYPE) {
-                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             } else if (entry.getValue().typeParameterClass == String.class) {
-                CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
+                CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
-                CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
+                CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());
             }
         }
     }
-    
+
 
     private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
 

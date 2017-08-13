@@ -12,6 +12,7 @@ import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
@@ -22,7 +23,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 /**
  * This Fragment holds all Attributes that can be edited
  */
-public class AttributesEditorFragment extends Fragment implements Step, IObstacleViewModelProvider {
+public class AttributesEditorFragment extends Fragment implements Step {
 
     private ObstacleViewModel obstacleViewModel;
 
@@ -32,14 +33,13 @@ public class AttributesEditorFragment extends Fragment implements Step, IObstacl
 
         View v = inflater.inflate(R.layout.stepfragment_attributes_edit, container, false);
 
-        final Obstacle obstacleToEdit = new Stairs();
+        final Obstacle obstacleToEdit = ObstacleDataSingleton.getInstance().getmObstacle();
 
-        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
+        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()));
+        ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
 
         // this.obstacleViewModel must be initialized first.
-        insertAttributeEditFragments(this, obstacleViewModel);
-
-
+        insertAttributeEditFragments(this);
 
         return v;
     }
@@ -59,12 +59,6 @@ public class AttributesEditorFragment extends Fragment implements Step, IObstacl
     public void onError(@NonNull VerificationError verificationError) {
 
     }
-
-    @Override
-    public ObstacleViewModel getViewModel() {
-        return obstacleViewModel;
-    }
-
 
 
 

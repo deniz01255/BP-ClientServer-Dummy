@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+
+import bp.common.model.IObstacle;
+import bp.common.model.Obstacle;
 
 /**
  * Created by vincent on 8/11/17.
@@ -67,9 +72,16 @@ public class SelectObstacleTypeFragment extends Fragment implements Step, Adapte
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        Toast.makeText(parent.getContext(),
+                "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
+                Toast.LENGTH_SHORT).show();
+
+
 
     }
+
+
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {

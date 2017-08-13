@@ -11,12 +11,13 @@ import android.view.ViewGroup;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 
 /**
  * Created by vincent on 8/11/17.
  */
 
-public class OverviewSendFragment extends Fragment implements Step {
+public class OverviewSendFragment extends Fragment implements Step, IObstacleViewModelConsumer {
 
     private static View view;
 
@@ -52,6 +53,11 @@ public class OverviewSendFragment extends Fragment implements Step {
 
     @Override
     public void onError(@NonNull VerificationError verificationError) {
+
+    }
+
+    @Override
+    public void setObstacleViewModel() {
 
     }
 }

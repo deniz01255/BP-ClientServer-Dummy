@@ -23,7 +23,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObsta
 public class CheckBoxAttributeFragment extends Fragment{
 
     private static final String LABEL_PARAM = "labelParam";
-    private static IObstacleViewModelProvider obstacleViewModelProvider;
 
     private String mLabelParam;
 
@@ -33,8 +32,7 @@ public class CheckBoxAttributeFragment extends Fragment{
         // Required empty public constructor
     }
 
-    public static CheckBoxAttributeFragment newInstance(String labelName, IObstacleViewModelProvider obstacleViewModelProvider) {
-        CheckBoxAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
+    public static CheckBoxAttributeFragment newInstance(String labelName) {
         CheckBoxAttributeFragment fragment = new CheckBoxAttributeFragment();
         Bundle args = new Bundle();
         args.putString(LABEL_PARAM, labelName);

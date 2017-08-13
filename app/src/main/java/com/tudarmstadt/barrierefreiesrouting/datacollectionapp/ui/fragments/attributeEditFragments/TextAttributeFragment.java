@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +28,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObsta
 public class TextAttributeFragment extends Fragment implements IObstacleViewModelConsumer   {
 
     private static final String ATTRIBUTE_KEY_STRING_PARAM = "keyStringParam";
-    private static IObstacleViewModelProvider obstacleViewModelProvider;
 
     private String mAttributeKeyString;
 
@@ -37,8 +37,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
         // Required empty public constructor
     }
 
-    public static TextAttributeFragment newInstance(String attributeKeyString, IObstacleViewModelProvider obstacleViewModelProvider) {
-        TextAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
+    public static TextAttributeFragment newInstance(String attributeKeyString) {
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
         args.putString(ATTRIBUTE_KEY_STRING_PARAM, attributeKeyString);
@@ -67,7 +66,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
 
         final EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
 
-        textEditInput.setText((String) obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).value);
+        textEditInput.setText((String) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value);
 
         textEditInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,7 +90,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
-                    obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
+                    ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
                 }
             }
         });

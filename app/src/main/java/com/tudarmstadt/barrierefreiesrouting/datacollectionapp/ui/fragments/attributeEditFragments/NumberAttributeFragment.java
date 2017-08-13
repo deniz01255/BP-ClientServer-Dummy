@@ -14,6 +14,9 @@ import android.widget.EditText;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 public class NumberAttributeFragment extends Fragment  {
 
@@ -28,7 +31,7 @@ public class NumberAttributeFragment extends Fragment  {
         // Required empty public constructor
     }
 
-    public static NumberAttributeFragment newInstance(String labelName, IObstacleViewModelProvider obstacleViewModelProvider) {
+    public static NumberAttributeFragment newInstance(String labelName) {
         NumberAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
         NumberAttributeFragment fragment = new NumberAttributeFragment();
         Bundle args = new Bundle();
@@ -51,15 +54,22 @@ public class NumberAttributeFragment extends Fragment  {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.attribute_fragment_edit_number, container, false);
 
-        TextInputLayout label = (TextInputLayout) v.findViewById(R.id.input_label_number);
-
         TextInputLayout textEditLabel = (TextInputLayout) v.findViewById(R.id.input_label);
 
         textEditLabel.setHint(mAttributeKeyString);
 
         final EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
+        Class<?> typeParameterClass = ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass;
+        if(ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Integer.TYPE){
+            textEditInput.setText(Integer.toString((Integer) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
 
-        textEditInput.setText((String) obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).value);
+        }else if(ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Double.TYPE){
+            textEditInput.setText(Double.toString( (Double) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
+
+        }else{
+            throw new NotImplementedException("Datatype not implemented");
+        }
+
 
         textEditInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -83,12 +93,12 @@ public class NumberAttributeFragment extends Fragment  {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
-                    obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
+                    ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
                 }
             }
         });
 
-        label.setHint(mAttributeKeyString);
+        textEditLabel.setHint(mAttributeKeyString);
 
         return v;
     }

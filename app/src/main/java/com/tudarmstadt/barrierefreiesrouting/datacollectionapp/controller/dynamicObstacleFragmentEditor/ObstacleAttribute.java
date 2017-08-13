@@ -11,7 +11,7 @@ import java.util.Observer;
 /**
  * ObstacleAttribute is used in the two-way binding between view and model.
  */
-public class ObstacleAttribute<T>  {
+public class ObstacleAttribute<T> {
 
     /**
      * The Type Class type of the Attribute. This value is required in order to determine the
@@ -34,13 +34,14 @@ public class ObstacleAttribute<T>  {
     /**
      * typeParameterClass must be specified in order to use this ObstacleAttribute.
      * A default value is not suitable
+     *
      * @param typeParameterClass
      */
     public ObstacleAttribute(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
     }
 
-    public void setValueFromString(String newValue){
+    public void setValueFromString(String newValue) {
         if (typeParameterClass == Double.TYPE) {
             value = (T) Double.valueOf(newValue);
 

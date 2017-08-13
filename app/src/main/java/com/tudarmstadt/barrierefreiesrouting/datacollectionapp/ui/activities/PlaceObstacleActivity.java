@@ -10,7 +10,9 @@ import android.widget.Toast;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
@@ -18,6 +20,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
 
 import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
+
 
 /**
  * Created by vincent on 8/11/17.
@@ -30,7 +34,6 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         private StepperLayout mStepperLayout;
 
 
-
     @Override
         protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -38,6 +41,8 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
         mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getSupportFragmentManager(), this));
         mStepperLayout.setListener(this);
+
+        ObstacleDataSingleton.getInstance().setmObstacle(new Stairs());
 
     }
 
@@ -83,4 +88,6 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }

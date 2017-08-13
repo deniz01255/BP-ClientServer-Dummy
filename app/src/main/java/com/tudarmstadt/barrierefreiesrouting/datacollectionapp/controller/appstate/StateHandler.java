@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appst
 
 import android.app.Activity;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
@@ -20,7 +21,7 @@ import bp.common.model.Obstacle;
  * Created by Vincent on 08.08.2017.
  */
 
-public class StateHandler {
+public  class StateHandler {
 
     private IOperatorState activeOperator;
     private ClearAllOperator clearAllOperator;
@@ -31,6 +32,9 @@ public class StateHandler {
 
     private Obstacle newObstacle;
     private GeoPoint newObstaclePosition;
+
+    private ObstacleViewModel obstacleViewModel;
+
 
     private String AppBarTitle = "";
 
@@ -88,5 +92,13 @@ public class StateHandler {
 
     public Overlay getPlaceNewObstacleOverlay() {
         return mapEditorFragment.placeNewObstacleOverlay;
+    }
+
+    public ObstacleViewModel getObstacleViewModel() {
+        return obstacleViewModel;
+    }
+
+    public void setObstacleViewModel(ObstacleViewModel obstacleViewModel) {
+        this.obstacleViewModel = obstacleViewModel;
     }
 }
