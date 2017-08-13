@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AttributesEditorFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,9 +26,10 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
  * Use the {@link TextAttributeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TextAttributeFragment extends Fragment {
+public class TextAttributeFragment extends Fragment implements IObstacleViewModelConsumer   {
 
     private static final String LABEL_PARAM = "labelParam";
+    private static IObstacleViewModelProvider obstacleViewModelProvider;
 
     private String mLabelParam;
 
@@ -35,7 +39,8 @@ public class TextAttributeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TextAttributeFragment newInstance(String labelName) {
+    public static TextAttributeFragment newInstance(String labelName, IObstacleViewModelProvider obstacleViewModelProvider) {
+        TextAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
         args.putString(LABEL_PARAM, labelName);
@@ -50,7 +55,6 @@ public class TextAttributeFragment extends Fragment {
         if (getArguments() != null) {
             mLabelParam = getArguments().getString(LABEL_PARAM);
         }
-
     }
 
     @Override
@@ -82,13 +86,11 @@ public class TextAttributeFragment extends Fragment {
             }
         });
 
-
         textEditInput.setOnFocusChangeListener(new View.OnFocusChangeListener(){
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
-
                 }
             }
         });
@@ -117,6 +119,12 @@ public class TextAttributeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void setObstacleViewModel() {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

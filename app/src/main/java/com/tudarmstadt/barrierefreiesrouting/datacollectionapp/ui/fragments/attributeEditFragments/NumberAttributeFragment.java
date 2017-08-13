@@ -11,10 +11,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AttributesEditorFragment;
 
-public class NumberAttributeFragment extends Fragment {
+public class NumberAttributeFragment extends Fragment  {
 
     private static final String LABEL_PARAM = "labelParam";
+    private static IObstacleViewModelProvider obstacleViewModelProvider;
 
     private String mLabelParam;
 
@@ -24,7 +28,8 @@ public class NumberAttributeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NumberAttributeFragment newInstance(String labelName) {
+    public static NumberAttributeFragment newInstance(String labelName, IObstacleViewModelProvider obstacleViewModelProvider) {
+        NumberAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
         NumberAttributeFragment fragment = new NumberAttributeFragment();
         Bundle args = new Bundle();
         args.putString(LABEL_PARAM, labelName);
@@ -70,6 +75,7 @@ public class NumberAttributeFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

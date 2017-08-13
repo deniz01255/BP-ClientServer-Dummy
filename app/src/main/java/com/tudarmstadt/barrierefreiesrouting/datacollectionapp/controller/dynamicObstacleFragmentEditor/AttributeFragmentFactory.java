@@ -1,12 +1,11 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
-
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
@@ -34,18 +33,19 @@ public class AttributeFragmentFactory {
 
         for (Map.Entry<String, ObstacleAttribute<?>> entry : obstacle.entrySet()) {
             if (entry.getValue().typeParameterClass == Double.TYPE) {
-                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
             } else if (entry.getValue().typeParameterClass == Integer.TYPE) {
-                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                CommitFragment(fragment, NumberAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
             } else if (entry.getValue().typeParameterClass == String.class) {
-                CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                CommitFragment(fragment, TextAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
             } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
-                CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                CommitFragment(fragment, CheckBoxAttributeFragment.newInstance(entry.getKey(), (IObstacleViewModelProvider) fragment), entry.getKey());
             }
         }
     }
 
     private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
+
         FragmentManager fragMan = parentFragment.getChildFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
         fragTransaction.add(R.id.editor_attribute_list_container, newFragment, tag);

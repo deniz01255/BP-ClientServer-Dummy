@@ -12,6 +12,7 @@ import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 
 import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
@@ -22,7 +23,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 /**
  * This Fragment holds all Attributes that can be edited
  */
-public class AttributesEditorFragment extends Fragment implements Step {
+public class AttributesEditorFragment extends Fragment implements Step, IObstacleViewModelProvider {
 
     private ObstacleViewModel obstacleViewModel;
 
@@ -36,6 +37,7 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
         obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
 
+        // this.obstacleViewModel must be initialized first.
         insertAttributeFragments(this, obstacleViewModel);
 
 
@@ -56,5 +58,10 @@ public class AttributesEditorFragment extends Fragment implements Step {
     @Override
     public void onError(@NonNull VerificationError verificationError) {
 
+    }
+
+    @Override
+    public ObstacleViewModel getViewModel() {
+        return obstacleViewModel;
     }
 }
