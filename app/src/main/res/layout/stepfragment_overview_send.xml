@@ -2,18 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     android:orientation="vertical">
 
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="16dp">
 
         <LinearLayout
             android:id="@+id/overview_details_attribute_list"
-            android:background="@color/colorPrimaryLight"
 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
