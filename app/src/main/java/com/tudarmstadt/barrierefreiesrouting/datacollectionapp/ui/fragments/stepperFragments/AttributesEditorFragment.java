@@ -33,20 +33,20 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
         View v = inflater.inflate(R.layout.stepfragment_attributes_edit, container, false);
 
-        final Obstacle obstacleToEdit = ObstacleDataSingleton.getInstance().getmObstacle();
-
-        obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()));
-        ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
-
         // this.obstacleViewModel must be initialized first.
         insertAttributeEditFragments(this);
 
         return v;
     }
+    @Override
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+    }
 
     @Override
     public VerificationError verifyStep() {
+
         return null;
     }
 

@@ -71,7 +71,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
         textEditInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                validateEditText(s);
             }
 
             @Override
@@ -99,7 +99,8 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
         return v;
     }
 
-    private void validateEditText(){
+    private void validateEditText(CharSequence s){
+
 
     }
 

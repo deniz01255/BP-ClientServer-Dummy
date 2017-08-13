@@ -26,7 +26,6 @@ public class AttributeFragmentFactory {
      * Depending on the typeParameterClass of the entry, a Number- Text- or CheckBox-
      * AttributeFragment will ne inserted in the fragment container.
      * @param fragment the fragment container, where to insert the attributes
-     * @param obstacleViewModel contains the attributes mapping
      */
     public static void insertAttributeEditFragments(Fragment fragment) {
 

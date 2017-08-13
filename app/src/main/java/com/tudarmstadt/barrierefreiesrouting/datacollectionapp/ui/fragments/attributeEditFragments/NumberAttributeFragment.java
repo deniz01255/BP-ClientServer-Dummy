@@ -59,7 +59,7 @@ public class NumberAttributeFragment extends Fragment  {
         textEditLabel.setHint(mAttributeKeyString);
 
         final EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
-        Class<?> typeParameterClass = ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass;
+
         if(ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Integer.TYPE){
             textEditInput.setText(Integer.toString((Integer) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
 
@@ -67,14 +67,14 @@ public class NumberAttributeFragment extends Fragment  {
             textEditInput.setText(Double.toString( (Double) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
 
         }else{
-            throw new NotImplementedException("Datatype not implemented");
+            throw new NotImplementedException("Type not implemented");
         }
 
 
         textEditInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                validateEditText(s);
             }
 
             @Override
@@ -103,6 +103,14 @@ public class NumberAttributeFragment extends Fragment  {
         return v;
     }
 
+    // TODO: handle verification
+    private void validateEditText(CharSequence s){
+
+        String temp = s.toString();
+
+        if (!temp.matches("[0-9]+") ) {
+        }
+    }
 
     @Override
     public void onAttach(Context context) {

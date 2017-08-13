@@ -8,25 +8,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.PlaceObstacleActivity;
 
+import bp.common.model.Construction;
+import bp.common.model.FastTrafficLight;
 import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
+import bp.common.model.Ramp;
+import bp.common.model.Stairs;
+import bp.common.model.TightPassage;
+import bp.common.model.Unevenness;
+
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
 /**
  * Created by vincent on 8/11/17.
  */
 
-public class SelectObstacleTypeFragment extends Fragment implements Step, AdapterView.OnItemSelectedListener{
+public class SelectObstacleTypeFragment extends Fragment implements Step{
 
     private static View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,12 +58,27 @@ public class SelectObstacleTypeFragment extends Fragment implements Step, Adapte
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                    Obstacle newObstacle = getObstacleFrom(position);
+                    ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
 
+                    ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
+                    ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+            ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(ObstacleDataSingleton.getInstance().getmObstacle(), getActivity()));
+            ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
 
         } catch (InflateException e) {
 
         }
-
 
 
         return view;
@@ -71,20 +99,29 @@ public class SelectObstacleTypeFragment extends Fragment implements Step, Adapte
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Toast.makeText(parent.getContext(),
-                "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-                Toast.LENGTH_SHORT).show();
 
 
+    private Obstacle getObstacleFrom(int pos) {
+        switch (String.valueOf(pos)) {
+            case "0":
+                return new Stairs();
+            case "1":
+                return new Ramp();
+            case "2":
+                return new Unevenness();
+            case "3":
+                return new Construction();
+            case "4":
+                return new FastTrafficLight();
+            case "5":
+                return new Stairs();
+            case "6":
+                return new TightPassage();
+            default:
+                return new Stairs();
+
+        }
 
     }
 
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 }

@@ -41,6 +41,23 @@ public class ObstacleAttribute<T> {
         this.typeParameterClass = typeParameterClass;
     }
 
+    public String getString(){
+        if (typeParameterClass == Double.TYPE) {
+            return Double.toString((Double) value);
+
+        } else if (typeParameterClass == Integer.TYPE) {
+            return Integer.toString((Integer) value);
+
+        } else if (typeParameterClass == String.class) {
+            return (String) value;
+
+        } else if (typeParameterClass == Boolean.TYPE) {
+            return Boolean.toString((Boolean) value);
+
+        }
+        return null;
+    }
+
     public void setValueFromString(String newValue) {
         if (typeParameterClass == Double.TYPE) {
             value = (T) Double.valueOf(newValue);

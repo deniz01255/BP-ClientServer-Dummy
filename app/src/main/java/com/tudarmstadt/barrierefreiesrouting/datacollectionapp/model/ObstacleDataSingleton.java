@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 
 import bp.common.model.Obstacle;
+import bp.common.model.Stairs;
 
 /**
  * Created by vincent on 8/13/17.
@@ -23,6 +24,8 @@ public class ObstacleDataSingleton {
             synchronized(ObstacleDataSingleton.class) {
                 if (instance == null) {
                     instance = new ObstacleDataSingleton();
+                    instance.setmObstacle(new Stairs());
+
                 }
             }
         }
