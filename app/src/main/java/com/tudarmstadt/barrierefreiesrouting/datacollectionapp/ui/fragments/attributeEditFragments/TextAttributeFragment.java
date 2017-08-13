@@ -11,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AttributesEditorFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,10 +26,10 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.step
  */
 public class TextAttributeFragment extends Fragment implements IObstacleViewModelConsumer   {
 
-    private static final String LABEL_PARAM = "labelParam";
+    private static final String ATTRIBUTE_KEY_STRING_PARAM = "keyStringParam";
     private static IObstacleViewModelProvider obstacleViewModelProvider;
 
-    private String mLabelParam;
+    private String mAttributeKeyString;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,11 +37,11 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
         // Required empty public constructor
     }
 
-    public static TextAttributeFragment newInstance(String labelName, IObstacleViewModelProvider obstacleViewModelProvider) {
+    public static TextAttributeFragment newInstance(String attributeKeyString, IObstacleViewModelProvider obstacleViewModelProvider) {
         TextAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();
-        args.putString(LABEL_PARAM, labelName);
+        args.putString(ATTRIBUTE_KEY_STRING_PARAM, attributeKeyString);
 
         fragment.setArguments(args);
         return fragment;
@@ -53,7 +51,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mLabelParam = getArguments().getString(LABEL_PARAM);
+            mAttributeKeyString = getArguments().getString(ATTRIBUTE_KEY_STRING_PARAM);
         }
     }
 
@@ -61,13 +59,15 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.attribute_fragment_text, container, false);
+        View v = inflater.inflate(R.layout.attribute_fragment_edit_text, container, false);
 
         TextInputLayout textEditLabel = (TextInputLayout) v.findViewById(R.id.input_label);
 
-        textEditLabel.setHint(mLabelParam);
+        textEditLabel.setHint(mAttributeKeyString);
 
-        EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
+        final EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
+
+        textEditInput.setText((String) obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).value);
 
         textEditInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,6 +91,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus){
+                    obstacleViewModelProvider.getViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
                 }
             }
         });

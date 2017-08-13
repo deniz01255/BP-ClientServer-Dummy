@@ -46,4 +46,7 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
     public int getCount() {
         return 3;
     }
+
+
+
 }

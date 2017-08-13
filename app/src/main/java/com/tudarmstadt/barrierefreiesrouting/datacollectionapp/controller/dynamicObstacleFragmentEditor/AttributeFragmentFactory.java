@@ -16,7 +16,6 @@ import java.util.Map;
  * Created by Vincent on 27.06.2017.
  */
 public class AttributeFragmentFactory {
-    private static final int CONTENT_VIEW_ID = 10101010;
 
     /**
      * Inserts Attribute Fragments into the given fragment. All Attributes are listed in the
@@ -27,7 +26,7 @@ public class AttributeFragmentFactory {
      * @param fragment the fragment container, where to insert the attributes
      * @param obstacleViewModel contains the attributes mapping
      */
-    public static void insertAttributeFragments(Fragment fragment, ObstacleViewModel obstacleViewModel) {
+    public static void insertAttributeEditFragments(Fragment fragment, ObstacleViewModel obstacleViewModel) {
 
         Map<String, ObstacleAttribute<?>> obstacle = obstacleViewModel.attributesMap;
 
@@ -43,6 +42,7 @@ public class AttributeFragmentFactory {
             }
         }
     }
+    
 
     private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
 

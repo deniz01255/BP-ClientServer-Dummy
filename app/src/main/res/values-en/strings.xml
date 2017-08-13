@@ -23,4 +23,5 @@
     <string name="obstacle_label_fast_traffic_light">Fast traffic Light</string>
     <string name="obstacle_label_stairs">Stairs</string>
     <string name="obstacle_label_unevenness">Unevenness</string>
+    <string name="Obstacle_saved">Obstacle saved!</string>
 </resources>

@@ -56,7 +56,7 @@ public class CheckBoxAttributeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.attribute_fragment_check_box, container, false);
+        View v = inflater.inflate(R.layout.attribute_fragment_edit_bool, container, false);
 
         TextView label = (TextView) v.findViewById(R.id.checkbox_attribute_label);
 

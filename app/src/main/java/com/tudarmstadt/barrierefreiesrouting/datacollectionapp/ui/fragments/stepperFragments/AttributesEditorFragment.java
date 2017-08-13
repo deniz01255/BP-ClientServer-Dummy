@@ -11,13 +11,12 @@ import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 
 import bp.common.model.Obstacle;
 import bp.common.model.Stairs;
 
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeFragments;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeEditFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
 /**
@@ -38,7 +37,8 @@ public class AttributesEditorFragment extends Fragment implements Step, IObstacl
         obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(obstacleToEdit, getActivity()), obstacleToEdit);
 
         // this.obstacleViewModel must be initialized first.
-        insertAttributeFragments(this, obstacleViewModel);
+        insertAttributeEditFragments(this, obstacleViewModel);
+
 
 
         return v;
@@ -64,4 +64,8 @@ public class AttributesEditorFragment extends Fragment implements Step, IObstacl
     public ObstacleViewModel getViewModel() {
         return obstacleViewModel;
     }
+
+
+
+
 }

@@ -1,5 +1,10 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
+
 import java.util.Observable;
 import java.util.Observer;
 
@@ -33,6 +38,23 @@ public class ObstacleAttribute<T>  {
      */
     public ObstacleAttribute(Class<T> typeParameterClass) {
         this.typeParameterClass = typeParameterClass;
+    }
+
+    public void setValueFromString(String newValue){
+        if (typeParameterClass == Double.TYPE) {
+            value = (T) Double.valueOf(newValue);
+
+        } else if (typeParameterClass == Integer.TYPE) {
+            value = (T) Integer.valueOf(newValue);
+
+        } else if (typeParameterClass == String.class) {
+            value = (T) String.valueOf(newValue);
+
+        } else if (typeParameterClass == Boolean.TYPE) {
+            value = (T) Boolean.valueOf(newValue);
+
+        }
+
     }
 
 }

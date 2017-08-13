@@ -10,15 +10,12 @@ import android.widget.Toast;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
-
-import org.osmdroid.util.GeoPoint;
 
 import bp.common.model.Obstacle;
 
@@ -47,7 +44,7 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
 
         @Override
         public void onCompleted (View view){
-            Toast.makeText(this, "onCompleted!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.Obstacle_saved, Toast.LENGTH_SHORT).show();
             this.finish();
 
     }
