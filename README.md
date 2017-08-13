@@ -6,4 +6,5 @@ Android App für das Bachelorpraktikum Datenerfassung für ein barrierefreies ro
 
 - OKHttp
 - osmdroid
+- [stepstone-tech/android-material-stepper](https://github.com/stepstone-tech/android-material-stepper)
 
