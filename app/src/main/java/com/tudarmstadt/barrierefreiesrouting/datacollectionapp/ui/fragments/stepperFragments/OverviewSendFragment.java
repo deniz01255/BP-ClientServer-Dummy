@@ -14,10 +14,13 @@ import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleAttribute;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 import java.util.Map;
+
+import bp.common.model.ObstacleTypes;
 
 /**
  * Created by vincent on 8/11/17.
@@ -55,13 +58,21 @@ public class OverviewSendFragment extends Fragment implements Step, IObstacleVie
     @Override
     public void onSelected() {
 
+        TextView title = (TextView) view.findViewById(R.id.overview_obstacle_title);
+
+
+        ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getmObstacle().getTypecode();
+
+
+        title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
+
         LinearLayout detailsList = (LinearLayout) view.findViewById(R.id.overview_details_attribute_list);
 
         detailsList.removeAllViews();
 
         // Place for each ViewModel Attribute a new label
         for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
-            
+
             TextView tt = new TextView(getActivity());
             tt.setText(entry.getValue().name + ": " +  entry.getValue().getString());
             detailsList.addView(tt);
