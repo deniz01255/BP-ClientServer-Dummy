@@ -68,6 +68,8 @@ public class OverviewSendFragment extends Fragment implements Step, IObstacleVie
         // Place for each ViewModel Attribute a new label
         for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
 
+
+
             TextView tt = new TextView(getActivity());
             tt.setText(entry.getValue().getString());
             detailsList.addView(tt);

@@ -24,4 +24,5 @@
     <string name="obstacle_label_stairs">Stairs</string>
     <string name="obstacle_label_unevenness">Unevenness</string>
     <string name="Obstacle_saved">Obstacle saved!</string>
+    <string name="explain_send_data_to_server">By clicking \"complete\" you agree to send the data about the obstacle to the BP server. You agree to share the data under Blah Blah License</string>
 </resources>
