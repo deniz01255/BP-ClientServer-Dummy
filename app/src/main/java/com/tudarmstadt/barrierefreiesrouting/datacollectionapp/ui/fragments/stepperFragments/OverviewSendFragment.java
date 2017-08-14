@@ -61,7 +61,7 @@ public class OverviewSendFragment extends Fragment implements Step, IObstacleVie
         TextView title = (TextView) view.findViewById(R.id.overview_obstacle_title);
 
 
-        ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getmObstacle().getTypecode();
+        ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getmObstacle().getTypeCode();
 
 
         title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
