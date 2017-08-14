@@ -1,22 +1,16 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.UiThread;
-import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.vision.text.Text;
-import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.Step;
-import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleAttribute;
@@ -67,11 +61,9 @@ public class OverviewSendFragment extends Fragment implements Step, IObstacleVie
 
         // Place for each ViewModel Attribute a new label
         for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
-
-
-
+            
             TextView tt = new TextView(getActivity());
-            tt.setText(entry.getValue().getString());
+            tt.setText(entry.getValue().name + ": " +  entry.getValue().getString());
             detailsList.addView(tt);
 
         }
