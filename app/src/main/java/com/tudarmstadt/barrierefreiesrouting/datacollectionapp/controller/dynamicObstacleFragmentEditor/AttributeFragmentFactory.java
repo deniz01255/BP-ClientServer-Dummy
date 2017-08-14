@@ -12,12 +12,19 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Vincent on 27.06.2017.
  */
 public class AttributeFragmentFactory {
+
+
+    private static List<Fragment> activeFragments = new ArrayList<Fragment>();
+    private static FragmentTransaction fragTransaction;
+    private static FragmentManager fragMan;
 
     /**
      * Inserts Attribute Fragments into the given fragment. All Attributes are listed in the
@@ -46,11 +53,25 @@ public class AttributeFragmentFactory {
 
 
     private static void CommitFragment(Fragment parentFragment, Fragment newFragment, String tag) {
-
-        FragmentManager fragMan = parentFragment.getChildFragmentManager();
-        FragmentTransaction fragTransaction = fragMan.beginTransaction();
+        activeFragments.add(newFragment);
+        fragMan = parentFragment.getChildFragmentManager();
+        fragTransaction = fragMan.beginTransaction();
         fragTransaction.add(R.id.editor_attribute_list_container, newFragment, tag);
         fragTransaction.commit();
     }
+
+    public static void ClearAllChildFragments(Fragment parentFragment) {
+        fragMan = parentFragment.getChildFragmentManager();
+
+        if (activeFragments.size() > 0) {
+            fragTransaction = fragMan.beginTransaction();
+            for (Fragment activeFragment : activeFragments) {
+                fragTransaction.remove(activeFragment);
+            }
+            activeFragments.clear();
+            fragTransaction.commit();
+        }
+    }
+
 
 }

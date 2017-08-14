@@ -32,7 +32,7 @@ import bp.common.model.Unevenness;
  * Created by vincent on 8/11/17.
  */
 
-public class PlaceObstacleActivity extends AppCompatActivity implements StepperLayout.StepperListener, AdapterView.OnItemSelectedListener, MapEditorFragment.OnFragmentInteractionListener,
+public class PlaceObstacleActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
     private StepperLayout mStepperLayout;
@@ -74,18 +74,9 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Obstacle newObstacle = getObstacleFromSelection(adapterView.getSelectedItemId());
-        ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
-    }
 
     private Obstacle getObstacleFromSelection(long selectedItemId) {
         return null;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
 

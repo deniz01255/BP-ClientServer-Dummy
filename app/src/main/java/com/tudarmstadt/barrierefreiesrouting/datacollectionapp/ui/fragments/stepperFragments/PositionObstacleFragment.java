@@ -1,6 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -12,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.Step;
+import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
@@ -22,7 +27,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
  * Created by vincent on 8/11/17.
  */
 
-public class PositionObstacleFragment extends Fragment implements Step {
+public class PositionObstacleFragment extends Fragment implements BlockingStep {
 
 
     private MapEditorFragment mapEditorFragment;
@@ -68,5 +73,35 @@ public class PositionObstacleFragment extends Fragment implements Step {
     @Override
     public void onError(@NonNull VerificationError verificationError) {
 
+    }
+
+
+    @Override
+    @UiThread
+    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callback.goToNextStep();
+            }
+        }, 0L);
+    }
+
+    @Override
+    @UiThread
+    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                callback.complete();
+            }
+        }, 0L);
+    }
+
+    @Override
+    @UiThread
+    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
+        Toast.makeText(this.getContext(), "Your custom back action. Here you should cancel currently running operations", Toast.LENGTH_SHORT).show();
+        callback.goToPrevStep();
     }
 }
