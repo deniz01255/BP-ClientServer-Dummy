@@ -76,6 +76,7 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
 
             }
 

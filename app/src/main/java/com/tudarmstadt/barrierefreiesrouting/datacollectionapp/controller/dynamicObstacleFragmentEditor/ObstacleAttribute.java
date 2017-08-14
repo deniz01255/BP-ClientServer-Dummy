@@ -60,10 +60,19 @@ public class ObstacleAttribute<T> {
 
     public void setValueFromString(String newValue) {
         if (typeParameterClass == Double.TYPE) {
-            value = (T) Double.valueOf(newValue);
+            try{
+                value = (T) Double.valueOf(newValue);
 
+            }catch(NumberFormatException e){
+                value =  (T) Double.valueOf(-1);
+            }
         } else if (typeParameterClass == Integer.TYPE) {
-            value = (T) Integer.valueOf(newValue);
+            try{
+                value = (T) Integer.valueOf(newValue);
+
+            }catch(NumberFormatException e){
+                value =  (T) Integer.valueOf(-1);
+            }
 
         } else if (typeParameterClass == String.class) {
             value = (T) String.valueOf(newValue);
