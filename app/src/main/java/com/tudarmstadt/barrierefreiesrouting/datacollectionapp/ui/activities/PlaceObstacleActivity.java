@@ -62,16 +62,19 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
     @Override
     public void onError(VerificationError verificationError) {
 
+        ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
     }
 
     @Override
     public void onStepSelected(int i) {
+        ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
 
     }
 
     @Override
     public void onReturn() {
 
+        ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
     }
 
 

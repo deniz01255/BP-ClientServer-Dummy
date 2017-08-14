@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.stepstone.stepper.BlockingStep;
+import com.stepstone.stepper.Step;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
@@ -22,7 +23,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 /**
  * This Fragment holds all Attributes that can be edited
  */
-public class AttributesEditorFragment extends Fragment implements BlockingStep {
+public class AttributesEditorFragment extends Fragment implements Step {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +49,6 @@ public class AttributesEditorFragment extends Fragment implements BlockingStep {
     @Override
     public void onSelected() {
         if(!ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection){
-            ClearAllChildFragments(this);
             // this.obstacleViewModel must be initialized first.
             insertAttributeEditFragments(this);
 
@@ -62,34 +62,4 @@ public class AttributesEditorFragment extends Fragment implements BlockingStep {
 
     }
 
-
-
-    @Override
-    @UiThread
-    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.goToNextStep();
-            }
-        }, 0L);
-    }
-
-    @Override
-    @UiThread
-    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.complete();
-            }
-        }, 0L);
-    }
-
-    @Override
-    @UiThread
-    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-        Toast.makeText(this.getContext(), "Your custom back action. Here you should cancel currently running operations", Toast.LENGTH_SHORT).show();
-        callback.goToPrevStep();
-    }
 }

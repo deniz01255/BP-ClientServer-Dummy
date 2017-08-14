@@ -41,7 +41,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
  * Created by vincent on 8/11/17.
  */
 
-public class SelectObstacleTypeFragment extends Fragment implements BlockingStep {
+public class SelectObstacleTypeFragment extends Fragment implements Step {
 
     private static View view;
 
@@ -132,34 +132,5 @@ public class SelectObstacleTypeFragment extends Fragment implements BlockingStep
         }
 
     }
-
-
-    @Override
-    @UiThread
-    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.goToNextStep();
-            }
-        }, 2000L);
-    }
-
-    @Override
-    @UiThread
-    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.complete();
-            }
-        }, 2000L);
-    }
-
-    @Override
-    @UiThread
-    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-        Toast.makeText(this.getContext(), "Your custom back action. Here you should cancel currently running operations", Toast.LENGTH_SHORT).show();
-        callback.goToPrevStep();
-    }
+    
 }

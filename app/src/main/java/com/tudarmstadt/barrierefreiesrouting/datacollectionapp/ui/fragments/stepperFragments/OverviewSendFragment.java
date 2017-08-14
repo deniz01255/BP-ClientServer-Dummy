@@ -29,7 +29,7 @@ import java.util.Map;
  * Created by vincent on 8/11/17.
  */
 
-public class OverviewSendFragment extends Fragment implements BlockingStep, IObstacleViewModelConsumer {
+public class OverviewSendFragment extends Fragment implements Step, IObstacleViewModelConsumer {
 
     private static View view;
 
@@ -86,32 +86,5 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
     }
 
 
-    @Override
-    @UiThread
-    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.goToNextStep();
-            }
-        }, 0L);
-    }
 
-    @Override
-    @UiThread
-    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                callback.complete();
-            }
-        }, 0L);
-    }
-
-    @Override
-    @UiThread
-    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
-        Toast.makeText(this.getContext(), "Your custom back action. Here you should cancel currently running operations", Toast.LENGTH_SHORT).show();
-        callback.goToPrevStep();
-    }
 }
