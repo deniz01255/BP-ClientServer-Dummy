@@ -66,16 +66,15 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view,
                                            int position, long id) {
+
                     Obstacle newObstacle = getObstacleFrom(position);
-                    if (ObstacleDataSingleton.getInstance().getmObstacle() != null &&
-                            newObstacle.getTypecode() != ObstacleDataSingleton.getInstance().getmObstacle().getTypecode()) {
+                    ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
 
-                        ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
+                    ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
+                    ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
 
-                        ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
-                        ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
-                        ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
-                    }
+                    ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
+
                     
                 }
 
@@ -132,5 +131,5 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
         }
 
     }
-    
+
 }
