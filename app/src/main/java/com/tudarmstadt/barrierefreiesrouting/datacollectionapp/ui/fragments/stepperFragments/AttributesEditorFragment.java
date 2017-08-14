@@ -11,20 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.stepstone.stepper.BlockingStep;
-import com.stepstone.stepper.Step;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
-
-import bp.common.model.Obstacle;
-import bp.common.model.Stairs;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.ClearAllChildFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeEditFragments;
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
 
 /**
  * This Fragment holds all Attributes that can be edited
@@ -54,9 +47,14 @@ public class AttributesEditorFragment extends Fragment implements BlockingStep {
 
     @Override
     public void onSelected() {
-        ClearAllChildFragments(this);
-        // this.obstacleViewModel must be initialized first.
-        insertAttributeEditFragments(this);
+        if(!ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection){
+            ClearAllChildFragments(this);
+            // this.obstacleViewModel must be initialized first.
+            insertAttributeEditFragments(this);
+
+            ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = true;
+        }
+
     }
 
     @Override

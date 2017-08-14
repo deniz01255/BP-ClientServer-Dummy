@@ -26,6 +26,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.PlaceObstacleActivity;
 
 import bp.common.model.Construction;
+import bp.common.model.Elevator;
 import bp.common.model.FastTrafficLight;
 import bp.common.model.IObstacle;
 import bp.common.model.Obstacle;
@@ -66,10 +67,16 @@ public class SelectObstacleTypeFragment extends Fragment implements BlockingStep
                 public void onItemSelected(AdapterView<?> parent, View view,
                                            int position, long id) {
                     Obstacle newObstacle = getObstacleFrom(position);
-                    ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
+                    if (ObstacleDataSingleton.getInstance().getmObstacle() != null &&
+                            newObstacle.getTypecode() != ObstacleDataSingleton.getInstance().getmObstacle().getTypecode()) {
 
-                    ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
-                    ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
+                        ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
+
+                        ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
+                        ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
+                        ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
+                    }
+                    
                 }
 
                 @Override
@@ -103,8 +110,6 @@ public class SelectObstacleTypeFragment extends Fragment implements BlockingStep
 
     }
 
-
-
     private Obstacle getObstacleFrom(int pos) {
         switch (String.valueOf(pos)) {
             case "0":
@@ -118,7 +123,7 @@ public class SelectObstacleTypeFragment extends Fragment implements BlockingStep
             case "4":
                 return new FastTrafficLight();
             case "5":
-                return new Stairs();
+                return new Elevator();
             case "6":
                 return new TightPassage();
             default:

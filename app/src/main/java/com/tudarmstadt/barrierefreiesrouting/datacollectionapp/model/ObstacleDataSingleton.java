@@ -16,6 +16,7 @@ public class ObstacleDataSingleton {
     private Obstacle mObstacle;
 
     private ObstacleViewModel mObstacleViewModel;
+    public boolean editorIsSyncedWithSelection = false;
 
     private ObstacleDataSingleton() {}
 

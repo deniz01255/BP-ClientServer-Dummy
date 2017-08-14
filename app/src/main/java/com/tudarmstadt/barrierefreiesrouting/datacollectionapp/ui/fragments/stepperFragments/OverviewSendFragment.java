@@ -47,21 +47,6 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
             view = inflater.inflate(R.layout.stepfragment_overview_send, container, false);
 
 
-
-            LinearLayout detailsList = (LinearLayout) view.findViewById(R.id.overview_details_attribute_list);
-
-
-            // Place for each ViewModel Attribute a new label
-            for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
-
-                TextView tt = new TextView(getActivity());
-                tt.setText(entry.getValue().getString());
-                detailsList.addView(tt);
-
-            }
-
-
-
         } catch (InflateException e) {
 
         }
@@ -76,6 +61,18 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
     @Override
     public void onSelected() {
 
+        LinearLayout detailsList = (LinearLayout) view.findViewById(R.id.overview_details_attribute_list);
+
+        detailsList.removeAllViews();
+
+        // Place for each ViewModel Attribute a new label
+        for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
+
+            TextView tt = new TextView(getActivity());
+            tt.setText(entry.getValue().getString());
+            detailsList.addView(tt);
+
+        }
     }
 
     @Override
