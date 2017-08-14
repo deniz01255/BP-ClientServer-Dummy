@@ -22,24 +22,24 @@ public class ObstacleToViewConverter {
     static {
         converterForClass.put(Long.TYPE, new Converter() {
             @Override
-            public ObstacleAttribute<?> convert(Object value) {
-                ObstacleAttribute<Long> oa = new ObstacleAttribute<Long>(Long.TYPE);
+            public ObstacleAttribute<?> convert(Object value, String name) {
+                ObstacleAttribute<Long> oa = new ObstacleAttribute<Long>(Long.TYPE, name);
                 oa.value = (Long) value;
                 return oa;
             }
         });
         converterForClass.put(Integer.TYPE, new Converter() {
             @Override
-            public ObstacleAttribute<?> convert(Object value) {
-                ObstacleAttribute<Integer> oa = new ObstacleAttribute<Integer>(Integer.TYPE);
+            public ObstacleAttribute<?> convert(Object value, String name) {
+                ObstacleAttribute<Integer> oa = new ObstacleAttribute<Integer>(Integer.TYPE, name);
                 oa.value = (Integer) value;
                 return oa;
             }
         });
         converterForClass.put(Double.TYPE, new Converter() {
             @Override
-            public ObstacleAttribute<?> convert(Object value) {
-                ObstacleAttribute<Double> oa = new ObstacleAttribute<Double>(Double.TYPE);
+            public ObstacleAttribute<?> convert(Object value, String name) {
+                ObstacleAttribute<Double> oa = new ObstacleAttribute<Double>(Double.TYPE, name);
                 oa.value = (Double) value;
                 return oa;
 
@@ -47,8 +47,8 @@ public class ObstacleToViewConverter {
         });
         converterForClass.put(String.class, new Converter() {
             @Override
-            public ObstacleAttribute<?> convert(Object value) {
-                ObstacleAttribute<String> oa = new ObstacleAttribute<String>(String.class);
+            public ObstacleAttribute<?> convert(Object value, String name) {
+                ObstacleAttribute<String> oa = new ObstacleAttribute<String>(String.class, name);
                 oa.value = (String) value;
                 return oa;
             }
@@ -74,8 +74,13 @@ public class ObstacleToViewConverter {
                 if (converterForClass.get(f.getType()) != null)
                     try {
                         f.setAccessible(true);
-                        if (f.getAnnotation(EditableAttribute.class) != null)
-                            map.put(f.getAnnotation(EditableAttribute.class).value(), converterForClass.get(f.getType()).convert(f.get(obstacle)));
+                        if (f.getAnnotation(EditableAttribute.class) != null){
+                            String attributeName= f.getAnnotation(EditableAttribute.class).value();
+                            ObstacleAttribute<?>  attribute = converterForClass.get(f.getType()).convert(f.get(obstacle), attributeName);
+
+                            map.put(attributeName, attribute);
+
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -88,7 +93,7 @@ public class ObstacleToViewConverter {
     }
 
     interface Converter {
-        ObstacleAttribute<?> convert(Object value);
+        ObstacleAttribute<?> convert(Object value, String name);
     }
 
 }

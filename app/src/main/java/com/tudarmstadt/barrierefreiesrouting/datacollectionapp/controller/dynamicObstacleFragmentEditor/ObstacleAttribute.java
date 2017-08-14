@@ -37,8 +37,9 @@ public class ObstacleAttribute<T> {
      *
      * @param typeParameterClass
      */
-    public ObstacleAttribute(Class<T> typeParameterClass) {
+    public ObstacleAttribute(Class<T> typeParameterClass, String name) {
         this.typeParameterClass = typeParameterClass;
+        this.name = name;
     }
 
     public String getString(){
