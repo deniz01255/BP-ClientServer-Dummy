@@ -66,7 +66,6 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
 
                     ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
 
-                    
                 }
 
                 @Override
@@ -101,26 +100,39 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
     }
 
     private Obstacle getObstacleFrom(int pos) {
+
+        Obstacle result;
         switch (String.valueOf(pos)) {
             case "0":
-                return new Stairs();
+                result = new Stairs();
+                break;
             case "1":
-                return new Ramp();
+                result = new Ramp();
+                break;
             case "2":
-                return new Unevenness();
+                result = new Unevenness();
+                break;
             case "3":
-                return new Construction();
+                result = new Construction();
+                break;
             case "4":
-                return new FastTrafficLight();
+                result = new FastTrafficLight();
+                break;
             case "5":
-                return new Elevator();
+                result = new Elevator();
+                break;
             case "6":
-                return new TightPassage();
+                result = new TightPassage();
+                break;
             default:
-                return new Stairs();
+                result = new Stairs();
+                break;
 
         }
+        result.setLatitude(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle.getLatitude());
+        result.setLongitude(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle.getLongitude());
 
+        return result;
     }
 
 }

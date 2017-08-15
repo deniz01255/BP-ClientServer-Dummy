@@ -34,11 +34,11 @@ public class DownloadObstaclesTask {
     public DownloadObstaclesTask() {
     }
 
-    public static void DownloadStairs(final Activity activity, final MapEditorFragment mapEditorFragment) {
+    public static void downloadObstacles(final Activity activity, final MapEditorFragment mapEditorFragment) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
+                .url(RoutingServerAPI.baseURL + RoutingServerAPI.obstacleResource)
                 .build();
 
         client.newCall(request)

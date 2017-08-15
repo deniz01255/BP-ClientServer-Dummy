@@ -1,16 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
-import android.app.Activity;
-import android.widget.Toast;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
 
@@ -46,7 +38,7 @@ public class PostObstacleToServerTask {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(RoutingServerAPI.baseURL + RoutingServerAPI.stairsResource)
+                .url(RoutingServerAPI.baseURL + RoutingServerAPI.obstacleResource)
                 .post(body)
                 .build();
 

@@ -21,6 +21,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
@@ -46,8 +47,8 @@ public class BrowseMapActivity extends AppCompatActivity
         , IObstacleProvider {
 
     private long selectedBarrier;
+    public FloatingActionButton floatingActionButton;
     public MapEditorFragment mapEditorFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class BrowseMapActivity extends AppCompatActivity
         if (findViewById(R.id.map_fragment_container) != null) {
             if (savedInstanceState != null)
                 return;
-            mapEditorFragment = MapEditorFragment.newInstance();
+            mapEditorFragment = MapEditorFragment.newInstance(this);
             mapEditorFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
@@ -85,9 +86,11 @@ public class BrowseMapActivity extends AppCompatActivity
         });
 
 
-        FloatingActionButton addObstacleButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
 
-        addObstacleButton.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton .hide();
+
+        floatingActionButton .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
@@ -112,16 +115,36 @@ public class BrowseMapActivity extends AppCompatActivity
 
         getObstaclesFromServer();
 
-
     }
 
+
+    public void refreshActionButtonVisibility(){
+
+        if(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null){
+            floatingActionButton.hide();
+
+        }
+        else{
+            floatingActionButton.show();
+        }
+    }
+    public void reEnterFromPlaceObstacle(){
+        floatingActionButton.hide();
+        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
+
+
+
+        mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
+        mapEditorFragment.getStateHandler().getCurrentRoadOverlays().clear();
+
+    }
 
     public void onResume() {
         super.onResume();
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         Context context = getApplicationContext();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-
+        refreshActionButtonVisibility();
         if (mapEditorFragment != null && mapEditorFragment.mLocationOverlay != null) {
             mapEditorFragment.mLocationOverlay.enableMyLocation();
             mapEditorFragment.mLocationOverlay.enableFollowLocation();
@@ -174,7 +197,7 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
     public void getObstaclesFromServer() {
-        DownloadObstaclesTask.DownloadStairs(this, mapEditorFragment);
+        DownloadObstaclesTask.downloadObstacles(this, mapEditorFragment);
     }
 
 

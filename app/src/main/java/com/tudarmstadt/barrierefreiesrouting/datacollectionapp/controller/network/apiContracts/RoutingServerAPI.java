@@ -14,7 +14,7 @@ public class RoutingServerAPI {
     /**
      * The Path to the Stairs Resource on the routing server
      */
-    public static String stairsResource = "/api/barriers/";
+    public static String obstacleResource = "/api/barriers/";
 
     /**
      * If the api key requires an apikey, load the api key to this variable.

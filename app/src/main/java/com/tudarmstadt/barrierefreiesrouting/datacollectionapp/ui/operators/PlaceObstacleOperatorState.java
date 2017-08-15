@@ -17,7 +17,9 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
@@ -55,11 +57,14 @@ import okhttp3.Response;
 
 public class PlaceObstacleOperatorState implements OnClickListener, IOperatorState {
 
-    protected NearestRoadsOverlay roadsOverlay;
-    protected MapEditorFragment mapEditorFragment;
+    private NearestRoadsOverlay roadsOverlay;
+    private MapEditorFragment mapEditorFragment;
+    private BrowseMapActivity browseMapActivity;
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
 
-    public PlaceObstacleOperatorState(MapEditorFragment mapEditorFragment) {
+    public PlaceObstacleOperatorState(MapEditorFragment mapEditorFragment, BrowseMapActivity browseMapActivity) {
+        this.mapEditorFragment = mapEditorFragment;
+        this.browseMapActivity = browseMapActivity;
     }
 
     @Override
@@ -85,30 +90,32 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
 
+        browseMapActivity.floatingActionButton.hide();
         try {
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
-            GeoPoint obstacleGeoPoint = getClosesPointOnPolyLine(mapView, polyline, finalPoint);
-            if (obstacleGeoPoint == null)
+
+            ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = getClosesPointOnPolyLine(mapView,polyline, finalPoint);
+            if (ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null)
                 return false;
 
-            OverlayItem newOverlayItem = new OverlayItem("", "", obstacleGeoPoint);
+            OverlayItem newOverlayItem = new OverlayItem("", "", ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle);
             if (newOverlayItem == null)
                 return false;
 
             // TODO: Das Icon soll eindeutiger einer Position zugeordnet werden können.
-            // newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
+            //newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
 
             mapEditorFragment.placeNewObstacleOverlay.addItem(newOverlayItem);
 
             // Workaround: display the tempOverlay on top
             mapView.getOverlays().add( mapEditorFragment.getStateHandler().getPlaceNewObstacleOverlay());
-            mapEditorFragment.getStateHandler().setNewObstaclePosition(obstacleGeoPoint);
+            mapEditorFragment.getStateHandler().setNewObstaclePosition(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle);
 
             mapView.invalidate();
-
-
+            browseMapActivity.floatingActionButton.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,8 +213,6 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
-
-        this.mapEditorFragment = mapEditorFragment;
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder());
         roadsOverlay = roadsDirector.construct(p);
 

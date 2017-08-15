@@ -1,6 +1,11 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
+import android.support.design.widget.FloatingActionButton;
+
+import com.google.android.gms.vision.barcode.Barcode;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
+
+import org.osmdroid.util.GeoPoint;
 
 import bp.common.model.obstacles.Obstacle;
 import bp.common.model.obstacles.Stairs;
@@ -19,6 +24,9 @@ public class ObstacleDataSingleton {
     private ObstacleViewModel mObstacleViewModel;
     public boolean editorIsSyncedWithSelection = false;
 
+    public GeoPoint currentPositionOfSetObstacle = null;
+
+
     private ObstacleDataSingleton() {}
 
     public static ObstacleDataSingleton getInstance() {
@@ -27,7 +35,6 @@ public class ObstacleDataSingleton {
                 if (instance == null) {
                     instance = new ObstacleDataSingleton();
                     instance.setmObstacle(new Stairs());
-
                 }
             }
         }

@@ -39,10 +39,10 @@ public  class StateHandler {
 
     private String AppBarTitle = "";
 
-    public StateHandler(MapEditorFragment mapEditorFragment) {
+    public StateHandler(BrowseMapActivity browseMapActivity, MapEditorFragment mapEditorFragment) {
         clearAllOperator = new ClearAllOperator(mapEditorFragment);
         this.mapEditorFragment = mapEditorFragment;
-        activeOperator = new PlaceObstacleOperatorState(mapEditorFragment);
+        activeOperator = new PlaceObstacleOperatorState(mapEditorFragment, browseMapActivity);
     }
 
     public void setupNextState(IOperatorState nextState) {

@@ -38,22 +38,25 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
 
-    private StateHandler mapStateHandler = new StateHandler(this);
+    private StateHandler mapStateHandler;
 
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {
     }
 
-    public static MapEditorFragment newInstance() {
+    public static MapEditorFragment newInstance(BrowseMapActivity browseMapActivity) {
         MapEditorFragment fragment = new MapEditorFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        fragment.mapStateHandler = new StateHandler(browseMapActivity, fragment);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 

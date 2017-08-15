@@ -18,7 +18,7 @@ public class ClearAllOperator {
 
     public void clearAll(){
         // Go back to place obstacle OperatorState
-        mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceObstacleOperatorState(mapEditorFragment));
+        //mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceObstacleOperatorState(mapEditorFragment));
 
         // reset the position
         mapEditorFragment.getStateHandler().setNewObstaclePosition(null);

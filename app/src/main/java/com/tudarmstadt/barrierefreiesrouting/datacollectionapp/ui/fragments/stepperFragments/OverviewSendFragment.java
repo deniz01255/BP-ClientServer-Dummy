@@ -22,6 +22,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.networ
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 
 import java.util.Map;
 
@@ -109,6 +110,8 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
 
         ObstacleDataSingleton.getInstance().setmObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
         PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getmObstacle());
+
+
 
 
         callback.complete();
