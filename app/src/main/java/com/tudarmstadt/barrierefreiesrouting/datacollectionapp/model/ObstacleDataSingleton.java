@@ -25,6 +25,7 @@ public class ObstacleDataSingleton {
     public boolean editorIsSyncedWithSelection = false;
 
     public GeoPoint currentPositionOfSetObstacle = null;
+    public boolean obstacleDataCollectionCompleted = false;
 
 
     private ObstacleDataSingleton() {}

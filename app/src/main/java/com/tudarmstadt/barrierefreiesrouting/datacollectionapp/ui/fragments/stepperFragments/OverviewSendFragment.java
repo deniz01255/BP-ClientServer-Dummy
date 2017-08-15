@@ -111,8 +111,8 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
         ObstacleDataSingleton.getInstance().setmObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
         PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getmObstacle());
 
-
-
+        // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
+        ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
 
         callback.complete();
     }

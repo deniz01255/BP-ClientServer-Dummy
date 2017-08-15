@@ -132,6 +132,7 @@ public class BrowseMapActivity extends AppCompatActivity
         floatingActionButton.hide();
         ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
 
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
 
         mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
@@ -144,7 +145,16 @@ public class BrowseMapActivity extends AppCompatActivity
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         Context context = getApplicationContext();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-        refreshActionButtonVisibility();
+
+
+
+        // Check if the last obstacle data collection was completed
+
+        if(ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted){
+            reEnterFromPlaceObstacle();
+            ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
+        }
+
         if (mapEditorFragment != null && mapEditorFragment.mLocationOverlay != null) {
             mapEditorFragment.mLocationOverlay.enableMyLocation();
             mapEditorFragment.mLocationOverlay.enableFollowLocation();
