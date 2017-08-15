@@ -7,6 +7,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.function.Consumer;
 
 /**
  * ObstacleAttribute is used in the two-way binding between view and model.
@@ -32,14 +33,20 @@ public class ObstacleAttribute<T> {
     public String name;
 
     /**
+     *
+     */
+    public int originalFieldIndex;
+
+    /**
      * typeParameterClass must be specified in order to use this ObstacleAttribute.
      * A default value is not suitable
      *
      * @param typeParameterClass
      */
-    public ObstacleAttribute(Class<T> typeParameterClass, String name) {
+    public ObstacleAttribute(Class<T> typeParameterClass, String name, int originalFieldIndex) {
         this.typeParameterClass = typeParameterClass;
         this.name = name;
+        this.originalFieldIndex = originalFieldIndex;
     }
 
     public String getString(){

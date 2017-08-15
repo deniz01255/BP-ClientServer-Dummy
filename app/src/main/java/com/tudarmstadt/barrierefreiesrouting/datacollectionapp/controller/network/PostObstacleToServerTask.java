@@ -14,7 +14,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.IOException;
 
-import bp.common.model.Stairs;
+import bp.common.model.obstacles.Obstacle;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -32,7 +32,7 @@ public class PostObstacleToServerTask {
 
     }
 
-    public static void PostStairs(final Stairs obstacle) {
+    public static void PostObstacle(final Obstacle obstacle) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
         try {
@@ -54,6 +54,8 @@ public class PostObstacleToServerTask {
                 .enqueue(new Callback() {
                     @Override
                     public void onFailure(final Call call, IOException e) {
+
+
                         // Error
                     }
                     @Override

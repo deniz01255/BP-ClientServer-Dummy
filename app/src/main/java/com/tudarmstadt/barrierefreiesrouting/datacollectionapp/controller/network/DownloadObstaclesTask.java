@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import bp.common.model.Stairs;
+import bp.common.model.obstacles.Obstacle;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -61,21 +61,21 @@ public class DownloadObstaclesTask {
                         //mapper.enableDefaultTyping();
                         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-                        List<Stairs> obstacleList = new LinkedList<Stairs>();
+                        List<Obstacle> obstacleList = new LinkedList<Obstacle>();
                         if (!response.isSuccessful())
                             return;
                         try {
-                            obstacleList = mapper.readValue(res, new TypeReference<List<Stairs>>() {
+                            obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {
                             });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
 
-                        final List<Stairs> finalObstacleList = obstacleList;
+                        final List<Obstacle> finalObstacleList = obstacleList;
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                for (Stairs obstacle : finalObstacleList) {
+                                for (Obstacle obstacle : finalObstacleList) {
                                     OverlayItem overlayItem = new OverlayItem(obstacle.getName(), activity.getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
                                     overlayItem.setMarker(activity.getResources().getDrawable(R.mipmap.ramppic));
                                     mapEditorFragment.obstacleOverlay.addItem(overlayItem);

@@ -2,8 +2,9 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 
-import bp.common.model.Obstacle;
-import bp.common.model.Stairs;
+import bp.common.model.obstacles.Obstacle;
+import bp.common.model.obstacles.Stairs;
+
 
 /**
  * Created by vincent on 8/13/17.

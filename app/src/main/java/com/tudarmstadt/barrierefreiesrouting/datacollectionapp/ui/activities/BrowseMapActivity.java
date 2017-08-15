@@ -29,14 +29,15 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 
-import bp.common.model.Construction;
-import bp.common.model.Elevator;
-import bp.common.model.FastTrafficLight;
-import bp.common.model.Obstacle;
-import bp.common.model.Ramp;
-import bp.common.model.Stairs;
-import bp.common.model.TightPassage;
-import bp.common.model.Unevenness;
+import bp.common.model.obstacles.Construction;
+import bp.common.model.obstacles.Elevator;
+import bp.common.model.obstacles.FastTrafficLight;
+import bp.common.model.obstacles.Obstacle;
+import bp.common.model.obstacles.Ramp;
+import bp.common.model.obstacles.Stairs;
+import bp.common.model.obstacles.TightPassage;
+import bp.common.model.obstacles.Unevenness;
+
 
 public class BrowseMapActivity extends AppCompatActivity
         implements

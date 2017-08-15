@@ -3,7 +3,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynam
 import java.util.HashMap;
 import java.util.Map;
 
-import bp.common.model.Obstacle;
+import bp.common.model.obstacles.Obstacle;
+
 
 /**
  * The ObstacleViewModel stores model data of the Obstacle, that is used to display (model->view)
@@ -13,11 +14,17 @@ import bp.common.model.Obstacle;
  */
 public class ObstacleViewModel {
 
+    public Obstacle internalObstacle;
+
+
     /**
      * The attributes mapped to the attributeName
      */
     public Map<String, ObstacleAttribute<?>> attributesMap = new HashMap<>();
 
+
+    public ObstacleViewModel() {
+    }
 
     public ObstacleViewModel(Map<String, ObstacleAttribute<?>> attributes) {
         attributesMap = attributes;

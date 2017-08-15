@@ -15,7 +15,8 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 
-import bp.common.model.Obstacle;
+import bp.common.model.obstacles.Obstacle;
+
 
 /**
  * Created by Vincent on 08.08.2017.

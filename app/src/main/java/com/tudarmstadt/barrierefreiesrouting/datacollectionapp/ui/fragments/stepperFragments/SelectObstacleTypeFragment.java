@@ -1,41 +1,32 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.android.gms.location.places.Place;
-import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.Step;
-import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.PlaceObstacleActivity;
 
-import bp.common.model.Construction;
-import bp.common.model.Elevator;
-import bp.common.model.FastTrafficLight;
-import bp.common.model.IObstacle;
-import bp.common.model.Obstacle;
-import bp.common.model.Ramp;
-import bp.common.model.Stairs;
-import bp.common.model.TightPassage;
-import bp.common.model.Unevenness;
+import bp.common.model.obstacles.Construction;
+import bp.common.model.obstacles.Elevator;
+import bp.common.model.obstacles.FastTrafficLight;
+import bp.common.model.obstacles.Obstacle;
+import bp.common.model.obstacles.Ramp;
+import bp.common.model.obstacles.Stairs;
+import bp.common.model.obstacles.TightPassage;
+import bp.common.model.obstacles.Unevenness;
 
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToAttributeMap;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToViewModel;
 
 /**
  * Created by vincent on 8/11/17.
@@ -70,7 +61,7 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
                     Obstacle newObstacle = getObstacleFrom(position);
                     ObstacleDataSingleton.getInstance().setmObstacle(newObstacle);
 
-                    ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(newObstacle, getActivity()));
+                    ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(newObstacle, getActivity());
                     ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
 
                     ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
@@ -83,7 +74,7 @@ public class SelectObstacleTypeFragment extends Fragment implements Step {
 
                 }
             });
-            ObstacleViewModel obstacleViewModel = new ObstacleViewModel(convertObstacleToAttributeMap(ObstacleDataSingleton.getInstance().getmObstacle(), getActivity()));
+            ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(ObstacleDataSingleton.getInstance().getmObstacle(), getActivity());
             ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
 
         } catch (InflateException e) {

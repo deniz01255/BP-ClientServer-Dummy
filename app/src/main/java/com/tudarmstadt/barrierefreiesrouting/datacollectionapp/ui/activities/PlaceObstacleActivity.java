@@ -19,13 +19,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
 
-import bp.common.model.Construction;
-import bp.common.model.FastTrafficLight;
-import bp.common.model.Obstacle;
-import bp.common.model.Ramp;
-import bp.common.model.Stairs;
-import bp.common.model.TightPassage;
-import bp.common.model.Unevenness;
+import bp.common.model.obstacles.Obstacle;
+import bp.common.model.obstacles.Stairs;
 
 
 /**

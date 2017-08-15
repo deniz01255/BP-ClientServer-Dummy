@@ -1,7 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -10,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.Step;
+import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleAttribute;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -22,11 +27,13 @@ import java.util.Map;
 
 import bp.common.model.ObstacleTypes;
 
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertAttributeMapToObstacle;
+
 /**
  * Created by vincent on 8/11/17.
  */
 
-public class OverviewSendFragment extends Fragment implements Step, IObstacleViewModelConsumer {
+public class OverviewSendFragment extends Fragment implements BlockingStep, IObstacleViewModelConsumer {
 
     private static View view;
 
@@ -90,6 +97,26 @@ public class OverviewSendFragment extends Fragment implements Step, IObstacleVie
 
     }
 
+    @Override
+    @UiThread
+    public void onNextClicked(final StepperLayout.OnNextClickedCallback callback) {
+        callback.goToNextStep();
+
+    }
+
+    @Override
+    public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
+
+        ObstacleDataSingleton.getInstance().setmObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
+        PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getmObstacle());
 
 
+        callback.complete();
+    }
+
+    @Override
+    @UiThread
+    public void onBackClicked(StepperLayout.OnBackClickedCallback callback) {
+        callback.goToPrevStep();
+    }
 }
