@@ -216,6 +216,9 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder());
         roadsOverlay = roadsDirector.construct(p);
 
+        // clear the new placed temp Marker Item
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+
         PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask task = new PlaceObstacleOperatorState.GetHighwaysFromOverpassAPITask(context);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
 
