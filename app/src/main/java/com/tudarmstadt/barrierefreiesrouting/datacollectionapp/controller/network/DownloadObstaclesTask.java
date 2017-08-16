@@ -27,7 +27,7 @@ public class DownloadObstaclesTask {
     public DownloadObstaclesTask() {
     }
 
-    public static void downloadObstacles(final Activity activity, final MapEditorFragment mapEditorFragment) {
+    public static void downloadObstacles() {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -38,13 +38,7 @@ public class DownloadObstaclesTask {
                 .enqueue(new Callback() {
                     @Override
                     public void onFailure(final Call call, IOException e) {
-                        // Error
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            }
-                        });
+                        
                     }
 
                     @Override

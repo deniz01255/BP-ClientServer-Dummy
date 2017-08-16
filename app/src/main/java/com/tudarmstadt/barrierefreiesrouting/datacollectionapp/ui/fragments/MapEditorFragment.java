@@ -35,7 +35,9 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     private MapEventsOverlay evOverlay;
     private IMapController mapController;
-    private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+    private ArrayList<OverlayItem> obstacleItems = new ArrayList<OverlayItem>();
+    private ArrayList<OverlayItem> tempObstacleItems = new ArrayList<OverlayItem>();
+
     private OnFragmentInteractionListener mListener;
 
     private MapEditorState mapStateHandler;
@@ -95,7 +97,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             }
         });
 
-        obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), items,
+        obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), obstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
@@ -107,7 +109,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                         return false;
                     }
                 });
-        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),items,
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),tempObstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {

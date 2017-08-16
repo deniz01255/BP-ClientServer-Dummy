@@ -133,7 +133,6 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-        getObstaclesFromServer();
 
     }
 
@@ -141,34 +140,14 @@ public class BrowseMapActivity extends AppCompatActivity
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        getObstaclesFromServer();
+
     }
 
     @Override
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
-    }
-
-    public void refreshActionButtonVisibility() {
-
-        if (ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null) {
-            floatingActionButton.hide();
-
-        } else {
-            floatingActionButton.show();
-        }
-    }
-
-    public void reEnterFromPlaceObstacle() {
-        floatingActionButton.hide();
-        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
-
-        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-
-
-        // mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
-
-
     }
 
     public void onResume() {
@@ -181,7 +160,12 @@ public class BrowseMapActivity extends AppCompatActivity
         // Check if the last obstacle data collection was completed
 
         if (ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted) {
-            reEnterFromPlaceObstacle();
+            floatingActionButton.hide();
+            mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+            for (Polyline p : currentPolylineArrayList) {
+                mapEditorFragment.map.getOverlays().remove(p);
+            }
+
             ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
         }
 
@@ -237,7 +221,7 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
     public void getObstaclesFromServer() {
-        DownloadObstaclesTask.downloadObstacles(this, mapEditorFragment);
+        DownloadObstaclesTask.downloadObstacles();
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -312,14 +296,17 @@ public class BrowseMapActivity extends AppCompatActivity
             mapEditorFragment.map.invalidate();
             floatingActionButton.show();
         } else {
+
             floatingActionButton.hide();
         }
+        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = point;
 
 
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onMessageEvent(RoadsHelperOverlayChangedEvent event) {
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         for (Polyline p : currentPolylineArrayList) {
             mapEditorFragment.map.getOverlays().remove(p);
