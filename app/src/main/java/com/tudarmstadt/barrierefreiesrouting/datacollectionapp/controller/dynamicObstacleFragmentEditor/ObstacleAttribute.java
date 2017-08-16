@@ -32,10 +32,7 @@ public class ObstacleAttribute<T> {
      */
     public String name;
 
-    /**
-     *
-     */
-    public int originalFieldIndex;
+
 
     /**
      * typeParameterClass must be specified in order to use this ObstacleAttribute.
@@ -43,10 +40,9 @@ public class ObstacleAttribute<T> {
      *
      * @param typeParameterClass
      */
-    public ObstacleAttribute(Class<T> typeParameterClass, String name, int originalFieldIndex) {
+    public ObstacleAttribute(Class<T> typeParameterClass, String name) {
         this.typeParameterClass = typeParameterClass;
         this.name = name;
-        this.originalFieldIndex = originalFieldIndex;
     }
 
     public String getString(){
