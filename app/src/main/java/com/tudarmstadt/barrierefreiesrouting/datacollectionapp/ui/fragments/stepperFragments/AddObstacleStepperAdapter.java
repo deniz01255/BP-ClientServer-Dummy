@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 /**
  * Created by vincent on 8/11/17.
@@ -23,16 +24,17 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public Step createStep(@IntRange(from = 0L) int position) {
+
+
         switch (position) {
             case 0:
-                return (Step) getStep(position, new SelectObstacleTypeFragment());
-            case 1:
                 return (Step) getStep(position, new AttributesEditorFragment());
-            case 2:{
+            case 1: {
                 return (Step) getStep(position, new OverviewSendFragment());
 
             }
         }
+
         return null;
     }
 
@@ -46,7 +48,7 @@ public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
 

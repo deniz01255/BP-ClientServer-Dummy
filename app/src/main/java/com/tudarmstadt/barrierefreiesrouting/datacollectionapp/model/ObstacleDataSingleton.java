@@ -26,6 +26,8 @@ public class ObstacleDataSingleton {
 
     public GeoPoint currentPositionOfSetObstacle = null;
     public boolean obstacleDataCollectionCompleted = false;
+    private Obstacle existingSelectedObstacle;
+    public boolean editExisting = false;
 
 
     private ObstacleDataSingleton() {}
@@ -57,5 +59,18 @@ public class ObstacleDataSingleton {
 
     public void setmObstacleViewModel(ObstacleViewModel mObstacleViewModel) {
         this.mObstacleViewModel = mObstacleViewModel;
+    }
+
+    /**
+     * If no Obstacle is selected, this must return null
+     * @return
+     */
+    public Obstacle getExistingSelectedObstacle() {
+        
+        return existingSelectedObstacle;
+    }
+
+    public void setExistingSelectedObstacle(Obstacle existingSelectedObstacle) {
+        this.existingSelectedObstacle = existingSelectedObstacle;
     }
 }

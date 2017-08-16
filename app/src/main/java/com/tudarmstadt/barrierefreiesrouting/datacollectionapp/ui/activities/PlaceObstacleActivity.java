@@ -47,7 +47,6 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         ObstacleDataSingleton.getInstance().setmObstacle(new Stairs());
 
 
-
     }
 
 

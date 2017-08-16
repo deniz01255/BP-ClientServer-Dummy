@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.StartEditObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 
 import bp.common.model.ObstacleTypes;
@@ -45,6 +47,10 @@ public class ObstacleDetailsViewerFragment extends Fragment {
         ObstacleTypes typeCode = obstacle.getTypeCode();
         title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
 
+
+        Button editObstacleButton = (Button) v.findViewById(R.id.edit_obstacle_details_button);
+
+        editObstacleButton.setOnClickListener(new StartEditObstacleListener(obstacle));
 
 
 

@@ -35,7 +35,33 @@ public class ObstacleTranslator {
 
         // Type is not specified, so just call it obstacle
         return context.getString(R.string.obstacle);
+    }
 
+    /**
+     * @param type
+     * @return
+     */
+    public static int getSpinnerPositionFromType(ObstacleTypes type) {
+        switch (type) {
+            case STAIRS:
+                return 0;
+            case RAMP:
+                return 1;
+            case UNEVENNESS:
+                return 2;
+            case CONSTRUCTION:
+                return 3;
+            case FAST_TRAFFIC_LIGHT:
+                return 4;
+            case ELEVATOR:
+                return 5;
+            case TIGHT_PASSAGE:
+                return 6;
+
+        }
+
+
+        return 5;
     }
 
 }

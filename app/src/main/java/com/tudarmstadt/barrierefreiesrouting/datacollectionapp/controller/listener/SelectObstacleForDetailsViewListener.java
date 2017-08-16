@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.liste
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemLongPressEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,7 +18,7 @@ public class SelectObstacleForDetailsViewListener implements ItemizedIconOverlay
 
     @Override
     public boolean onItemSingleTapUp(int i, ObstacleOverlayItem o) {
-
+        // set the selected obstacle for edit mode
         EventBus.getDefault().post(new ObstacleOverlayItemSingleTapEvent(o));
 
         return true;
@@ -26,7 +27,6 @@ public class SelectObstacleForDetailsViewListener implements ItemizedIconOverlay
     @Override
     public boolean onItemLongPress(int i, ObstacleOverlayItem o) {
         EventBus.getDefault().post(new ObstacleOverlayItemLongPressEvent(o));
-
         return true;
     }
 }

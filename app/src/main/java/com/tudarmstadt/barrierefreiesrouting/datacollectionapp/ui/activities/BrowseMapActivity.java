@@ -29,6 +29,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -374,10 +375,16 @@ public class BrowseMapActivity extends AppCompatActivity
         obstacleDetailsFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.obstacle_bottom_sheet_details_container, obstacleDetailsFragment).commit();
-
-
-
+                .replace(R.id.obstacle_bottom_sheet_details_container, obstacleDetailsFragment).commit();
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StartEditObstacleEvent event) {
+        ObstacleDataSingleton.getInstance().setmObstacle(event.getObstacle());
+        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = new GeoPoint(event.getObstacle().latitude, event.getObstacle().longitude);
+        Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
+        startActivity(intent);
+    }
+
 }
