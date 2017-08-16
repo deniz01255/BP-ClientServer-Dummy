@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.MapEditorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.SelectObstacleForDetailsView;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.SelectObstacleForDetailsViewListener;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -31,12 +32,12 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     public MyLocationNewOverlay mLocationOverlay;
     public MapView map;
-    public ItemizedOverlayWithFocus<OverlayItem> obstacleOverlay;
+    public ItemizedOverlayWithFocus<ObstacleOverlayItem> obstacleOverlay;
     public ItemizedOverlayWithFocus<OverlayItem> placeNewObstacleOverlay;
 
     private MapEventsOverlay evOverlay;
     private IMapController mapController;
-    private ArrayList<OverlayItem> obstacleItems = new ArrayList<OverlayItem>();
+    private ArrayList<ObstacleOverlayItem> obstacleItems = new ArrayList<ObstacleOverlayItem>();
     private ArrayList<OverlayItem> tempObstacleItems = new ArrayList<OverlayItem>();
 
     private OnFragmentInteractionListener mListener;
@@ -98,8 +99,9 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
             }
         });
 
+
         obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), obstacleItems,
-                new SelectObstacleForDetailsView());
+                new SelectObstacleForDetailsViewListener());
 
         placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),tempObstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {

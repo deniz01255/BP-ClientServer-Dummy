@@ -2,9 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 import android.app.Activity;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.NavigationBarState;
 
 import org.osmdroid.util.GeoPoint;
 

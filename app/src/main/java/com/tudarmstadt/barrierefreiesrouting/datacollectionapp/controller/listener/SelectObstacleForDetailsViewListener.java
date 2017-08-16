@@ -1,7 +1,8 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemLongPressEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
@@ -11,11 +12,11 @@ import org.osmdroid.views.overlay.OverlayItem;
  * Created by vincent on 8/16/17.
  */
 
-public class SelectObstacleForDetailsView implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
+public class SelectObstacleForDetailsViewListener implements ItemizedIconOverlay.OnItemGestureListener<ObstacleOverlayItem> {
 
 
     @Override
-    public boolean onItemSingleTapUp(int i, OverlayItem o) {
+    public boolean onItemSingleTapUp(int i, ObstacleOverlayItem o) {
 
         EventBus.getDefault().post(new ObstacleOverlayItemSingleTapEvent(o));
 
@@ -23,7 +24,7 @@ public class SelectObstacleForDetailsView implements ItemizedIconOverlay.OnItemG
     }
 
     @Override
-    public boolean onItemLongPress(int i, OverlayItem o) {
+    public boolean onItemLongPress(int i, ObstacleOverlayItem o) {
         EventBus.getDefault().post(new ObstacleOverlayItemLongPressEvent(o));
 
         return true;

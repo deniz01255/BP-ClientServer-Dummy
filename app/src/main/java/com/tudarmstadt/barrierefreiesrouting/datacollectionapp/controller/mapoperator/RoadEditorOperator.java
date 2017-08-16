@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
 import android.app.Activity;
 
@@ -10,11 +10,7 @@ import org.osmdroid.util.GeoPoint;
 /**
  * Created by vincent on 8/16/17.
  */
-
 public class RoadEditorOperator implements IUserInteractionWithMap {
-
-
-
 
 
     // Longpress auf die Map
