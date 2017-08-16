@@ -23,6 +23,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
@@ -39,7 +41,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import bp.common.model.obstacles.Construction;
@@ -62,6 +66,7 @@ public class BrowseMapActivity extends AppCompatActivity
     private long selectedBarrier;
     public FloatingActionButton floatingActionButton;
     public MapEditorFragment mapEditorFragment;
+    private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +166,8 @@ public class BrowseMapActivity extends AppCompatActivity
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
 
-        mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
-        mapEditorFragment.getStateHandler().getCurrentRoadOverlays().clear();
+        // mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
+
 
     }
 
@@ -235,7 +240,6 @@ public class BrowseMapActivity extends AppCompatActivity
         DownloadObstaclesTask.downloadObstacles(this, mapEditorFragment);
     }
 
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
 
@@ -271,8 +275,6 @@ public class BrowseMapActivity extends AppCompatActivity
         }
     }
 
-
-    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclePostedEvent event) {
 
@@ -281,7 +283,6 @@ public class BrowseMapActivity extends AppCompatActivity
 
         if (!response.isSuccessful())
             return;
-
 
         runOnUiThread(new Runnable() {
             @Override
@@ -301,6 +302,40 @@ public class BrowseMapActivity extends AppCompatActivity
 
     }
 
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(ObstaclePositionSelectedOnPolylineEvent event) {
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        GeoPoint point = event.getPoint();
+        if (point != null) {
+            OverlayItem overlayItem = new OverlayItem("", "", point);
+            mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
+            mapEditorFragment.map.invalidate();
+            floatingActionButton.show();
+        } else {
+            floatingActionButton.hide();
+        }
 
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(RoadsHelperOverlayChangedEvent event) {
+
+        for (Polyline p : currentPolylineArrayList) {
+            mapEditorFragment.map.getOverlays().remove(p);
+        }
+
+        currentPolylineArrayList = event.getRoads();
+
+        for (Polyline p : currentPolylineArrayList) {
+            mapEditorFragment.map.getOverlays().add(p);
+        }
+
+        mapEditorFragment.map.getOverlays().remove(mapEditorFragment.placeNewObstacleOverlay);
+        mapEditorFragment.map.getOverlays().add(mapEditorFragment.placeNewObstacleOverlay);
+
+        mapEditorFragment.map.invalidate();
+
+    }
 
 }

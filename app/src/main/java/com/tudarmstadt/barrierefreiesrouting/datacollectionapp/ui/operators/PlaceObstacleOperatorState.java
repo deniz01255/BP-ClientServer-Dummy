@@ -5,10 +5,9 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.MainOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RamplerOverpassAPI;
@@ -22,6 +21,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -58,13 +59,11 @@ import okhttp3.Response;
 public class PlaceObstacleOperatorState implements OnClickListener, IOperatorState {
 
     private NearestRoadsOverlay roadsOverlay;
-    private MapEditorFragment mapEditorFragment;
-    private BrowseMapActivity browseMapActivity;
+
+
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
 
-    public PlaceObstacleOperatorState(MapEditorFragment mapEditorFragment, BrowseMapActivity browseMapActivity) {
-        this.mapEditorFragment = mapEditorFragment;
-        this.browseMapActivity = browseMapActivity;
+    public PlaceObstacleOperatorState() {
     }
 
     @Override
@@ -89,33 +88,13 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
         ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
 
-        browseMapActivity.floatingActionButton.hide();
         try {
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
 
-            ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = getClosesPointOnPolyLine(mapView,polyline, finalPoint);
-            if (ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null)
-                return false;
-
-            OverlayItem newOverlayItem = new OverlayItem("", "", ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle);
-            if (newOverlayItem == null)
-                return false;
-
-            // TODO: Das Icon soll eindeutiger einer Position zugeordnet werden können.
-            //newOverlayItem.setMarker(mapView.getContext().getResources().getDrawable(R.mipmap.ramppic));
-
-            mapEditorFragment.placeNewObstacleOverlay.addItem(newOverlayItem);
-
-            // Workaround: display the tempOverlay on top
-            mapView.getOverlays().add( mapEditorFragment.getStateHandler().getPlaceNewObstacleOverlay());
-            mapEditorFragment.getStateHandler().setNewObstaclePosition(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle);
-
-            mapView.invalidate();
-            browseMapActivity.floatingActionButton.show();
+            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosesPointOnPolyLine(mapView,polyline, finalPoint)));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,9 +211,10 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
     protected void processRoads(Response response) {
         if (response != null && response.isSuccessful()) {
-            mapEditorFragment.map.getOverlays().removeAll(mapEditorFragment.getStateHandler().getCurrentRoadOverlays());
-            mapEditorFragment.getStateHandler().getCurrentRoadOverlays().clear();
+
             try {
+                ArrayList<Polyline> polylines = new ArrayList<>();
+
                 SAXParserFactory factory = SAXParserFactory.newInstance();
                 SAXParser saxParser = factory.newSAXParser();
 
@@ -255,36 +235,24 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
                     polyline.setPoints(r.getRoadPoints());
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
+                    // See onClick() method in this class.
                     polyline.setOnClickListener(this);
-
-                   mapEditorFragment.getStateHandler().getCurrentRoadOverlays().add(polyline);
-
+                    polylines.add(polyline);
                 }
-                for (Polyline p : mapEditorFragment.getStateHandler().getCurrentRoadOverlays()) {
-                    mapEditorFragment.map.getOverlays().add(p);
 
-                }
-                mapEditorFragment.map.getOverlays().remove(mapEditorFragment.placeNewObstacleOverlay);
-                mapEditorFragment.map.getOverlays().add(mapEditorFragment.placeNewObstacleOverlay);
-
-                mapEditorFragment.map.invalidate();
+                EventBus.getDefault().post(new RoadsHelperOverlayChangedEvent(polylines));
 
             } catch (SAXException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-
-            return;
-        } else {
-            return;
         }
     }
 
-    class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
+    private class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 
         GetHighwaysFromOverpassAPITask(Activity activity ) {
@@ -324,7 +292,6 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
 
             if (!response.isSuccessful()) {
                 //TODO: handle unsuccessful server responses
-                System.out.print("This line exists only for break pointability ;P ... Server responded not successfully");
             }
             return response;
         }

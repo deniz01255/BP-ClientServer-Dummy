@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.appstate.StateHandler;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.MapEditorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 
 import org.osmdroid.api.IMapController;
@@ -38,7 +38,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     private ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
     private OnFragmentInteractionListener mListener;
 
-    private StateHandler mapStateHandler;
+    private MapEditorState mapStateHandler;
 
 
     // Leerer Constructor wird benötigt
@@ -49,7 +49,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         MapEditorFragment fragment = new MapEditorFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fragment.mapStateHandler = new StateHandler(browseMapActivity, fragment);
+        fragment.mapStateHandler = new MapEditorState(browseMapActivity, fragment);
 
         return fragment;
     }
@@ -120,7 +120,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
                     }
                 });
 
-        obstacleOverlay.setFocusItemsOnTap(true);
+        obstacleOverlay.setFocusItemsOnTap(false);
         map.getOverlays().add(obstacleOverlay);
         map.getOverlays().add(placeNewObstacleOverlay);
 
@@ -156,7 +156,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
     }
 
-    public StateHandler getStateHandler() {
+    public MapEditorState getStateHandler() {
         return mapStateHandler;
     }
 
