@@ -1,6 +1,5 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 /**
@@ -18,7 +17,7 @@ public class ClearAllOperator {
 
     public void clearAll(){
         // Go back to place obstacle OperatorState
-        //mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceObstacleOperatorState(mapEditorFragment));
+        //mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceNearestRoadsOnMapOperator(mapEditorFragment));
 
         // remove temporary edit obstacle items on the road overlay
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();

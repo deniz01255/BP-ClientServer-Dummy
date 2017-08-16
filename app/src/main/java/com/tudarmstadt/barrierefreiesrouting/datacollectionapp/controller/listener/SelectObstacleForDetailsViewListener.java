@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemLongPressEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
@@ -12,7 +12,7 @@ import org.osmdroid.views.overlay.OverlayItem;
  * Created by vincent on 8/16/17.
  */
 
-public class SelectObstacleForDetailsView implements ItemizedIconOverlay.OnItemGestureListener<ObstacleOverlayItem> {
+public class SelectObstacleForDetailsViewListener implements ItemizedIconOverlay.OnItemGestureListener<ObstacleOverlayItem> {
 
 
     @Override

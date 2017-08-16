@@ -1,4 +1,4 @@
-package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators;
+package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
 import android.app.Activity;
 
