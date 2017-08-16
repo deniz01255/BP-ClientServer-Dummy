@@ -23,6 +23,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 
 public class OverviewSendFragment extends Fragment implements BlockingStep, IObstacleViewModelConsumer {
 
-    private static View view;
+    private View view;
 
 
     @Override
@@ -109,6 +110,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
     public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
 
         ObstacleDataSingleton.getInstance().setmObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
+
         PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getmObstacle());
 
         // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually

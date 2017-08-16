@@ -33,6 +33,8 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
     private StepperLayout mStepperLayout;
     private int selectedBarrier;
 
+    public BrowseMapActivity browseMapActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         mStepperLayout.setListener(this);
 
         ObstacleDataSingleton.getInstance().setmObstacle(new Stairs());
+
+
 
     }
 

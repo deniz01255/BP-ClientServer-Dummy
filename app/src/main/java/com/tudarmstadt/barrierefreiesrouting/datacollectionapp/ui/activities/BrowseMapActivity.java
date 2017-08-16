@@ -13,12 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerResponseEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -27,8 +32,16 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.OverlayItem;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
@@ -38,11 +51,12 @@ import bp.common.model.obstacles.Ramp;
 import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
+import okhttp3.Response;
 
 
 public class BrowseMapActivity extends AppCompatActivity
         implements
-        AdapterView.OnItemSelectedListener,  MapEditorFragment.OnFragmentInteractionListener,
+        AdapterView.OnItemSelectedListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
@@ -80,6 +94,7 @@ public class BrowseMapActivity extends AppCompatActivity
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
             }
+
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
@@ -88,9 +103,9 @@ public class BrowseMapActivity extends AppCompatActivity
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
 
-        floatingActionButton .hide();
+        floatingActionButton.hide();
 
-        floatingActionButton .setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
@@ -108,6 +123,7 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onPlaceSelected(Place place) {
                 mapEditorFragment.map.getController().setCenter(new GeoPoint(place.getLatLng().latitude, place.getLatLng().longitude));
             }
+
             @Override
             public void onError(Status status) {
             }
@@ -117,18 +133,29 @@ public class BrowseMapActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-    public void refreshActionButtonVisibility(){
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
 
-        if(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null){
+    public void refreshActionButtonVisibility() {
+
+        if (ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle == null) {
             floatingActionButton.hide();
 
-        }
-        else{
+        } else {
             floatingActionButton.show();
         }
     }
-    public void reEnterFromPlaceObstacle(){
+
+    public void reEnterFromPlaceObstacle() {
         floatingActionButton.hide();
         ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
 
@@ -147,10 +174,9 @@ public class BrowseMapActivity extends AppCompatActivity
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
 
-
         // Check if the last obstacle data collection was completed
 
-        if(ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted){
+        if (ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted) {
             reEnterFromPlaceObstacle();
             ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
         }
@@ -210,5 +236,39 @@ public class BrowseMapActivity extends AppCompatActivity
         DownloadObstaclesTask.downloadObstacles(this, mapEditorFragment);
     }
 
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(RoutingServerResponseEvent event) {
+
+        try {
+            Response response = event.getResponse();
+            String res = response.body().string();
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            if (!response.isSuccessful())
+                return;
+
+            final List<Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {});
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (Obstacle obstacle : obstacleList) {
+                        OverlayItem overlayItem = new OverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                        overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                        mapEditorFragment.obstacleOverlay.addItem(overlayItem);
+                    }
+                    Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
+                            Toast.LENGTH_SHORT).show();
+                    mapEditorFragment.map.invalidate();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

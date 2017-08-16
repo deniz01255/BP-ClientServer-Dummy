@@ -2,7 +2,10 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerResponseEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 
@@ -47,12 +50,12 @@ public class PostObstacleToServerTask {
                     @Override
                     public void onFailure(final Call call, IOException e) {
 
-
                         // Error
                     }
+
                     @Override
                     public void onResponse(Call call, final Response response) throws IOException {
-
+                        EventBus.getDefault().post(new RoutingServerResponseEvent(response));
                     }
                 });
     }
