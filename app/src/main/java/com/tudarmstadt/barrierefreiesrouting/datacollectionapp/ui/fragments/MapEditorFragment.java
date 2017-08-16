@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.MapEditorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.SelectObstacleForDetailsView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -98,17 +99,8 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         });
 
         obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), obstacleItems,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        return true;
-                    }
+                new SelectObstacleForDetailsView());
 
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        return false;
-                    }
-                });
         placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),tempObstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override

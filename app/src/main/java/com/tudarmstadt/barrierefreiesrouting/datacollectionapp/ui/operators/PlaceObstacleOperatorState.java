@@ -15,16 +15,14 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlay;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.Polyline.OnClickListener;
 import org.xml.sax.InputSource;
@@ -56,7 +54,7 @@ import okhttp3.Response;
  * Next Step: get Details for Obstacle
  */
 
-public class PlaceObstacleOperatorState implements OnClickListener, IOperatorState {
+public class PlaceObstacleOperatorState implements OnClickListener, IUserInteractionWithMap {
 
     private NearestRoadsOverlay roadsOverlay;
 
@@ -64,26 +62,6 @@ public class PlaceObstacleOperatorState implements OnClickListener, IOperatorSta
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
 
     public PlaceObstacleOperatorState() {
-    }
-
-    @Override
-    public boolean init() {
-        return false;
-    }
-
-    @Override
-    public boolean dispose() {
-        return false;
-    }
-
-    @Override
-    public NavigationBarState getNavigationState() {
-        return NavigationBarState.PLACE_BARRIER;
-    }
-
-    @Override
-    public String getTopBarTitle() {
-        return "Not Set yet! Bad boy...";
     }
 
     @Override

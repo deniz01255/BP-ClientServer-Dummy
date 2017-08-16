@@ -24,7 +24,7 @@
             android:layout_height="match_parent">
 
                 <FrameLayout
-                    android:id="@+id/edit_details_container"
+                    android:id="@+id/obstacle_bottom_sheet_details_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     />

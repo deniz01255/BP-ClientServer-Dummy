@@ -14,18 +14,11 @@ import org.osmdroid.util.GeoPoint;
  * Operators are initialized before they are ready for usage.
  * Before a new Operator can start, the currently active Operator must be disposed.
  */
-public interface IOperatorState {
-
-    boolean init();
-
-    boolean dispose();
+public interface IUserInteractionWithMap {
 
     boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment);
 
     boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment);
 
-    NavigationBarState getNavigationState();
-
-    String getTopBarTitle();
 
 }

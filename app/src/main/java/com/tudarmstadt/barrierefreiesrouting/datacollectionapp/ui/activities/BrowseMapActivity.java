@@ -23,6 +23,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
@@ -31,6 +32,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.networ
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
@@ -67,6 +69,7 @@ public class BrowseMapActivity extends AppCompatActivity
     public FloatingActionButton floatingActionButton;
     public MapEditorFragment mapEditorFragment;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
+    private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +93,12 @@ public class BrowseMapActivity extends AppCompatActivity
         // get the bottom sheet view
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
 
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(rlBottomLayout);
+        bottomSheetBehavior = BottomSheetBehavior.from(rlBottomLayout);
 
         bottomSheetBehavior.setHideable(false);
+
+        BottomSheetBehavior.from(rlBottomLayout)
+                .setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -325,4 +331,22 @@ public class BrowseMapActivity extends AppCompatActivity
 
     }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ObstacleOverlayItemSingleTapEvent event) {
+
+        OverlayItem overlayItem = event.getOverlayItem();
+
+        LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
+        BottomSheetBehavior.from(rlBottomLayout)
+                .setState(BottomSheetBehavior.STATE_EXPANDED);
+
+        ObstacleDetailsViewerFragment obstacleDetailsFragment = ObstacleDetailsViewerFragment.newInstance();
+        obstacleDetailsFragment.setArguments(getIntent().getExtras());
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.obstacle_bottom_sheet_details_container, obstacleDetailsFragment).commit();
+
+
+    }
 }
