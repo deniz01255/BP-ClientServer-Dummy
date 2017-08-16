@@ -1,3 +1,35 @@
 <resources>
-    <string name="app_name">BP-ServerClientCommunication</string>
+    <string name="app_name">Data Collection</string>
+
+
+    <string name="error_server_not_found">Error: Server not found</string>
+    <string name="default_description">No description available</string>
+    <string name="action_barrier_added">Barrier added</string>
+    <string name="action_barrier_loaded">Barriers loaded</string>
+    <string name="help_place_an_obstacle">Place an Obstacle</string>
+    <string name="action_barrier_placed">Obstacle placed</string>
+    <string name="server_response_roads_loaded">Nearby streets loaded</string>
+    <string name="navigation_get_near_roads">Get Nearby Roads</string>
+    <string name="navigation_place_obstacle">Place Obstacle</string>
+    <string name="navigation_get_details">Details</string>
+    <string name="action_obstacle_details_dialog_send">Save Obstacle</string>
+    <string name="action_obstacle_details_dialog_cancel">Cancel</string>
+    <string name="action_roads_overlay_loaded">Nearby streets loaded</string>
+    <string name="help_get_nearest_roads">Place Obstacle</string>
+    <string name="server_response_posted_new_obstacle">Obstacle saved</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="label_new_barrier">New Obstacle</string>
+    <string name="obstacle_label_ramp">Ramp</string>
+    <string name="obstacle_label_elevator">Elevator</string>
+    <string name="obstacle_label_tight_passage">Tight Passage</string>
+    <string name="obstacle_label_stairs">Stairs</string>
+    <string name="obstacle_label_construction">Construction</string>
+    <string name="obstacle_label_fast_traffic_light">Fast traffic Light</string>
+    <string name="obstacle_label_unevenness">Unevenness</string>
+    <string name="Obstacle_saved">Obstacle saved!</string>
+    <string name="explain_send_data_to_server">By clicking \"complete\" you agree to send the data about the obstacle to the BP server. You agree to share the data under Blah Blah License</string>
+    <string name="collected">Collected</string>
+    <string name="data">data</string>
+    <string name="obstacle">Obstacle</string>
+
 </resources>
