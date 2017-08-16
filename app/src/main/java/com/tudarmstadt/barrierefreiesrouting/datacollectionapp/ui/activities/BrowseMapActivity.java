@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -24,14 +25,17 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleAttribute;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
@@ -50,7 +54,9 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import bp.common.model.ObstacleTypes;
 import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.FastTrafficLight;
@@ -278,7 +284,7 @@ public class BrowseMapActivity extends AppCompatActivity
                 @Override
                 public void run() {
                     for (Obstacle obstacle : obstacleList) {
-                        OverlayItem overlayItem = new OverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                        ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
                         overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
                         mapEditorFragment.obstacleOverlay.addItem(overlayItem);
                     }
@@ -306,7 +312,7 @@ public class BrowseMapActivity extends AppCompatActivity
             @Override
             public void run() {
 
-                OverlayItem overlayItem = new OverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
                 overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
                 mapEditorFragment.obstacleOverlay.addItem(overlayItem);
 
@@ -363,17 +369,19 @@ public class BrowseMapActivity extends AppCompatActivity
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ObstacleOverlayItemSingleTapEvent event) {
 
-        OverlayItem overlayItem = event.getOverlayItem();
+        ObstacleOverlayItem overlayItem = event.getOverlayItem();
 
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
         BottomSheetBehavior.from(rlBottomLayout)
                 .setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        ObstacleDetailsViewerFragment obstacleDetailsFragment = ObstacleDetailsViewerFragment.newInstance();
+        ObstacleDetailsViewerFragment obstacleDetailsFragment = ObstacleDetailsViewerFragment.newInstance(event.getOverlayItem().getObstacle());
         obstacleDetailsFragment.setArguments(getIntent().getExtras());
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.obstacle_bottom_sheet_details_container, obstacleDetailsFragment).commit();
+
+
 
 
     }

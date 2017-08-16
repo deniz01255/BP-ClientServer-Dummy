@@ -1,5 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
+
 import org.osmdroid.views.overlay.OverlayItem;
 
 /**
@@ -7,14 +9,14 @@ import org.osmdroid.views.overlay.OverlayItem;
  */
 
 public class ObstacleOverlayItemSingleTapEvent {
-    private OverlayItem overlayItem;
+    private ObstacleOverlayItem overlayItem;
 
 
-    public ObstacleOverlayItemSingleTapEvent(OverlayItem o) {
+    public ObstacleOverlayItemSingleTapEvent(ObstacleOverlayItem o) {
         this.overlayItem = o;
     }
 
-    public OverlayItem getOverlayItem() {
+    public ObstacleOverlayItem getOverlayItem() {
         return overlayItem;
     }
 }
