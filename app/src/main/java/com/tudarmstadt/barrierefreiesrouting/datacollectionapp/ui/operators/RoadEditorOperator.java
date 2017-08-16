@@ -10,12 +10,8 @@ import org.osmdroid.util.GeoPoint;
 /**
  * Created by vincent on 8/16/17.
  */
-
 public class RoadEditorOperator implements IUserInteractionWithMap {
-
-
-
-
+    
 
     // Longpress auf die Map
     @Override
