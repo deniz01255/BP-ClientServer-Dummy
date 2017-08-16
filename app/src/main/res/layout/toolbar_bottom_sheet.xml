@@ -11,6 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:drawableTop="@android:drawable/ic_menu_myplaces"
+        android:text="Place Obstacle Edit Mode"
+        android:id="@+id/bottom_sheet_button_place_obstacle_mode"
+
         />
 
     <Button
@@ -18,7 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:drawableTop="@android:drawable/ic_menu_help"
+        android:drawableTop="@android:drawable/ic_input_add"
+        android:text="Road Edit Mode"
+        android:id="@+id/bottom_sheet_button_road_edit_mode"
+
         />
 
 </LinearLayout>

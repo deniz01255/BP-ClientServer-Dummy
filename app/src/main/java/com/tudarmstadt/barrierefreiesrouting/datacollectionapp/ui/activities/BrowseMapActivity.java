@@ -12,6 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.Obst
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.PlaceObstacleOperatorState;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.operators.RoadEditorOperator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -139,6 +142,31 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
+        Button placeObstacleModeButton = (Button) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
+        placeObstacleModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapEditorFragment.getStateHandler().setActiveOperator(new PlaceObstacleOperatorState());
+            }
+        });
+
+        Button roadEditorModeButton = (Button) findViewById(R.id.bottom_sheet_button_road_edit_mode);
+        roadEditorModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                floatingActionButton.hide();
+                mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+                for (Polyline p : currentPolylineArrayList) {
+                    mapEditorFragment.map.getOverlays().remove(p);
+                }
+
+                ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
+                mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
+                mapEditorFragment.map.invalidate();
+
+            }
+        });
 
     }
 

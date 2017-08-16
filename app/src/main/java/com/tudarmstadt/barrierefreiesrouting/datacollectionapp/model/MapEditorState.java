@@ -16,10 +16,6 @@ public  class MapEditorState {
 
     private static MapEditorState INSTANCE;
 
-
-
-
-
     private IUserInteractionWithMap activeOperator;
     private ClearAllOperator clearAllOperator;
 
@@ -33,6 +29,9 @@ public  class MapEditorState {
         return activeOperator;
     }
 
+    public void setActiveOperator(IUserInteractionWithMap activeOperator){
+        this.activeOperator = activeOperator;
+    }
 
     public ClearAllOperator getClearAllOperator() {
         return clearAllOperator;
