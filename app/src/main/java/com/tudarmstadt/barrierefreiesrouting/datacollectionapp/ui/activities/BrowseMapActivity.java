@@ -23,7 +23,8 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerResponseEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -39,8 +40,6 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import bp.common.model.obstacles.Construction;
@@ -237,8 +236,8 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
     // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(RoutingServerResponseEvent event) {
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
 
         try {
             Response response = event.getResponse();
@@ -250,7 +249,8 @@ public class BrowseMapActivity extends AppCompatActivity
             if (!response.isSuccessful())
                 return;
 
-            final List<Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {});
+            final List<Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {
+            });
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -270,5 +270,37 @@ public class BrowseMapActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+
+    // This method will be called when a MessageEvent is posted (in the UI thread for Toast)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEvent(RoutingServerObstaclePostedEvent event) {
+
+        final Obstacle obstacle = event.getObstacle();
+        Response response = event.getResponse();
+
+        if (!response.isSuccessful())
+            return;
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                OverlayItem overlayItem = new OverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()));
+                overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                mapEditorFragment.obstacleOverlay.addItem(overlayItem);
+
+                Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
+                        Toast.LENGTH_SHORT).show();
+
+                mapEditorFragment.map.invalidate();
+            }
+        });
+
+
+    }
+
+
 
 }

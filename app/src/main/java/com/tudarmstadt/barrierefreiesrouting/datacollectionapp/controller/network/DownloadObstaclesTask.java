@@ -2,7 +2,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 
 import android.app.Activity;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerResponseEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -48,7 +49,7 @@ public class DownloadObstaclesTask {
 
                     @Override
                     public void onResponse(Call call, final Response response) throws IOException {
-                        EventBus.getDefault().post(new RoutingServerResponseEvent(response));
+                        EventBus.getDefault().post(new RoutingServerObstaclesDownloadedEvent(response));
                     }
                 });
     }
