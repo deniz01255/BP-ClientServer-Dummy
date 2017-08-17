@@ -54,6 +54,10 @@ Beispiel:
   }
 ```
 
+### Konfiguration für dynamsichen Attribut Editor
+
+Über die *@EditableAttribute* Java Annotationen können Attribute der Obstacle POJO makriert werden, damit diese in der APP im Attribut Editor editierbar sind.
+
 
 
 
