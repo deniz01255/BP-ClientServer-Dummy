@@ -23,6 +23,8 @@ Der stepper entspricht den material design guidelines und wird von Stepstone ent
 
 Der Stepper wird über *AddObstacleStepperAdapter* aufgebaut. Dort werden die einzelnen Fragmente geladen, welche das Interface *Step* bzw. *BlockingStep* implementieren. 
 
+Über einen Dynamischen Attribut Editor können Obstacles aus dem BP-Common Projekt editiert werden. Dieser lädt die benötigten Fragmente. Hier wird die Java Reflection API verwendet um die Attribute der Obstacle Klassenm 
+
 ## Common Datenmodell
 
 Das Common Datenmodell ist hier zu finden: [GitHub Projekt - vincinator/BP-Common](https://github.com/Vincinator/BP-common)
