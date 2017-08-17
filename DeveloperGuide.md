@@ -58,6 +58,14 @@ Beispiel:
 
 Über die *@EditableAttribute* Java Annotationen können Attribute der Obstacle POJO makriert werden, damit diese in der APP im Attribut Editor editierbar sind.
 
+## Updating Dependency
+
+Das BP-Common Projekt wird über Jitpack als Dependency für Server und App hinzugefügt. 
+Über den [Jitpack - vincinator/BP-Common](https://jitpack.io/#Vincinator/BP-Common) Link kann die entsprechende Zeile für Gradle oder Maven herausgesucht werden. 
+Der Server muss noch einmal gepusht werden mit den änderungen, damit diese auf routing.vincinator.de zu sehen sind.
+
+
+
 
 
 
