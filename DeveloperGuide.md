@@ -39,6 +39,7 @@ Hibernate kann sich aus der Tabelle die konkreten Klassen wieder zusammen bauen.
 Für die Kommuniktion zwischen Server und App werden JSON Daten verschickt. Diese sind so konfiguriert, dass die Konkrete Obstacle Klasse in ein JSON-Attribut als string gespeichert wird.
 
 Beispiel:
+```JSON
 {
     "@class": "bp.common.model.obstacles.Stairs",
     "mName": null,
@@ -51,7 +52,7 @@ Beispiel:
     "heightOfStairs": 12,
     "name": "haben Treppen namen?"
   }
-
+```
 
 
 
