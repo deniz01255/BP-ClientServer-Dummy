@@ -23,7 +23,11 @@ Der stepper entspricht den material design guidelines und wird von Stepstone ent
 
 Der Stepper wird über *AddObstacleStepperAdapter* aufgebaut. Dort werden die einzelnen Fragmente geladen, welche das Interface *Step* bzw. *BlockingStep* implementieren. 
 
-Über einen Dynamischen Attribut Editor können Obstacles aus dem BP-Common Projekt editiert werden. Dieser lädt die benötigten Fragmente. Hier wird die Java Reflection API verwendet um die Attribute der Obstacle Klassenm 
+Über einen Dynamischen Attribut Editor können Obstacles aus dem BP-Common Projekt editiert werden. Dieser lädt die benötigten Fragmente. Hierfür wird die Java Reflection API verwendet, diese liest die gegebene Obstacle Klasse und erstellt für jedes Feld ein neues InputFragment. Über das InputFragment können die werte erfasst werden.
+
+Die erfassten Werte werden vor Abschluss der Datenerfassung noch einmal aufgelistet. Mit klicken auf "complete" werden die erfassten Daten an die routing.vincinator.de/api/barriers api gesendet (Method: POST). 
+
+
 
 ## Common Datenmodell
 
@@ -65,8 +69,6 @@ Beispiel:
 Das BP-Common Projekt wird über Jitpack als Dependency für Server und App hinzugefügt. 
 Über den [Jitpack - vincinator/BP-Common](https://jitpack.io/#Vincinator/BP-Common) Link kann die entsprechende Zeile für Gradle oder Maven herausgesucht werden. 
 Der Server muss noch einmal gepusht werden mit den änderungen, damit diese auf routing.vincinator.de zu sehen sind.
-
-
 
 
 
