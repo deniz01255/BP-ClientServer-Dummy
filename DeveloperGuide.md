@@ -60,11 +60,28 @@ Beispiel:
 
 Über die *@EditableAttribute* Java Annotationen können Attribute der Obstacle POJO makriert werden, damit diese in der APP im Attribut Editor editierbar sind.
 
-## Updating Dependency
+### Updating Dependency
 
 Das BP-Common Projekt wird über Jitpack als Dependency für Server und App hinzugefügt. 
 Über den [Jitpack - vincinator/BP-Common](https://jitpack.io/#Vincinator/BP-Common) Link kann die entsprechende Zeile für Gradle oder Maven herausgesucht werden. 
 Der Server muss noch einmal gepusht werden mit den änderungen, damit diese auf routing.vincinator.de zu sehen sind.
+
+
+
+
+
+## Web-API Server
+
+Die web-API ist mithilfe von Jersey erstellt wordne. Swagger wird verwendet um eine interaktive API Dokumentation zur Verfügung zu stellen. 
+
+Die Interaktive Dokumentation ist unter [routing.vincinator.de](www.routing.vincinator.de) erreichbar. 
+
+Die Base URL der API ist unter routing.vincinator.de/api/barriers erreichbar. Der "/barriers" Endpunkt ist in der Java Klasse *BarriersService* implementiert. 
+
+Weitere Endpunkte können analog zum *BarriersService* implementiert werden.
+
+
+
 
 
 
