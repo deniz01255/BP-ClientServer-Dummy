@@ -46,8 +46,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
  * This Fragment holds all Attributes that can be edited
  */
 public class AttributesEditorFragment extends Fragment implements Step {
-
-
+    
     @Override
     public void onStart() {
         super.onStart();
