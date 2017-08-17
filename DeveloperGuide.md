@@ -72,6 +72,8 @@ Der Server muss noch einmal gepusht werden mit den änderungen, damit diese auf 
 
 ## Web-API Server
 
+Das Server Projekt ist hier zu finden [GitHub Project - Vincinator/BP17-Server](https://github.com/Vincinator/BP17-Server/)
+
 Die web-API ist mithilfe von Jersey erstellt wordne. Swagger wird verwendet um eine interaktive API Dokumentation zur Verfügung zu stellen. 
 
 Die Interaktive Dokumentation ist unter [routing.vincinator.de](www.routing.vincinator.de) erreichbar. 
@@ -81,10 +83,8 @@ Die Base URL der API ist unter routing.vincinator.de/api/barriers erreichbar. De
 Weitere Endpunkte können analog zum *BarriersService* implementiert werden.
 
 
-
-
-
-
+Commits in den Master Branch des Server Projektes 
+ 
 
 
 
