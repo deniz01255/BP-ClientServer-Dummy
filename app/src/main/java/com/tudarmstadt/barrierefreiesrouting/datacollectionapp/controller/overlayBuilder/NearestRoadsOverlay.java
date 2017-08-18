@@ -7,9 +7,8 @@ import org.osmdroid.util.GeoPoint;
 import java.util.LinkedList;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * This Overlay is used to provide an overlay for the user to choose where the obstacle should be placed
  */
-
 public class NearestRoadsOverlay {
 
     /**

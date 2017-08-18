@@ -11,28 +11,45 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 
 /**
- * Created by vincent on 8/16/17.
+ * Places an Obstacle on the Polygon that this class listens for Click Events.
+ *
  */
-
 public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener {
 
 
+    /**
+     *  Callback function gets called after the user has clicked on the polyline that this
+     *  Listener is set to listen to.
+     * @param polyline
+     * @param mapView
+     * @param eventPos
+     * @return
+     */
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
         ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
-
         try {
+
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
 
-            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosesPointOnPolyLine(mapView,polyline, finalPoint)));
+            // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
+            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint)));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
     }
-    private GeoPoint getClosesPointOnPolyLine(MapView mapView, Polyline polyline, Point point) {
+
+    /**
+     *
+     * @param mapView
+     * @param polyline
+     * @param point
+     * @return
+     */
+    private GeoPoint getClosestPointOnPolyLine(MapView mapView, Polyline polyline, Point point) {
 
         if (polyline.getPoints().size() < 2)
             return null;
@@ -42,6 +59,13 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
         GeoPoint candidate = null;
         Point candidatePoint = null;
 
+        /**
+         * IMPORTANT HINT FOR BI:
+         * The nodes are ordered in the polyline.
+         * this means, that we can iterate through the polyline and get the nearest line
+         * of the polyline to the placed Point.
+         *
+         */
         for (int curIndex = 0; curIndex + 1 < polyline.getPoints().size(); curIndex++) {
             start = polyline.getPoints().get(curIndex);
             end = polyline.getPoints().get(curIndex + 1);
@@ -53,12 +77,18 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
                 Point projectedPointEnd = mapView.getProjection().toProjectedPixels(end.getLatitude(), end.getLongitude(), null);
                 Point pointB = mapView.getProjection().toPixelsFromProjected(projectedPointEnd, null);
 
-                // calc closest point on line between start and end
-
                 if (isProjectedPointOnLineSegment(pointA, pointB, point)) {
+
                     Point closestPointOnLine = getClosestPointOnLine(pointA, pointB, point);
 
+                    // Is there a candidate?
+                    // Is the new candidatePoint nearer than the old one?
+                    // candidatePoints are ALWAYS on some line.
+                    // point is the user placed position, which is probably not on the line and for
+                    // which we want to search the position on the line.s
                     if (candidate == null || (getDistance(candidatePoint, point) > getDistance(closestPointOnLine, point))) {
+
+                        // TODO: you can also store the start and end node here
                         candidatePoint = closestPointOnLine;
                         candidate = (GeoPoint) mapView.getProjection().fromPixels(closestPointOnLine.x, closestPointOnLine.y);
                     }

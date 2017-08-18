@@ -3,7 +3,9 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Used for parsing the response from overpass api
+ * Used for parsing the response from overpass api.
+ *
+ * Used by OsmParser
  */
 public class Node {
 

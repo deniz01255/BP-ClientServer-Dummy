@@ -3,9 +3,9 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapop
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 /**
- * Created by Vincent on 08.08.2017.
+ * TODO: Implement clear All Method
+ * Can not be used right now.
  */
-
 public class ClearAllOperator {
 
     private MapEditorFragment mapEditorFragment;

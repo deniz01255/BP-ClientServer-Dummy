@@ -12,9 +12,12 @@ import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 /**
- * Created by vincent on 8/11/17.
+ * Simple Implementation of Material-Stepper.
+ *
+ * Two Steps are initialized in the createStep Method.
+ *
+ * Please review the README from https://github.com/stepstone-tech/android-material-stepper
  */
-
 public class AddObstacleStepperAdapter extends AbstractFragmentStepAdapter {
 
 

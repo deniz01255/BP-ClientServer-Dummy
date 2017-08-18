@@ -63,7 +63,15 @@ import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
 import okhttp3.Response;
 
-
+/**
+ * The starting point of the app.
+ *
+ * This Activity displays the map fragment, the bottom sheet and the searchView.
+ *
+ *
+ * Events send via the EventBus that require an update on the map, are handled in the
+ * onMessageEvent() methods with the respective Event class as Parameter.
+ */
 public class BrowseMapActivity extends AppCompatActivity
         implements
         AdapterView.OnItemSelectedListener, MapEditorFragment.OnFragmentInteractionListener,
@@ -381,7 +389,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(StartEditObstacleEvent event) {
-        ObstacleDataSingleton.getInstance().setmObstacle(event.getObstacle());
+        ObstacleDataSingleton.getInstance().setObstacle(event.getObstacle());
         ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = new GeoPoint(event.getObstacle().latitude, event.getObstacle().longitude);
         Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
         startActivity(intent);

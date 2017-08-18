@@ -1,7 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.stepstone.stepper.BlockingStep;
-import com.stepstone.stepper.Step;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
@@ -22,8 +20,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.networ
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import java.util.Map;
 
@@ -32,9 +28,11 @@ import bp.common.model.ObstacleTypes;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertAttributeMapToObstacle;
 
 /**
- * Created by vincent on 8/11/17.
+ * This Fragment provides an overview of the Attributes that were collected and
+ * a legal notice that by clicking "complete" the user agrees to send the collected data to the server.
+ *
+ * By Clicking complete the edited Obstacle is send via the PostObstacle Task to the routing server.
  */
-
 public class OverviewSendFragment extends Fragment implements BlockingStep, IObstacleViewModelConsumer {
 
     private View view;
@@ -70,7 +68,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
         TextView title = (TextView) view.findViewById(R.id.overview_obstacle_title);
 
 
-        ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getmObstacle().getTypeCode();
+        ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getObstacle().getTypeCode();
 
 
         title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
@@ -109,9 +107,9 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
     @Override
     public void onCompleteClicked(final StepperLayout.OnCompleteClickedCallback callback) {
 
-        ObstacleDataSingleton.getInstance().setmObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
+        ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
 
-        PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getmObstacle());
+        PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getObstacle());
 
         // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
         ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;

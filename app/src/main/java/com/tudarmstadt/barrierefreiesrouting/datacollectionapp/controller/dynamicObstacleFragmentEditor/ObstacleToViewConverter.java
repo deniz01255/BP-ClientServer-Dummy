@@ -12,7 +12,8 @@ import bp.common.model.obstacles.Obstacle;
 import bp.common.model.obstacles.Stairs;
 
 /**
- * Created by Vincent on 27.06.2017.
+ * Converts the Obstacle to a ObstacleViewModel.
+ *
  */
 public class ObstacleToViewConverter {
 

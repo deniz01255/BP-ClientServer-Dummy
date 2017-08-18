@@ -4,14 +4,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
@@ -24,9 +21,10 @@ import bp.common.model.obstacles.Stairs;
 
 
 /**
- * Created by vincent on 8/11/17.
+ * This activity provides a Stepper which is responsible to step through the
+ * data collection process.
+ *
  */
-
 public class PlaceObstacleActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
@@ -44,7 +42,7 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
         mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getSupportFragmentManager(), this));
         mStepperLayout.setListener(this);
 
-        ObstacleDataSingleton.getInstance().setmObstacle(new Stairs());
+        ObstacleDataSingleton.getInstance().setObstacle(new Stairs());
 
 
     }

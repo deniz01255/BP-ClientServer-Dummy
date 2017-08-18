@@ -3,9 +3,9 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * API Contract for the main overpass api
+ *
  */
-
 public class MainOverpassAPI {
 
     /**

@@ -10,9 +10,9 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 /**
- * Created by vincent on 8/16/17.
+ * Listener that emits events if an Obstacle Overlay Item was clicked
+ * This Listener only makes sense if it is used for ObstacleOverlayItems
  */
-
 public class SelectObstacleForDetailsViewListener implements ItemizedIconOverlay.OnItemGestureListener<ObstacleOverlayItem> {
 
 

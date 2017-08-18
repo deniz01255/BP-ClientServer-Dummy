@@ -16,8 +16,6 @@ import okhttp3.Response;
 
 public class NearestRoadsOverlayBuilder implements INearestRoadsOverlayBuilder {
 
-    protected Response response = null;
-    protected LinkedList<Road> roads = null;
     private NearestRoadsOverlay roadsOverlay;
 
     public NearestRoadsOverlayBuilder() {

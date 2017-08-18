@@ -7,12 +7,16 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import bp.common.model.ObstacleTypes;
 
 /**
- * Created by vincent on 8/14/17.
+ * Translator Utilities for the Obstacle
  */
-
 public class ObstacleTranslator {
 
-
+    /**
+     * Get the Localisation string for the Obstacle Type
+     * @param context a context to get the localisation string from
+     * @param type the type to translate
+     * @return the translation
+     */
     public static String getTranslationFor(Context context, ObstacleTypes type) {
 
         switch (type) {
@@ -38,6 +42,8 @@ public class ObstacleTranslator {
     }
 
     /**
+     * Is Used to get the Spinner position if an Obstacle is edited by the user, so the spinner
+     * can start at the correct position.
      * @param type
      * @return
      */

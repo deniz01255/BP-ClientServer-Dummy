@@ -11,17 +11,16 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapope
  * Created by Vincent on 08.08.2017.
  */
 
-public  class MapEditorState {
+public class MapEditorState {
 
-
-    private static MapEditorState INSTANCE;
-
+    /**
+     * The active Map operator that is used to handle long press and single tap events on the map.
+     */
     private IUserInteractionWithMap activeOperator;
-    private ClearAllOperator clearAllOperator;
+
 
 
     public MapEditorState(BrowseMapActivity browseMapActivity, MapEditorFragment mapEditorFragment) {
-        clearAllOperator = new ClearAllOperator(mapEditorFragment);
         activeOperator = new PlaceNearestRoadsOnMapOperator();
     }
 
@@ -33,9 +32,6 @@ public  class MapEditorState {
         this.activeOperator = activeOperator;
     }
 
-    public ClearAllOperator getClearAllOperator() {
-        return clearAllOperator;
-    }
 
 
 }

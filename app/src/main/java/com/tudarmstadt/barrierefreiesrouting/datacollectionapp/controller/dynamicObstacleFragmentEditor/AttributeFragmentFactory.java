@@ -17,7 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Vincent on 27.06.2017.
+ * This "Factory" creates a List of Fragments according to the concrete implementation of the
+ * abstract Obstacle class.
+ *
+ * All Fields marked with "@EditableAttribute" Annotation in the BP-Common Project are getting an
+ * InputFragment. Via this Input Fragment Obstacle Data can be edited.
+ *
+ * Between the Fragment and the POJO Obstacle is an ObstacleViewModel. This ViewModel holds the mapping
+ * between the Fields and the edited Attributes.
+ *
+ * After the editing is done, the obstacle is updated with the content from the ViewModel.
+ *
  */
 public class AttributeFragmentFactory {
 

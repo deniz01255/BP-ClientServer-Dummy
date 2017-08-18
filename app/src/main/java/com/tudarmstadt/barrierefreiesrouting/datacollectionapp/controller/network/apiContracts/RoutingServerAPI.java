@@ -1,9 +1,12 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts;
 
 /**
- * Created by Vincent on 01.08.2017.
+ * API Contract for the BP Routing server web api.
+ *
+ * Calls to the obstacleResource
+ * POST: send a new obstacle
+ * GET: get all obstacles
  */
-
 public class RoutingServerAPI {
 
     /**

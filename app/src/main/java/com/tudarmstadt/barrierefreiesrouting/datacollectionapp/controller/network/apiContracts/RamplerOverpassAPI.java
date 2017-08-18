@@ -3,9 +3,10 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Created by Vincent on 03.08.2017.
+ * Alternative Overpass API.
+ *
+ * Use this in case the main API is down.
  */
-
 public class RamplerOverpassAPI {
 
     /**

@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by deniz on 12.05.17.
+ * Task to download all obstacles from the routing web api.
  */
 public class DownloadObstaclesTask {
 

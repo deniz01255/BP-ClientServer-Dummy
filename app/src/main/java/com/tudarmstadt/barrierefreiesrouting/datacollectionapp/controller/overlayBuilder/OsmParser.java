@@ -16,8 +16,13 @@ import java.util.LinkedList;
  */
 public class OsmParser extends DefaultHandler {
 
-    boolean bNd = false;
+    /**
+     * Stores all nodes from the overpass api response
+     */
     private HashMap<Long, Node> nodes = new HashMap<>();
+    /**
+     * Stores all Roads from the overpass api response
+     */
     private LinkedList<Road> roads = new LinkedList<>();
     private Road currentRoad;
     private Node currentNode;

@@ -1,8 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
-import android.support.design.widget.FloatingActionButton;
-
-import com.google.android.gms.vision.barcode.Barcode;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 
 import org.osmdroid.util.GeoPoint;
@@ -12,9 +9,8 @@ import bp.common.model.obstacles.Stairs;
 
 
 /**
- * Created by vincent on 8/13/17.
+ * This Singleton holds the current State of the Obstacle that is or will be edited.
  */
-
 public class ObstacleDataSingleton {
 
     private static volatile ObstacleDataSingleton instance = null;
@@ -27,29 +23,28 @@ public class ObstacleDataSingleton {
     public GeoPoint currentPositionOfSetObstacle = null;
     public boolean obstacleDataCollectionCompleted = false;
     private Obstacle existingSelectedObstacle;
-    public boolean editExisting = false;
 
 
-    private ObstacleDataSingleton() {}
+    private ObstacleDataSingleton() {
+    }
 
     public static ObstacleDataSingleton getInstance() {
         if (instance == null) {
-            synchronized(ObstacleDataSingleton.class) {
+            synchronized (ObstacleDataSingleton.class) {
                 if (instance == null) {
                     instance = new ObstacleDataSingleton();
-                    instance.setmObstacle(new Stairs());
+                    instance.setObstacle(new Stairs());
                 }
             }
         }
         return instance;
     }
 
-
-    public Obstacle getmObstacle() {
+    public Obstacle getObstacle() {
         return mObstacle;
     }
 
-    public void setmObstacle(Obstacle mObstacle) {
+    public void setObstacle(Obstacle mObstacle) {
         this.mObstacle = mObstacle;
     }
 
@@ -57,20 +52,8 @@ public class ObstacleDataSingleton {
         return mObstacleViewModel;
     }
 
-    public void setmObstacleViewModel(ObstacleViewModel mObstacleViewModel) {
+    public void setObstacleViewModel(ObstacleViewModel mObstacleViewModel) {
         this.mObstacleViewModel = mObstacleViewModel;
     }
 
-    /**
-     * If no Obstacle is selected, this must return null
-     * @return
-     */
-    public Obstacle getExistingSelectedObstacle() {
-        
-        return existingSelectedObstacle;
-    }
-
-    public void setExistingSelectedObstacle(Obstacle existingSelectedObstacle) {
-        this.existingSelectedObstacle = existingSelectedObstacle;
-    }
 }

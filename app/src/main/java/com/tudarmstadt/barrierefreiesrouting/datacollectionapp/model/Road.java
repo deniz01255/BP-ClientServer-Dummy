@@ -5,7 +5,9 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 
 /**
- * Used for parsing the response from overpass api
+ * Used for parsing the response from overpass api.
+ *
+ * Used by OsmParser
  */
 public class Road {
 

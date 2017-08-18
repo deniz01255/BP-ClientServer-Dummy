@@ -1,9 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts;
 
 /**
- * Created by Vincent on 01.08.2017.
+ * API Contract for Google roads api.
+ *
  */
-
 public class GoogleRoadsAPI {
 
     /**

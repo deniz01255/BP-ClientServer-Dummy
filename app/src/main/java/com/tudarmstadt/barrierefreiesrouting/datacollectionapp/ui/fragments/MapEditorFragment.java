@@ -28,6 +28,9 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 
+/**
+ * This Fragment holds the MapView and is responsible for initializing Map Overlays.
+ */
 public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     public MyLocationNewOverlay mLocationOverlay;
@@ -37,13 +40,24 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     private MapEventsOverlay evOverlay;
     private IMapController mapController;
+    /**
+     * All existing Obstacles items
+     */
     private ArrayList<ObstacleOverlayItem> obstacleItems = new ArrayList<ObstacleOverlayItem>();
+
+    /**
+     * The temporary Item (usually just one item) that is placed on a polyline.
+     */
     private ArrayList<OverlayItem> tempObstacleItems = new ArrayList<OverlayItem>();
+
 
     private OnFragmentInteractionListener mListener;
 
+    /**
+     * This is a Singleton Class and holds the active MapEditor State, which includes the current
+     * selected Map Editor Operator
+     */
     private MapEditorState mapStateHandler;
-
 
     // Leerer Constructor wird benötigt
     public MapEditorFragment() {

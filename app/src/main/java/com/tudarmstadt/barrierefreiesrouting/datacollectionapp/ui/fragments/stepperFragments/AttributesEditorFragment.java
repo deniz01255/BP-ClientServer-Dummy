@@ -1,9 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -12,16 +10,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.stepstone.stepper.BlockingStep;
 import com.stepstone.stepper.Step;
-import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleViewModel;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.SelectedObstacleTypeChangedEvent;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
@@ -38,12 +32,17 @@ import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
 
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.ClearAllChildFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.AttributeFragmentFactory.insertAttributeEditFragments;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertObstacleToViewModel;
 
 /**
- * This Fragment holds all Attributes that can be edited
+ * This Fragment holds a Obstacle Type dropdown selection (a spinner)
+ *
+ * Selecting an item from the spinner, the current Obstacle Type is updated in the
+ * ObstacleDataSingleton. This Obstacle Type is used to initialize the Attribute List
+ * via the AttributeFragmentFactory.
+ *
+ *
  */
 public class AttributesEditorFragment extends Fragment implements Step {
     
@@ -78,14 +77,15 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            if (ObstacleDataSingleton.getInstance().getmObstacle() != null)
-                spinner.setSelection(ObstacleTranslator.getSpinnerPositionFromType(ObstacleDataSingleton.getInstance().getmObstacle().getTypeCode()));
+            if (ObstacleDataSingleton.getInstance().getObstacle() != null)
+                spinner.setSelection(ObstacleTranslator.getSpinnerPositionFromType(ObstacleDataSingleton.getInstance().getObstacle().getTypeCode()));
 
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view,
                                            int position, long id) {
-
+                    // Send Event that Selection of Obstacle has changed.
+                    // HINT: BrowseMapActivity subscribes to this Event.
                     EventBus.getDefault().post(new SelectedObstacleTypeChangedEvent(getObstacleFrom(position)));
 
                 }
@@ -95,8 +95,8 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
                 }
             });
-            ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(ObstacleDataSingleton.getInstance().getmObstacle(), getActivity());
-            ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
+            ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(ObstacleDataSingleton.getInstance().getObstacle(), getActivity());
+            ObstacleDataSingleton.getInstance().setObstacleViewModel(obstacleViewModel);
 
         } catch (InflateException e) {
 
@@ -174,7 +174,7 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
 
         ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(event.getObstacle(), getActivity());
-        ObstacleDataSingleton.getInstance().setmObstacleViewModel(obstacleViewModel);
+        ObstacleDataSingleton.getInstance().setObstacleViewModel(obstacleViewModel);
 
         ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
 

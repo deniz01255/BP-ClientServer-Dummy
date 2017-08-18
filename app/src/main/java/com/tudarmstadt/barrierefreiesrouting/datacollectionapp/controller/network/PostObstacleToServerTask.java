@@ -19,7 +19,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by deniz on 12.05.17.
+ * Task to post a new obstacle to the routing web-api.
+ *
  */
 public class PostObstacleToServerTask {
 
