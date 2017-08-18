@@ -103,6 +103,9 @@ public class BrowseMapActivity extends AppCompatActivity
                     .add(R.id.map_fragment_container, mapEditorFragment).commit();
         }
 
+
+
+
         // get the bottom sheet view
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
 
