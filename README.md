@@ -8,4 +8,5 @@ Android App für das Bachelorpraktikum Datenerfassung für ein barrierefreies ro
 - osmdroid
 - [BP Common Data Model](https://github.com/Vincinator/BP-Common)
 - [stepstone-tech/android-material-stepper](https://github.com/stepstone-tech/android-material-stepper)
+- EventBus [greenrobot eventBus Documentation](http://greenrobot.org/eventbus/documentation/)
 
