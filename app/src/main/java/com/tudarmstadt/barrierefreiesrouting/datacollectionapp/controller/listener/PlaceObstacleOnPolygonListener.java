@@ -10,6 +10,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 
+import bp.common.model.obstacles.Obstacle;
+
 /**
  * Places an Obstacle on the Polygon that this class listens for Click Events.
  *
@@ -34,6 +36,7 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
 
             // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
+            // Subscriber will be notified about this post, but only one specified method will be called
             EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint)));
 
         } catch (Exception e) {

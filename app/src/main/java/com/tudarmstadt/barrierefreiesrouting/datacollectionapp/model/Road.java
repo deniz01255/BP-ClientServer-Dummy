@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
 import org.osmdroid.util.GeoPoint;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -17,6 +18,14 @@ public class Road {
      */
     public String name = "has no name";
     private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
+    /**
+     * list of node instead of GeoPoint
+     */
+    private ArrayList<Node> roadNodes = new ArrayList<Node>();
+
+    public ArrayList<Node> getRoadNodes() {
+        return roadNodes;
+    }
 
     /**
      * All GeoPoints that form the Road.
@@ -24,5 +33,7 @@ public class Road {
     public ArrayList<GeoPoint> getRoadPoints() {
         return roadPoints;
     }
+
+
 
 }

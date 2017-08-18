@@ -15,6 +15,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlayBuilder;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -79,6 +80,11 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
         return false;
     }
 
+    /**
+     * render the roads found near a chosen point as Polyline
+     * and give this an Eventlistener so when touched a barrier will be added to the map
+     * @param response
+     */
     protected void processRoads(Response response) {
         if (response != null && response.isSuccessful()) {
 
@@ -101,7 +107,8 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
 
                 for (Road r : roadsOverlay.nearestRoads) {
 
-                    Polyline polyline = new Polyline();
+                    CustomPolyline polyline = new CustomPolyline();
+                    polyline.setRoad(r);
                     polyline.setPoints(r.getRoadPoints());
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
@@ -122,6 +129,10 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
         }
     }
 
+    /**
+     * A Asynctask Class to get the osm data from a certain area while longpressed
+     * This is used to find the nearest roads to a chosen point on the map
+     */
     private class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 

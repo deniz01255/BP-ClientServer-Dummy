@@ -48,6 +48,9 @@ public class OsmParser extends DefaultHandler {
                     nodes.get(Long.parseLong(attributes.getValue("ref"))).geoPoint
 
             );
+            currentRoad.getRoadNodes().add(
+                    nodes.get(Long.parseLong(attributes.getValue("ref")))
+            );
         }
     }
 

@@ -10,7 +10,6 @@ import org.osmdroid.util.GeoPoint;
 public class Node {
 
     public GeoPoint geoPoint;
-
     public long id;
 
 }
