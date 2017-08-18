@@ -3,6 +3,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.liste
 import android.graphics.Point;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,6 +39,12 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
 
             // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
             // Subscriber will be notified about this post, but only one specified method will be called
+            Obstacle ob = ObstacleDataSingleton.getInstance().getObstacle();
+            if(polyline instanceof CustomPolyline)
+            {
+                CustomPolyline cuspo = (CustomPolyline) polyline;
+                ob.setId_way(cuspo.getRoad().id);
+            }
             EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint)));
 
         } catch (Exception e) {
@@ -90,10 +98,18 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
                     // point is the user placed position, which is probably not on the line and for
                     // which we want to search the position on the line.s
                     if (candidate == null || (getDistance(candidatePoint, point) > getDistance(closestPointOnLine, point))) {
-
-                        // TODO: you can also store the start and end node here
                         candidatePoint = closestPointOnLine;
                         candidate = (GeoPoint) mapView.getProjection().fromPixels(closestPointOnLine.x, closestPointOnLine.y);
+                        // get the up to date Obstacle Object and set its values for the 2 nodes surrounded it
+                        // TODO: From Bi, maybe something incorect, check later
+                        Obstacle ob = ObstacleDataSingleton.getInstance().getObstacle();
+                        // check if polyline is really from type Custom
+                        if(polyline instanceof CustomPolyline)
+                        {
+                            CustomPolyline cuspo = (CustomPolyline) polyline;
+                            ob.setId_firstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
+                            ob.setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
+                        }
                     }
                 }
 
