@@ -27,6 +27,9 @@ Der Stepper wird über *AddObstacleStepperAdapter* aufgebaut. Dort werden die ei
 
 Die erfassten Werte werden vor Abschluss der Datenerfassung noch einmal aufgelistet. Mit klicken auf "complete" werden die erfassten Daten an die routing.vincinator.de/api/barriers api gesendet (Method: POST). 
 
+### EventBus
+
+![alt text](doc/bp_diagramm.png)
 
 
 ## Common Datenmodell

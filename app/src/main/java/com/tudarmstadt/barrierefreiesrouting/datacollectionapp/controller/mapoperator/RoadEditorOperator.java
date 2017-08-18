@@ -40,22 +40,21 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
 
 
+
         Polyline streetLine = new Polyline(context);
-        streetLine.setTitle("Start for ");
-        streetLine.setWidth(10f);
         //here, we create a polygon, note that you need 5 points in order to make a closed polygon (rectangle)
+
         roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()));
         roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()+0.0002));
         roadEndPoints.add(new GeoPoint(p.getLatitude()+0.0002, p.getLongitude()));
-        streetLine.setPoints(roadEndPoints);
-        streetLine.setGeodesic(true);
-        streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+        streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPoints);
+
         Marker startMarker = new Marker(mapEditorFragment.map);
         startMarker.setPosition(roadEndPoints.get(0));
         startMarker.setTitle("Start point for creating new Road");
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         RoadMarker.add(startMarker);
-        mapEditorFragment.map.getOverlays().add(startMarker);
+
         //Note, the info window will not show if you set the onclick listener
         //line can also attach click listeners to the line
         /*
@@ -66,8 +65,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                 return false;
             }
         });*/
-        mapEditorFragment.map.getOverlayManager().add(streetLine);
-        mapEditorFragment.map.invalidate();
+        addMapOverlay(startMarker, streetLine, mapEditorFragment);
 
 
 
@@ -81,17 +79,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         if(roadEndPoints.size() > 0) {
             List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
             Polyline streetLine = new Polyline(context);
-            streetLine.setTitle("added Line");
-            streetLine.setWidth(10f);
 
             roadEndPoints.add(p);
-
             roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size() - 2));
             roadEndPointsCrob.add(p);
-
-            streetLine.setPoints(roadEndPointsCrob);
-            streetLine.setGeodesic(true);
-            streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+            streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
 
             Marker end = new Marker(mapEditorFragment.map);
             end.setPosition(p);
@@ -99,9 +91,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(end);
 
-            mapEditorFragment.map.getOverlays().add(end);
-            mapEditorFragment.map.getOverlayManager().add(streetLine);
-            mapEditorFragment.map.invalidate();
+            addMapOverlay(end, streetLine, mapEditorFragment);
 
 
             return true;
@@ -109,5 +99,23 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         else{
            return false;
         }
+    }
+
+    private void addMapOverlay(Marker marker, Polyline polyline, MapEditorFragment mapEditorFragment){
+        mapEditorFragment.map.getOverlays().add(marker);
+        mapEditorFragment.map.getOverlayManager().add(polyline);
+        mapEditorFragment.map.invalidate();
+    }
+
+    private Polyline setUPPoly(Polyline streetLine, MapEditorFragment mapEditorFragment, List<GeoPoint> list){
+
+        streetLine.setTitle("Text param");
+        streetLine.setWidth(10f);
+
+        streetLine.setPoints(list);
+        streetLine.setGeodesic(true);
+        streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+
+        return streetLine;
     }
 }
