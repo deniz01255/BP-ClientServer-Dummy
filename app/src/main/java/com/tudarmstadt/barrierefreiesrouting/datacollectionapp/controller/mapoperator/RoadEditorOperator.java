@@ -78,31 +78,36 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     // Single Tap auf die Map
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
-        List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
-        Polyline streetLine = new Polyline(context);
-        streetLine.setTitle("added Line");
-        streetLine.setWidth(10f);
+        if(roadEndPoints.size() > 0) {
+            List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
+            Polyline streetLine = new Polyline(context);
+            streetLine.setTitle("added Line");
+            streetLine.setWidth(10f);
 
-        roadEndPoints.add(p);
+            roadEndPoints.add(p);
 
-        roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size()-2));
-        roadEndPointsCrob.add(p);
+            roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size() - 2));
+            roadEndPointsCrob.add(p);
 
-        streetLine.setPoints(roadEndPointsCrob);
-        streetLine.setGeodesic(true);
-        streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+            streetLine.setPoints(roadEndPointsCrob);
+            streetLine.setGeodesic(true);
+            streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
 
-        Marker end = new Marker(mapEditorFragment.map);
-        end.setPosition(p);
-        end.setTitle("endPunkt");
-        end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        RoadMarker.add(end);
+            Marker end = new Marker(mapEditorFragment.map);
+            end.setPosition(p);
+            end.setTitle("endPunkt");
+            end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            RoadMarker.add(end);
 
-        mapEditorFragment.map.getOverlays().add(end);
-        mapEditorFragment.map.getOverlayManager().add(streetLine);
-        mapEditorFragment.map.invalidate();
+            mapEditorFragment.map.getOverlays().add(end);
+            mapEditorFragment.map.getOverlayManager().add(streetLine);
+            mapEditorFragment.map.invalidate();
 
 
-        return true;
+            return true;
+        }
+        else{
+           return false;
+        }
     }
 }
