@@ -10,6 +10,10 @@ Android App für das Bachelorpraktikum Datenerfassung für ein barrierefreies ro
 - [stepstone-tech/android-material-stepper](https://github.com/stepstone-tech/android-material-stepper)
 - EventBus [greenrobot eventBus Documentation](http://greenrobot.org/eventbus/documentation/)
 
+## Developer Documentation
+The Developer Guide is a working document, it will change over the time of the project. Please feel free to improve the document.
+
+[Developer Guide](DeveloperGuide.md)
 
 ## Usage
 
@@ -37,7 +41,8 @@ Note: you can also get other roads, by long pressing near the place where you wa
 <img src="doc/appScreenshot_4.png" width="350">
 
 
-### Step 4. After you have completed the Step-By-Step Dialog, your collected data has been send to the
+### Step 4. 
+After you have completed the Step-By-Step Dialog, your collected data has been send to the
 server. The new Obstacle is now displayed.
 
 <img src="doc/appScreenshot_5.png" width="350">
