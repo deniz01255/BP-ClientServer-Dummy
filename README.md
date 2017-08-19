@@ -18,25 +18,26 @@ Android App für das Bachelorpraktikum Datenerfassung für ein barrierefreies ro
 In order to place a new Obstacle on the openstreetmap roads, you need to retrieve road information.
 long press near the place where you want to add the obstacle.
 
-![alt text](doc/appScreenshot_1.png)
+<img src="doc/appScreenshot_1.png" width="350">
 
-![alt text](doc/appScreenshot_2.png)
+<img src="doc/appScreenshot_2.png" width="350">
+
 
 ### Step 2.
 The nearby roads are highlighted with an overlay.
 You can click on the overlay to place the obstacle.
 
-![alt text](doc/appScreenshot_3.png)
+<img src="doc/appScreenshot_3.png" width="350">
 
 ### Step 3.
 The Action Button appears. Click the action Button if you are finished with the positioning.
 Note: you can replace the position by clicking on an other spot at the highlighted road.
 Note: you can also get other roads, by long pressing near the place where you want to get other roads.
 
-![alt text](doc/appScreenshot_4.png)
+<img src="doc/appScreenshot_4.png" width="350">
 
 
 ### Step 4. After you have completed the Step-By-Step Dialog, your collected data has been send to the
 server. The new Obstacle is now displayed.
 
-![alt text](doc/appScreenshot_5.png)
+<img src="doc/appScreenshot_5.png" width="350">
