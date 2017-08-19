@@ -109,7 +109,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
 
         ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
         // wait for the Obstacle instance to be updated, then save 3 Ids into that Obstacle Instance before upload to the server
-        ObstacleDataSingleton.saveThreeIdAttributes();
+        ObstacleDataSingleton.getInstance().saveThreeIdAttributes();
 
         PostObstacleToServerTask.PostObstacle(ObstacleDataSingleton.getInstance().getObstacle());
 

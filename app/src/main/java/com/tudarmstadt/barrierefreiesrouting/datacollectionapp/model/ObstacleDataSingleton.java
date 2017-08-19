@@ -27,9 +27,9 @@ public class ObstacleDataSingleton {
     /*  ##########################################################
         #Attribute needed for Export Tools
         ##########################################################*/
-    private static long id_way;
-    private static long id_firstnode;
-    private static long id_lastnode;
+    private long id_way;
+    private long id_firstnode;
+    private long id_lastnode;
 
     /*  ##########################################################
         #Attribute needed for Export Tools
@@ -75,7 +75,7 @@ public class ObstacleDataSingleton {
      * before sending it to server
      * @return true if successful, meaning the Obstacle is already created and exists
      */
-    public static boolean saveThreeIdAttributes(){
+    public boolean saveThreeIdAttributes(){
         if(instance != null){
             instance.getObstacle().setId_way(id_way);
             instance.getObstacle().setId_firstnode(id_firstnode);
@@ -85,28 +85,28 @@ public class ObstacleDataSingleton {
         else return false;
     }
 
-    public static long getId_way() {
+    public long getId_way() {
         return id_way;
     }
 
-    public static void setId_way(long id_way) {
-        ObstacleDataSingleton.id_way = id_way;
+    public void setId_way(long id_way) {
+        this.id_way = id_way;
     }
 
-    public static long getId_firstnode() {
+    public long getId_firstnode() {
         return id_firstnode;
     }
 
-    public static void setId_firstnode(long id_firstnode) {
-        ObstacleDataSingleton.id_firstnode = id_firstnode;
+    public void setId_firstnode(long id_firstnode) {
+        this.id_firstnode = id_firstnode;
     }
 
-    public static long getId_lastnode() {
+    public long getId_lastnode() {
         return id_lastnode;
     }
 
-    public static void setId_lastnode(long id_lastnode) {
-        ObstacleDataSingleton.id_lastnode = id_lastnode;
+    public void setId_lastnode(long id_lastnode) {
+        this.id_lastnode = id_lastnode;
     }
 
     /*  ##########################################################

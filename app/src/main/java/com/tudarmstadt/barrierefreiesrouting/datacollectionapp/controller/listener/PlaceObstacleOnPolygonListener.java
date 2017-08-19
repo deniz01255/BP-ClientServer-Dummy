@@ -41,7 +41,7 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
             if(polyline instanceof CustomPolyline)
             {
                 CustomPolyline cuspo = (CustomPolyline) polyline;
-                ObstacleDataSingleton.setId_way(cuspo.getRoad().id);
+                ObstacleDataSingleton.getInstance().setId_way(cuspo.getRoad().id);
             }
             // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
             // Subscriber will be notified about this post, but only one specified method will be called
@@ -106,8 +106,8 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
                         if(polyline instanceof CustomPolyline)
                         {
                             CustomPolyline cuspo = (CustomPolyline) polyline;
-                            ObstacleDataSingleton.setId_firstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
-                            ObstacleDataSingleton.setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
+                            ObstacleDataSingleton.getInstance().setId_firstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
+                            ObstacleDataSingleton.getInstance().setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
                         }
                     }
                 }
