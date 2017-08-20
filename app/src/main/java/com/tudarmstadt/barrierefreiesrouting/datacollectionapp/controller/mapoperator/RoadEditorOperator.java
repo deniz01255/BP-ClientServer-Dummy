@@ -1,26 +1,19 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
 import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.Point;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.ClickObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +68,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
     // Single Tap auf die Map
     @Override
-    public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+    public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, final MapEditorFragment mapEditorFragment) {
         if(roadEndPoints.size() > 0) {
             List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
             Polyline streetLine = new Polyline(context);
@@ -88,8 +81,56 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             Marker end = new Marker(mapEditorFragment.map);
             end.setPosition(p);
             end.setTitle("endPunkt");
+            end.setDraggable(true);
+            end.isDraggable();
+            end.setOnMarkerClickListener(new ClickObstacleListener());
+
+            /**end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
+                //LatLng temp = null;
+                GeoPoint geopoint = null;
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+                    // TODO Auto-generated method stub
+                    geopoint = marker.getPosition();
+                    //temp=marker.getPosition();
+                }
+
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+                    // TODO Auto-generated method stub
+                    marker.setPosition(geopoint);
+                }
+
+                @Override
+                public void onMarkerDrag(Marker marker) {
+                    // TODO Auto-generated method stub
+                    //LatLng temp = marker.getPosition();
+                   GeoPoint geopoint = marker.getPosition();
+                }
+            });
+**/
+
+            /*end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
+                @Override
+                public void onMarkerDragStart(Marker marker) {
+
+                }
+
+                @Override
+                public void onMarkerDragEnd(Marker marker) {
+                    GeoPoint geopoint = marker.getPosition();
+                }
+
+                @Override
+                public void onMarkerDrag(Marker marker) {
+                    marker.setPosition(new GeoPoint(marker.getPosition().getLatitude()+0.00015,marker.getPosition().getLongitude()));
+                    mapEditorFragment.map.invalidate();
+
+                }
+            });*/
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(end);
+
 
             addMapOverlay(end, streetLine, mapEditorFragment);
 
