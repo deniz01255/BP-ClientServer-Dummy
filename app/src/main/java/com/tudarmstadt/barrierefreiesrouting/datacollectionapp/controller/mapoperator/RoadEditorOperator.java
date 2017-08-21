@@ -84,7 +84,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
-            end.setOnMarkerDragListener(new DragObstacleListener());
+            end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
 
             /**end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
                 //LatLng temp = null;
@@ -143,13 +143,13 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         }
     }
 
-    private void addMapOverlay(Marker marker, Polyline polyline, MapEditorFragment mapEditorFragment){
+    public void addMapOverlay(Marker marker, Polyline polyline, MapEditorFragment mapEditorFragment){
         mapEditorFragment.map.getOverlays().add(marker);
         mapEditorFragment.map.getOverlayManager().add(polyline);
         mapEditorFragment.map.invalidate();
     }
 
-    private Polyline setUPPoly(Polyline streetLine, MapEditorFragment mapEditorFragment, List<GeoPoint> list){
+    public Polyline setUPPoly(Polyline streetLine, MapEditorFragment mapEditorFragment, List<GeoPoint> list){
 
         streetLine.setTitle("Text param");
         streetLine.setWidth(10f);
