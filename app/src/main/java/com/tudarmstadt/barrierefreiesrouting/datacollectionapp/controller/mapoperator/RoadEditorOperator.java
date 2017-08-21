@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.ClickObstacleListener;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.DragObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -83,7 +84,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
-            end.setOnMarkerClickListener(new ClickObstacleListener());
+            end.setOnMarkerDragListener(new DragObstacleListener());
 
             /**end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
                 //LatLng temp = null;
