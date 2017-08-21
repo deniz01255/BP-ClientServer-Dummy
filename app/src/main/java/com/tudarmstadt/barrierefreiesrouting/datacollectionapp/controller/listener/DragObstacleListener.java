@@ -42,10 +42,12 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener{
         Polyline streetLine = new Polyline(context);
         List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
 
+        mapEditorFragment.map.getOverlays().remove(mapEditorFragment.map.getOverlays().size()-1);
+
         roadPoints.add(geopoint);
-        roadEndPointsCrob.add(roadPoints.get(roadPoints.size() - 2));
+        roadEndPointsCrob.add(roadPoints.get(roadPoints.size() - 3));
         roadEndPointsCrob.add(geopoint);
-        roadPoints.remove(roadPoints.size()-1);
+        roadPoints.remove(roadPoints.size()-2);
 
        streetLine = roadEditorOperator.setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
 
