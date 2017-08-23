@@ -6,6 +6,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.ClickObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.DragObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 
@@ -26,12 +27,22 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
     List<GeoPoint> roadEndPoints = new ArrayList<>();
     List<Marker>  RoadMarker = new ArrayList<>();
+    List<Road> RoadList = new ArrayList<>();
 
     // Longpress auf die Map
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+        roadEndPoints.clear();
+        Road newStreet =  new Road();
 
-
+        if (RoadList.size() != 0 )
+            {
+                 newStreet.id =  RoadList.get(RoadList.size()-1).id + 1;
+            }
+        else{
+            newStreet.id = 0;
+        }
+        newStreet.name = "Street: "+ newStreet.id;
 
 
 
@@ -41,6 +52,8 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()));
         roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()+0.0002));
         roadEndPoints.add(new GeoPoint(p.getLatitude()+0.0002, p.getLongitude()));
+        newStreet.setROADList(roadEndPoints);
+
         streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPoints);
 
         Marker startMarker = new Marker(mapEditorFragment.map);
@@ -49,20 +62,10 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         RoadMarker.add(startMarker);
 
-        //Note, the info window will not show if you set the onclick listener
-        //line can also attach click listeners to the line
-        /*
-        line.setOnClickListener(new Polyline.OnClickListener() {
-            @Override
-            public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-                Toast.makeText(context, "Hello world!", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        });*/
         addMapOverlay(startMarker, streetLine, mapEditorFragment);
 
 
-
+        RoadList.add(newStreet);
         return true;
     }
 
@@ -86,49 +89,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             end.isDraggable();
             end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
 
-            /**end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
-                //LatLng temp = null;
-                GeoPoint geopoint = null;
-                @Override
-                public void onMarkerDragStart(Marker marker) {
-                    // TODO Auto-generated method stub
-                    geopoint = marker.getPosition();
-                    //temp=marker.getPosition();
-                }
 
-                @Override
-                public void onMarkerDragEnd(Marker marker) {
-                    // TODO Auto-generated method stub
-                    marker.setPosition(geopoint);
-                }
-
-                @Override
-                public void onMarkerDrag(Marker marker) {
-                    // TODO Auto-generated method stub
-                    //LatLng temp = marker.getPosition();
-                   GeoPoint geopoint = marker.getPosition();
-                }
-            });
-**/
-
-            /*end.setOnMarkerDragListener(new Marker.OnMarkerDragListener() {
-                @Override
-                public void onMarkerDragStart(Marker marker) {
-
-                }
-
-                @Override
-                public void onMarkerDragEnd(Marker marker) {
-                    GeoPoint geopoint = marker.getPosition();
-                }
-
-                @Override
-                public void onMarkerDrag(Marker marker) {
-                    marker.setPosition(new GeoPoint(marker.getPosition().getLatitude()+0.00015,marker.getPosition().getLongitude()));
-                    mapEditorFragment.map.invalidate();
-
-                }
-            });*/
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(end);
 
