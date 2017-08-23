@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
 import android.app.Activity;
+import android.graphics.Color;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.ClickObstacleListener;
@@ -28,10 +29,25 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     List<GeoPoint> roadEndPoints = new ArrayList<>();
     List<Marker>  RoadMarker = new ArrayList<>();
     List<Road> RoadList = new ArrayList<>();
+    List<List<Polyline>> colorCapture = new ArrayList<>();
+    List<Polyline> currentRoadCapture = new ArrayList<>();
 
     // Longpress auf die Map
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+        if (currentRoadCapture.size() != 0 ){
+            colorCapture.add(currentRoadCapture);
+
+        }
+        if(colorCapture.size() != 0){
+            for (Polyline poly: colorCapture.get(colorCapture.size()-1)) {
+                poly.setColor(Color.BLACK);
+                mapEditorFragment.map.getOverlayManager().add(poly);
+            }
+            mapEditorFragment.map.invalidate();
+            currentRoadCapture.clear();
+        }
+
         roadEndPoints.clear();
         Road newStreet =  new Road();
 
@@ -77,7 +93,10 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
             Polyline streetLine = new Polyline(context);
 
+
             roadEndPoints.add(p);
+            RoadList.get(RoadList.size()-1).setROADList(roadEndPoints);
+
             roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size() - 2));
             roadEndPointsCrob.add(p);
             streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
@@ -114,10 +133,12 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
         streetLine.setTitle("Text param");
         streetLine.setWidth(10f);
-
+        streetLine.setColor(Color.BLUE);
         streetLine.setPoints(list);
         streetLine.setGeodesic(true);
         streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+
+        currentRoadCapture.add(streetLine);
 
         return streetLine;
     }
