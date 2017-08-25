@@ -22,6 +22,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Attr;
 
 import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
@@ -80,6 +81,9 @@ public class AttributesEditorFragment extends Fragment implements Step {
             if (ObstacleDataSingleton.getInstance().getObstacle() != null)
                 spinner.setSelection(ObstacleTranslator.getSpinnerPositionFromType(ObstacleDataSingleton.getInstance().getObstacle().getTypeCode()));
 
+
+
+
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view,
@@ -87,6 +91,7 @@ public class AttributesEditorFragment extends Fragment implements Step {
                     // Send Event that Selection of Obstacle has changed.
                     // HINT: BrowseMapActivity subscribes to this Event.
                     EventBus.getDefault().post(new SelectedObstacleTypeChangedEvent(getObstacleFrom(position)));
+
 
                 }
 
@@ -120,7 +125,7 @@ public class AttributesEditorFragment extends Fragment implements Step {
     public void onSelected() {
         if (!ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection) {
             // this.obstacleViewModel must be initialized first.
-           // insertAttributeEditFragments(this);
+            //insertAttributeEditFragments(this);
 
             ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = true;
         }
@@ -172,13 +177,12 @@ public class AttributesEditorFragment extends Fragment implements Step {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SelectedObstacleTypeChangedEvent event) {
 
-
         ObstacleViewModel obstacleViewModel = convertObstacleToViewModel(event.getObstacle(), getActivity());
         ObstacleDataSingleton.getInstance().setObstacleViewModel(obstacleViewModel);
 
         ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
-
         insertAttributeEditFragments(this);
+
 
     }
 
