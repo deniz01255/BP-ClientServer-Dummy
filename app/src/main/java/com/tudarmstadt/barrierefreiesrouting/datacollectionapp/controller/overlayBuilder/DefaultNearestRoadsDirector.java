@@ -20,7 +20,7 @@ public class DefaultNearestRoadsDirector {
     public NearestRoadsOverlay construct(GeoPoint p) {
         return builder
                 .setCenter(p)
-                .setRadius(10)
+                .setRadius(50)
                 .setTypes("^(.*)$")
                 .build();
     }

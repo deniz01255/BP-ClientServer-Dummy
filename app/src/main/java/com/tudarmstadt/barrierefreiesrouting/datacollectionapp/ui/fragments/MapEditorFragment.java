@@ -163,7 +163,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
+            return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
     }
 
     public MapEditorState getStateHandler() {
