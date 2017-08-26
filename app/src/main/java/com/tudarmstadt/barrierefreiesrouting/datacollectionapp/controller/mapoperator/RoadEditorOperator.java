@@ -2,6 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapop
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -69,7 +70,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         GetHighwaysFromOverpassAPITask task = new GetHighwaysFromOverpassAPITask(context);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
 
-        if (currentRoadCapture.size() != 0 ){
+       /** if (currentRoadCapture.size() != 0 ){
             colorCapture.add(currentRoadCapture);
 
         }
@@ -115,7 +116,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         addMapOverlay(startMarker, streetLine, mapEditorFragment);
 
 
-        RoadList.add(newStreet);
+        RoadList.add(newStreet);**/
         return true;
     }
 
@@ -183,7 +184,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
      * and give this an Eventlistener so when touched a barrier will be added to the map
      * @param response
      */
-    protected void processRoads(Response response) {
+    protected void processRoads(Response response ,Context context) {
         if (response != null && response.isSuccessful()) {
 
             try {
@@ -211,7 +212,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
                     // See onClick() method in this class.
-                    polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline());
+                    polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
                     polylines.add(polyline);
                 }
 
@@ -283,7 +284,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            processRoads(result);
+            processRoads(result, progressDialog.getContext());
 
         }
     }
