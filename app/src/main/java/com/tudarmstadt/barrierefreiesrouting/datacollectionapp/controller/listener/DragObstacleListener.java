@@ -1,5 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
@@ -19,15 +20,17 @@ import java.util.List;
 public class DragObstacleListener implements Marker.OnMarkerDragListener{
     List<GeoPoint> roadPoints = new ArrayList<>();
     MapEditorFragment mapEditorFragment;
-    RoadEditorOperator roadEditorOperator;
+    PlaceStartOfRoadOnPolyline roadEditorOperator;
     Context context;
 
-    public DragObstacleListener(MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints,RoadEditorOperator roadEditorOperator, Context context){
+    public DragObstacleListener(MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints,PlaceStartOfRoadOnPolyline roadEditorOperator, Context context){
         this.mapEditorFragment = mapEditorFragment;
         this.roadPoints = roadPoints;
         this.roadEditorOperator = roadEditorOperator;
         this.context = context;
     }
+
+
 
     @Override
     public void onMarkerDrag(Marker marker) {
@@ -49,7 +52,7 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener{
         roadEndPointsCrob.add(geopoint);
         roadPoints.remove(roadPoints.size()-2);
 
-       streetLine = roadEditorOperator.setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
+        streetLine = roadEditorOperator.setUPPoly(streetLine, mapEditorFragment.map,roadEndPointsCrob);
 
         mapEditorFragment.map.getOverlayManager().add(streetLine);
         mapEditorFragment.map.invalidate();

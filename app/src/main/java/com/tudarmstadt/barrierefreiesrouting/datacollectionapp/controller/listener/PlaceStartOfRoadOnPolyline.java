@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -22,14 +23,14 @@ import java.util.List;
  * Created by deniz on 26.08.17.
  */
 
-public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener {
-    List<GeoPoint> roadEndPoints = new ArrayList<>();
-    Road newStreet =  new Road();
-    List<Marker>  RoadMarker = new ArrayList<>();
-    List<Road> RoadList = new ArrayList<>();
-    MapEditorFragment mapEditorFragment;
-    Context context;
-    List<Polyline> currentRoadCapture = new ArrayList<>();
+public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUserInteractionWithMap {
+   public List<GeoPoint> roadEndPoints = new ArrayList<>();
+   public Road newStreet =  new Road();
+    public List<Marker>  RoadMarker = new ArrayList<>();
+    public List<Road> RoadList = new ArrayList<>();
+    public MapEditorFragment mapEditorFragment;
+    public  Context context;
+    public  List<Polyline> currentRoadCapture = new ArrayList<>();
 
     public PlaceStartOfRoadOnPolyline( Context context){
         /**this.mapEditorFragment = mapEditorFragment;**/
@@ -53,8 +54,14 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener {
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         RoadMarker.add(startMarker);
 
-        addMapOverlay(startMarker, streetLine, mapView);
+        Marker endM = new Marker(mapView);
+        endM.setPosition(roadEndPoints.get(2));
+        endM.setTitle("Start point for creating new Road");
+        endM.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        RoadMarker.add(endM);
 
+        addMapOverlay(startMarker, streetLine, mapView);
+        addMapOverlay(endM, streetLine, mapView);
 
         RoadList.add(newStreet);
 
@@ -84,4 +91,45 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener {
     }
 
 
+    @Override
+    public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+        return false;
+    }
+
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+        if(roadEndPoints.size() > 0) {
+
+            List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
+            Polyline streetLine = new Polyline(context);
+
+
+            roadEndPoints.add(p);
+            RoadList.get(RoadList.size()-1).setROADList(roadEndPoints);
+
+            roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size() - 2));
+            roadEndPointsCrob.add(p);
+            streetLine = setUPPoly(streetLine, mapEditorFragment.map,roadEndPointsCrob);
+
+            Marker end = new Marker(mapEditorFragment.map);
+            end.setPosition(p);
+            end.setTitle("endPunkt");
+            end.setDraggable(true);
+            end.isDraggable();
+            end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
+
+
+            end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            RoadMarker.add(end);
+
+
+            addMapOverlay(end, streetLine, mapEditorFragment.map);
+
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
