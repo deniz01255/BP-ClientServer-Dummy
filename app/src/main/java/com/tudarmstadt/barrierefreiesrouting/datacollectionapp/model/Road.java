@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Road {
      */
     public String name = "has no name";
     private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
+    public ArrayList<Polyline> polylines = new ArrayList<>();
     /**
      * list of node instead of GeoPoint
      */

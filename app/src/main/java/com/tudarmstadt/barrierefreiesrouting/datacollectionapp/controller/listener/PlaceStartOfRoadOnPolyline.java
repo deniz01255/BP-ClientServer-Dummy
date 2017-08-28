@@ -25,7 +25,7 @@ import java.util.List;
 
 public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUserInteractionWithMap {
    public List<GeoPoint> roadEndPoints = new ArrayList<>();
-   public Road newStreet =  new Road();
+   public Road newStreet;
     public List<Marker>  RoadMarker = new ArrayList<>();
     public List<Road> RoadList = new ArrayList<>();
     public MapEditorFragment mapEditorFragment;
@@ -40,6 +40,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
 
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint geoPoint) {
+        newStreet =  new Road();
         Polyline streetLine = new Polyline(context);
         roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()));
         roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()+0.0002));
@@ -47,6 +48,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
         newStreet.setROADList(roadEndPoints);
 
         streetLine = setUPPoly(streetLine, mapView,roadEndPoints);
+
 
         Marker startMarker = new Marker(mapView);
         startMarker.setPosition(roadEndPoints.get(0));
@@ -66,6 +68,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
         RoadList.add(newStreet);
 
         Log.d("myTag", "This is my message");
+        roadEndPoints.clear();
         return true;
     }
 

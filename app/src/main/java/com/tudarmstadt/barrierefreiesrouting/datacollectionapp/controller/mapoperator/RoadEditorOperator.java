@@ -68,7 +68,6 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
         Road newStreet =  new Road();
-
         if (RoadList.size() != 0 )
         {
             newStreet.id =  RoadList.get(RoadList.size()-1).id + 1;
@@ -88,19 +87,18 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         task.execute(roadsOverlay.center, roadsOverlay.radius);
 
         int i = 0;
-       /** if (currentRoadCapture.size() != 0 ){
-            colorCapture.add(currentRoadCapture);
 
-        }
-        if(colorCapture.size() != 0){
-            for (Polyline poly: colorCapture.get(colorCapture.size()-1)) {
-                poly.setColor(Color.BLACK);
-                mapEditorFragment.map.getOverlayManager().add(poly);
+        if(RoadList.size() != 0){
+            for (Road road: RoadList) {
+                for(Polyline polyline: road.polylines) {
+                    polyline.setColor(Color.BLACK);
+                    mapEditorFragment.map.getOverlayManager().add(polyline);
+                }
             }
             mapEditorFragment.map.invalidate();
             currentRoadCapture.clear();
         }
-
+/**
         roadEndPoints.clear();
         Road newStreet =  new Road();
 
@@ -145,6 +143,8 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
        List<GeoPoint> gp = new ArrayList<GeoPoint>();
         List<Overlay> xx = mapEditorFragment.map.getOverlays();
         Road road = RoadList.get(RoadList.size()-1);
+        road.polylines.add((Polyline) xx.get(xx.size()-1));
+        road.polylines.add((Polyline) xx.get(xx.size()-3));
 
         Marker x = (Marker)xx.get(xx.size()-4);
         gp.add(x.getPosition());
