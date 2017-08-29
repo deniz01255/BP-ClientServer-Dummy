@@ -13,9 +13,11 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,14 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint geoPoint) {
         newStreet =  new Road();
+        //List<Overlay> po = mapView.getOverlays();
+        /** for(Overlay ov: mapView.getOverlays()){
+           if(Polyline.class.isInstance(ov)){
+                mapView.getOverlays().remove(ov);
+            }
+        }**/
+
+
         Polyline streetLine = new Polyline(context);
         roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()));
         roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()+0.0002));
@@ -119,7 +129,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
-            end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
+           // end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
 
 
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);

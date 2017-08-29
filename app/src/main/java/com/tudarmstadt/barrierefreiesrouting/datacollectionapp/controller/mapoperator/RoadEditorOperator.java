@@ -171,7 +171,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
-           // end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
+            end.setOnMarkerDragListener(new DragObstacleListener(road,mapEditorFragment,roadEndPoints,this,context));
 
 
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
