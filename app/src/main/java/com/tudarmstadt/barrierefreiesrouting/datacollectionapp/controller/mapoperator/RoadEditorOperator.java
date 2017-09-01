@@ -187,6 +187,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             addMapOverlay(end, streetLine, mapEditorFragment);
 
 
+           sendToServer();
             return true;
         }
         else{
@@ -331,13 +332,13 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
     public void sendToServer() {
 
-      /**  ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
+        //ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
 
-        PostStreetToServerTask.PostStreet(road);
+        PostStreetToServerTask.PostStreet(RoadList.get(RoadList.size()-1));
 
         // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
-        ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
-**/
+       // ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
+
 
     }
 

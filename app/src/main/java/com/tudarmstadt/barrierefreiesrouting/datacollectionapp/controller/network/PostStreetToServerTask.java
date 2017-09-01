@@ -8,6 +8,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.networ
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 
 import org.greenrobot.eventbus.EventBus;
+import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
 
@@ -26,37 +27,45 @@ import okhttp3.Response;
 
 public class PostStreetToServerTask {
 
-    public PostStreetToServerTask() {}
+    public PostStreetToServerTask() {
+    }
 
     public static void PostStreet(final Road road) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
-        try {
-            jsonString = mapper.writeValueAsString(road);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        StringBuilder parse = new StringBuilder();
+
+        parse.append("highway=*; Road-Nodes= ");
+        for (GeoPoint g : road.getRoadPoints()) {
+            parse.append(g.toString() + ", ");
         }
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(JSON, jsonString);
+            parse.replace(parse.length() - 2, parse.length() - 2, "; ");
 
-        OkHttpClient client = new OkHttpClient();
+            jsonString = parse.toString();
 
-        Request request = new Request.Builder()
-                .url(RoutingServerAPI.baseURL + RoutingServerAPI.obstacleResource)
-                .post(body)
-                .build();
 
-        client.newCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(final Call call, IOException e) {
-                        // Error
-                    }
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(JSON, jsonString);
 
-                    @Override
-                    public void onResponse(Call call, final Response response) throws IOException {
-                        EventBus.getDefault().post(new RoutingServerStreetPostedEvent(response, road));
-                    }
-                });
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(RoutingServerAPI.baseURL + RoutingServerAPI.obstacleResource)
+                    .post(body)
+                    .build();
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(final Call call, IOException e) {
+                            // Error
+                        }
+
+                        @Override
+                        public void onResponse(Call call, final Response response) throws IOException {
+                            EventBus.getDefault().post(new RoutingServerStreetPostedEvent(response, road));
+                        }
+                    });
+        }
     }
-}
+
