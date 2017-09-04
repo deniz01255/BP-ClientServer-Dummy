@@ -61,7 +61,11 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
     compile 'com.android.support:support-v4:25.3.1'
 
+//<<<<<<< HEAD
     compile 'com.github.Vincinator:BP-Common:467da710c0'
+//=======
+    compile 'com.github.Vincinator:BP-Common:eaf6633f36'
+//>>>>>>> 3f43510ff5c9271f9631117b4b37e4cc28a092c8
 
     compile 'com.android.support:recyclerview-v7:25.3.1'
 

@@ -11,8 +11,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.util.GeoPoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import bp.common.model.obstacles.Obstacle;
+import bp.common.model.ways.Node;
+import bp.common.model.ways.Way;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -31,8 +35,23 @@ public class PostStreetToServerTask {
     }
 
     public static void PostStreet(final Road road) {
+        ArrayList<Node> nodes = new ArrayList<>();
+
+
+        for (GeoPoint g:road.getRoadPoints()) {
+            nodes.add(new Node(g.getLatitude(),g.getLongitude()));
+        }
+
+        Way way = new Way(road.name,nodes);
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
+        try {
+            jsonString = mapper.writeValueAsString(way);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+/**
+
         StringBuilder parse = new StringBuilder();
 
         parse.append("highway=*; Road-Nodes= ");
@@ -43,7 +62,7 @@ public class PostStreetToServerTask {
 
             jsonString = parse.toString();
 
-
+**/
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, jsonString);
 

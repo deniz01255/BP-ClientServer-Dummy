@@ -24,6 +24,16 @@ public class ObstacleDataSingleton {
     public boolean obstacleDataCollectionCompleted = false;
     private Obstacle existingSelectedObstacle;
 
+    /*  ##########################################################
+        #Attribute needed for Export Tools
+        ##########################################################*/
+    private long id_way;
+    private long id_firstnode;
+    private long id_lastnode;
+
+    /*  ##########################################################
+        #Attribute needed for Export Tools
+        ##########################################################*/
 
     private ObstacleDataSingleton() {
     }
@@ -56,4 +66,50 @@ public class ObstacleDataSingleton {
         this.mObstacleViewModel = mObstacleViewModel;
     }
 
+    /*  ##########################################################
+        #Function needed for Export Tools
+        ##########################################################*/
+
+    /**
+     * set the 3 IDs values needed for ExportTool in the current Obstacle Object
+     * before sending it to server
+     * @return true if successful, meaning the Obstacle is already created and exists
+     */
+    public boolean saveThreeIdAttributes(){
+        if(instance != null){
+            instance.getObstacle().setId_way(id_way);
+            instance.getObstacle().setId_firstnode(id_firstnode);
+            instance.getObstacle().setId_lastnode(id_lastnode);
+            return true;
+        }
+        else return false;
+    }
+
+    public long getId_way() {
+        return id_way;
+    }
+
+    public void setId_way(long id_way) {
+        this.id_way = id_way;
+    }
+
+    public long getId_firstnode() {
+        return id_firstnode;
+    }
+
+    public void setId_firstnode(long id_firstnode) {
+        this.id_firstnode = id_firstnode;
+    }
+
+    public long getId_lastnode() {
+        return id_lastnode;
+    }
+
+    public void setId_lastnode(long id_lastnode) {
+        this.id_lastnode = id_lastnode;
+    }
+
+    /*  ##########################################################
+        #Functions needed for Export Tools
+        ##########################################################*/
 }
