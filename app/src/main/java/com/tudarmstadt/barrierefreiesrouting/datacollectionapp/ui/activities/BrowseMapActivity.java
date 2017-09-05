@@ -26,6 +26,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
@@ -80,6 +81,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
     private long selectedBarrier;
     public FloatingActionButton floatingActionButton;
+    public FloatingActionButton floatingActionButtonRoad;
     public MapEditorFragment mapEditorFragment;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
@@ -125,6 +127,22 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
         });
+
+
+        floatingActionButtonRoad = (FloatingActionButton) findViewById(R.id.action_send_Street);
+
+        floatingActionButtonRoad.hide();
+
+        floatingActionButtonRoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
 
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
@@ -329,6 +347,25 @@ public class BrowseMapActivity extends AppCompatActivity
                 mapEditorFragment.map.invalidate();
             }
         });
+
+
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(RoadPositionSelectedOnPolylineEvent event) {
+        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+        GeoPoint point = event.getPoint();
+        if (point != null) {
+            OverlayItem overlayItem = new OverlayItem("", "", point);
+            mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
+            mapEditorFragment.map.invalidate();
+            floatingActionButtonRoad.show();
+        } else {
+
+            floatingActionButtonRoad.hide();
+        }
+        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = point;
 
 
     }

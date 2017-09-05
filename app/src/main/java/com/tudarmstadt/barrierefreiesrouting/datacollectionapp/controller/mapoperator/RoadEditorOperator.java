@@ -1,8 +1,10 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
@@ -146,53 +148,82 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     // Single Tap auf die Map
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, final MapEditorFragment mapEditorFragment) {
-       List<GeoPoint> gp = new ArrayList<GeoPoint>();
-        List<Overlay> xx = mapEditorFragment.map.getOverlays();
-        Road road = RoadList.get(RoadList.size()-1);
-        road.polylines.add((Polyline) xx.get(xx.size()-1));
-        road.polylines.add((Polyline) xx.get(xx.size()-3));
+        if (RoadList.size() == 0) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            builder1.setTitle("No existing road!");
+            builder1.setMessage("Please verify that you first do a LONGPRESS to create a road \n\n" +
+                    "Single tap only works if a road exists, adding further nodes.");
+            builder1.setCancelable(true);
 
-        Marker x = (Marker)xx.get(xx.size()-4);
-        gp.add(x.getPosition());
-        x = (Marker)xx.get(xx.size()-2);
-        gp.add(x.getPosition());
-        road.setROADList(gp);
+            builder1.setPositiveButton(
+                    "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
 
+            /**builder1.setNegativeButton(
+                    "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });**/
 
-       if(road.getRoadPoints().size() > 0) {
-
-            List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
-            Polyline streetLine = new Polyline(context);
-
-
-            road.setRoadPoints(p);
-
-
-            roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size() - 2));
-            roadEndPointsCrob.add(p);
-            streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
-
-            Marker end = new Marker(mapEditorFragment.map);
-            end.setPosition(p);
-            end.setTitle("endPunkt");
-            end.setDraggable(true);
-            end.isDraggable();
-            end.setOnMarkerDragListener(new DragObstacleListener(road,mapEditorFragment,roadEndPoints,this,context));
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
 
 
-            end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            RoadMarker.add(end);
-
-
-            addMapOverlay(end, streetLine, mapEditorFragment);
-
-
-           sendToServer();
-            return true;
+            return false;
         }
-        else{
-           return false;
-        }
+            List<GeoPoint> gp = new ArrayList<GeoPoint>();
+            List<Overlay> xx = mapEditorFragment.map.getOverlays();
+            Road road = RoadList.get(RoadList.size() - 1);
+            road.polylines.add((Polyline) xx.get(xx.size() - 1));
+            road.polylines.add((Polyline) xx.get(xx.size() - 3));
+
+            Marker x = (Marker) xx.get(xx.size() - 4);
+            gp.add(x.getPosition());
+            x = (Marker) xx.get(xx.size() - 2);
+            gp.add(x.getPosition());
+            road.setROADList(gp);
+
+
+            if (road.getRoadPoints().size() > 0) {
+
+                List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
+                Polyline streetLine = new Polyline(context);
+
+
+                road.setRoadPoints(p);
+
+
+                roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size() - 2));
+                roadEndPointsCrob.add(p);
+                streetLine = setUPPoly(streetLine, mapEditorFragment, roadEndPointsCrob);
+
+                Marker end = new Marker(mapEditorFragment.map);
+                end.setPosition(p);
+                end.setTitle("endPunkt");
+                end.setDraggable(true);
+                end.isDraggable();
+                end.setOnMarkerDragListener(new DragObstacleListener(road, mapEditorFragment, roadEndPoints, this, context));
+
+
+                end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                RoadMarker.add(end);
+
+
+                addMapOverlay(end, streetLine, mapEditorFragment);
+
+
+                sendToServer();
+                return true;
+            } else {
+                return false;
+            }
+
     }
 
     public void addMapOverlay(Marker marker, Polyline polyline, MapEditorFragment mapEditorFragment){

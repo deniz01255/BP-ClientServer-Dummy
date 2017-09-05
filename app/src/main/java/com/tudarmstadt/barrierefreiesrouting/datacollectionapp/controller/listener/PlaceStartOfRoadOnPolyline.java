@@ -6,10 +6,13 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -79,6 +82,16 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
 
         Log.d("myTag", "This is my message");
         roadEndPoints.clear();
+        EventBus.getDefault().post(new RoadPositionSelectedOnPolylineEvent(geoPoint));
+
+      /**  for (Overlay overlay:mapView.getOverlays()) {
+            if(Marker.class.isInstance(overlay)){
+                break;
+            }else{
+                mapView.getOverlays().remove(overlay);
+            }
+        }**/
+
         return true;
     }
 

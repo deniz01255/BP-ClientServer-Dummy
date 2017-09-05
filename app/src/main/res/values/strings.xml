@@ -32,4 +32,8 @@
     <string name="data">data</string>
     <string name="obstacle">Obstacle</string>
 
+    <string name="title_activity_place_road">PLaceRoadActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
 </resources>
