@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewOverlay;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.CompleteRoadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
@@ -48,9 +51,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +68,11 @@ import bp.common.model.obstacles.Ramp;
 import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
+import bp.common.model.ways.Node;
+import bp.common.model.ways.Way;
 import okhttp3.Response;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * The starting point of the app.
@@ -136,8 +146,36 @@ public class BrowseMapActivity extends AppCompatActivity
         floatingActionButtonRoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
-                startActivity(intent);
+                List<GeoPoint> geop = new ArrayList<GeoPoint>();
+                ArrayList<Node> nodeList = new ArrayList<Node>();
+                List<Overlay> xx = mapEditorFragment.map.getOverlays();
+                for(int i = xx.size()-1; i > 0; i--){
+                    if (Polyline.class.isInstance(xx.get(i))|| Marker.class.isInstance(xx.get(i))) {
+                        if(Marker.class.isInstance(xx.get(i))){
+                            xx.get(i).isEnabled();
+                            geop.add(((Marker) xx.get(i)).getPosition());
+                        }
+                    } else{
+                        break;
+                    }
+                }
+                for (GeoPoint gp: geop) {
+                    nodeList.add(new Node(gp.getLatitude(),gp.getLongitude()));
+                }
+
+                Intent i = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
+                StringBuilder sb = new StringBuilder();
+                for (Node nd: nodeList) {
+                    sb.append(nd.getLatitude());
+                    sb.append(nd.getLongitude());
+                    sb.append("|");
+                }
+                i.putExtra("key", sb.toString());
+                startActivity(i);
+               // Intent intent = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
+               // startActivity(intent);
+
+
 
             }
         });
@@ -152,6 +190,7 @@ public class BrowseMapActivity extends AppCompatActivity
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
                 startActivity(intent);
 

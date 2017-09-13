@@ -1,7 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,8 +22,12 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import bp.common.model.obstacles.Obstacle;
 import bp.common.model.obstacles.Stairs;
+import bp.common.model.ways.Way;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -32,14 +38,19 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
 
     private StepperLayout mStepperLayout;
     private int selectedBarrier;
+    private int i ;
 
     public BrowseMapActivity browseMapActivity;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place_road);
+        setContentView(R.layout.activity_place_obstacle);
+        Intent intent = getIntent();
+        String xx = intent.getExtras().getString("key");
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
         mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getSupportFragmentManager(), this));
         mStepperLayout.setListener(this);
@@ -52,7 +63,7 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
 
     @Override
     public void onCompleted(View view) {
-        Toast.makeText(this, R.string.Obstacle_saved, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.Way_saved, Toast.LENGTH_SHORT).show();
         this.finish();
 
     }

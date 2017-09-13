@@ -1,5 +1,8 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polyline;
 
@@ -12,7 +15,7 @@ import java.util.List;
  *
  * Used by OsmParser
  */
-public class Road {
+public class Road implements Parcelable {
 
     public long id;
     /**
@@ -44,6 +47,13 @@ public class Road {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
 
+    }
 }
