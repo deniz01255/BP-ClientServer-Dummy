@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.event
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 
 import bp.common.model.obstacles.Obstacle;
+import bp.common.model.ways.Way;
 import okhttp3.Response;
 
 /**
@@ -12,20 +13,20 @@ import okhttp3.Response;
 public class RoutingServerStreetPostedEvent {
 
     private final Response response;
-    private final Road road;
+    private final Way way;
 
 
-    public RoutingServerStreetPostedEvent(Response response, Road road) {
+    public RoutingServerStreetPostedEvent(Response response, Way way) {
         this.response = response;
-        this.road = road;
+        this.way = way;
     }
 
     public Response getResponse() {
         return response;
     }
 
-    public Road getObstacle() {
-        return road;
+    public Way getObstacle() {
+        return way;
     }
 }
 

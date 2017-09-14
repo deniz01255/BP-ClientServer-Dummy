@@ -16,8 +16,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listen
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceStartOfRoadOnPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RamplerOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.DefaultNearestRoadsDirector;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.NearestRoadsOverlay;
@@ -217,8 +215,6 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 addMapOverlay(end, streetLine, mapEditorFragment);
 
-
-                sendToServer();
                 return true;
             } else {
                 return false;
@@ -365,7 +361,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
         //ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
 
-        PostStreetToServerTask.PostStreet(RoadList.get(RoadList.size()-1));
+        //PostStreetToServerTask.PostStreet(RoadList.get(RoadList.size()-1));
 
         // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
        // ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;

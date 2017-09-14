@@ -46,8 +46,7 @@ dependencies {
     //=======
     //>>>>>>> 3f43510ff5c9271f9631117b4b37e4cc28a092c8
 
-    compile 'com.github.Vincinator:BP-Common:eaf6633f36'
-    compile 'com.github.Vincinator:BP-Common:467da710c0'
+
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
     compile 'com.android.support:support-v4:25.3.1'
@@ -59,6 +58,7 @@ dependencies {
 
 
     compile'com.android.support:design:25.3.1'
+    compile 'com.github.Vincinator:BP-Common:5d59591a1a'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
@@ -74,7 +74,6 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
-    compile 'com.github.Vincinator:BP-Common:eaf6633f36'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.stepstone.stepper:material-stepper:4.0.0'
     compile 'org.greenrobot:eventbus:3.0.0'

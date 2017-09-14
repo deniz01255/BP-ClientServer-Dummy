@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,11 +11,14 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewOverlay;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -35,6 +39,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
@@ -73,6 +78,7 @@ import bp.common.model.ways.Way;
 import okhttp3.Response;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.userInputDialog;
 
 /**
  * The starting point of the app.
@@ -95,11 +101,14 @@ public class BrowseMapActivity extends AppCompatActivity
     public MapEditorFragment mapEditorFragment;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
+    private String result;
+    private ArrayList<Node> nodeList = new ArrayList<Node>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final Context c = this;
         setContentView(R.layout.activity_browser_map);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -146,8 +155,8 @@ public class BrowseMapActivity extends AppCompatActivity
         floatingActionButtonRoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                nodeList.clear();
                 List<GeoPoint> geop = new ArrayList<GeoPoint>();
-                ArrayList<Node> nodeList = new ArrayList<Node>();
                 List<Overlay> xx = mapEditorFragment.map.getOverlays();
                 for(int i = xx.size()-1; i > 0; i--){
                     if (Polyline.class.isInstance(xx.get(i))|| Marker.class.isInstance(xx.get(i))) {
@@ -163,18 +172,36 @@ public class BrowseMapActivity extends AppCompatActivity
                     nodeList.add(new Node(gp.getLatitude(),gp.getLongitude()));
                 }
 
-                Intent i = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
-                StringBuilder sb = new StringBuilder();
-                for (Node nd: nodeList) {
-                    sb.append(nd.getLatitude());
-                    sb.append(nd.getLongitude());
-                    sb.append("|");
-                }
-                i.putExtra("key", sb.toString());
-                startActivity(i);
-               // Intent intent = new Intent(BrowseMapActivity.this, PLaceRoadActivity.class);
-               // startActivity(intent);
 
+                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
+                View mView = layoutInflaterAndroid.inflate(R.layout.activity_place_road, null);
+                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
+                alertDialogBuilderUserInput.setView(mView);
+                final EditText userInputDialogEditText = (EditText) mView.findViewById(userInputDialog);
+                alertDialogBuilderUserInput
+                        .setCancelable(false)
+                        .setPositiveButton("An Server Senden ", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                result = userInputDialogEditText.getText().toString();
+                                Way w = new Way(result, nodeList);
+                                PostStreetToServerTask.PostStreet(w);
+                                Toast.makeText(c, R.string.Way_saved, Toast.LENGTH_SHORT).show();
+
+                            }
+                        })
+
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialogBox, int id) {
+                                        dialogBox.cancel();
+                                    }
+                                });
+
+                AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+                alertDialogAndroid.show();
+
+
+                //String ret = result.getText().toString() ;
 
 
             }
@@ -316,7 +343,7 @@ public class BrowseMapActivity extends AppCompatActivity
             case "4":
                 return new FastTrafficLight();
             case "5":
-                return new Elevator("test", 0, 9, "1", "5");
+                return new Elevator("test", 0, 9);
             case "6":
                 return new TightPassage();
             default:

@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;

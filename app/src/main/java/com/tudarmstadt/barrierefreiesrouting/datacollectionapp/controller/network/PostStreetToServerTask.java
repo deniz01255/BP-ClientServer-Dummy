@@ -31,18 +31,18 @@ import okhttp3.Response;
 
 public class PostStreetToServerTask {
 
+
+
     public PostStreetToServerTask() {
     }
 
-    public static void PostStreet(final Road road) {
-        ArrayList<Node> nodes = new ArrayList<>();
+    public static void PostStreet(final Way way) {
 
 
-        for (GeoPoint g:road.getRoadPoints()) {
-            nodes.add(new Node(g.getLatitude(),g.getLongitude()));
-        }
 
-        Way way = new Way(road.name,nodes);
+
+
+
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";
         try {
@@ -69,7 +69,7 @@ public class PostStreetToServerTask {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url(RoutingServerAPI.baseURL + RoutingServerAPI.obstacleResource)
+                    .url(RoutingServerAPI.baseURL + RoutingServerAPI.roadResource)
                     .post(body)
                     .build();
 
@@ -82,7 +82,7 @@ public class PostStreetToServerTask {
 
                         @Override
                         public void onResponse(Call call, final Response response) throws IOException {
-                            EventBus.getDefault().post(new RoutingServerStreetPostedEvent(response, road));
+                            EventBus.getDefault().post(new RoutingServerStreetPostedEvent(response, way));
                         }
                     });
         }
