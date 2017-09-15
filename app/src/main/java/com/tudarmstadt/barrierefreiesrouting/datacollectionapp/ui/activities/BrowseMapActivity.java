@@ -37,6 +37,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
@@ -265,6 +266,23 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
+        android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(c);
+        builder1.setTitle("Start Hilfe");
+        builder1.setMessage("Um die umliegenden Straßen \"chlickbar\" zu machen, erfordert dies ein längeres gedrückthalten des fingers von ca. 2-3sec. auf den Bildschirm");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+
+        android.app.AlertDialog alert11 = builder1.create();
+        alert11.show();
+
     }
 
     @Override
@@ -354,6 +372,43 @@ public class BrowseMapActivity extends AppCompatActivity
     public void getObstaclesFromServer() {
         DownloadObstaclesTask.downloadObstacles();
     }
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
+
+        try {
+            Response response = event.getResponse();
+            String res = response.body().string();
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            if (!response.isSuccessful())
+                return;
+
+            final List<Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {
+            });
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (Obstacle obstacle : obstacleList) {
+                        ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
+                        overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                        mapEditorFragment.obstacleOverlay.addItem(overlayItem);
+                    }
+                    Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
+                            Toast.LENGTH_SHORT).show();
+                    mapEditorFragment.map.invalidate();
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+  //  ##############
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
