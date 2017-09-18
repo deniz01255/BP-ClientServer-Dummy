@@ -3,6 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -39,7 +40,11 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.DragObstacleListener;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceStartOfRoadOnPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -61,6 +66,7 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -290,6 +296,9 @@ public class BrowseMapActivity extends AppCompatActivity
         super.onStart();
         EventBus.getDefault().register(this);
         getObstaclesFromServer();
+        getRoadsFromServer();
+
+
 
     }
 
@@ -373,6 +382,13 @@ public class BrowseMapActivity extends AppCompatActivity
         DownloadObstaclesTask.downloadObstacles();
     }
 
+    public void getRoadsFromServer() {
+        DownloadRoadTask.downloadroad();
+    }
+
+
+  //  ##############
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
 
@@ -386,17 +402,33 @@ public class BrowseMapActivity extends AppCompatActivity
             if (!response.isSuccessful())
                 return;
 
-            final List<Obstacle> obstacleList = mapper.readValue(res, new TypeReference<List<Obstacle>>() {
+            final List<Way> wayList = mapper.readValue(res, new TypeReference<List<Way>>() {
             });
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    for (Obstacle obstacle : obstacleList) {
-                        ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
-                        overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-                        mapEditorFragment.obstacleOverlay.addItem(overlayItem);
+
+                    for (Way way : wayList) {
+                        List<GeoPoint> gp = new ArrayList<GeoPoint>();
+                            for (Node node : way.getNodes()) {
+                                GeoPoint g = new GeoPoint(node.getLatitude(),node.getLongitude());
+                                gp.add(g);
+                            }
+                        Polyline streetLine = new Polyline(getBaseContext());
+                        streetLine.setTitle("Text param");
+                        streetLine.setWidth(10f);
+                        streetLine.setColor(Color.RED);
+                        streetLine.setPoints(gp);
+                        streetLine.setGeodesic(true);
+                        streetLine.setOnClickListener(new PlaceObstacleOnPolygonListener());
+                        streetLine.setInfoWindow(new BasicInfoWindow(R.layout.bonuspack_bubble, mapEditorFragment.map));
+                        mapEditorFragment.map.getOverlays().add(streetLine);
+
                     }
+
+
+
                     Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
                             Toast.LENGTH_SHORT).show();
                     mapEditorFragment.map.invalidate();
@@ -408,7 +440,8 @@ public class BrowseMapActivity extends AppCompatActivity
         }
     }
 
-  //  ##############
+
+  //###############################
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
