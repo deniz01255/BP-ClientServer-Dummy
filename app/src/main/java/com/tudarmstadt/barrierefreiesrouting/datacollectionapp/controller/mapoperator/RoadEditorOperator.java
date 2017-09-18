@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stepstone.stepper.StepperLayout;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadsHelperOverlayChangedEvent;
@@ -48,6 +51,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import bp.common.model.ways.Node;
+import bp.common.model.ways.Way;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -68,6 +73,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     public List<Marker>  RoadMarker = new ArrayList<>();
     public List<Polyline> currentRoadCapture = new ArrayList<>();
     public GetHighwaysFromOverpassAPITask task;
+    public GetHighwaysFromCustomServerTask task2;
 
 
     // Longpress auf die Map
@@ -81,6 +87,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         else{
             newStreet.id = 0;
         }
+
+
+/**crec3vr
+        https://routing.vincinator.de/api/barriers/ways/radius?lat1=49.873090&long1=8.659275&radius=100**/
+
         newStreet.name = "Street: "+ newStreet.id;
 
         RoadList.add(newStreet);
@@ -89,8 +100,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         roadsOverlay = roadsDirector.construct(p);
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
+
         task = new GetHighwaysFromOverpassAPITask(context);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
+
+
 
         int i = 0;
 
@@ -104,41 +118,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             mapEditorFragment.map.invalidate();
             currentRoadCapture.clear();
         }
-/**
-        roadEndPoints.clear();
-        Road newStreet =  new Road();
 
-        if (RoadList.size() != 0 )
-            {
-                 newStreet.id =  RoadList.get(RoadList.size()-1).id + 1;
-            }
-        else{
-            newStreet.id = 0;
-        }
-        newStreet.name = "Street: "+ newStreet.id;
+//###########
+        task2 = new GetHighwaysFromCustomServerTask(context);
+        task2.execute(roadsOverlay.center, roadsOverlay.radius);
 
-
-
-        Polyline streetLine = new Polyline(context);
-        //here, we create a polygon, note that you need 5 points in order to make a closed polygon (rectangle)
-
-        roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()));
-        roadEndPoints.add(new GeoPoint(p.getLatitude(), p.getLongitude()+0.0002));
-        roadEndPoints.add(new GeoPoint(p.getLatitude()+0.0002, p.getLongitude()));
-        newStreet.setROADList(roadEndPoints);
-
-        streetLine = setUPPoly(streetLine, mapEditorFragment,roadEndPoints);
-
-        Marker startMarker = new Marker(mapEditorFragment.map);
-        startMarker.setPosition(roadEndPoints.get(0));
-        startMarker.setTitle("Start point for creating new Road");
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        RoadMarker.add(startMarker);
-
-        addMapOverlay(startMarker, streetLine, mapEditorFragment);
-
-
-        RoadList.add(newStreet);**/
         return true;
     }
 
@@ -262,19 +246,23 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                 String ss = response.body().string();
                 InputSource source = new InputSource(new StringReader(ss));
 
-                saxParser.parse(source, parser);
+                final ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-                roadsOverlay.nearestRoads = parser.getRoads();
 
-                if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
-                    return;
+                final List<Way> wayList = mapper.readValue(ss, new TypeReference<List<Way>>() {
+                });
 
-                for (Road r : roadsOverlay.nearestRoads) {
 
+                for (Way w: wayList) {
+                    List<GeoPoint> node = new ArrayList<>();
+                    for (Node n: w.getNodes()) {
+                        GeoPoint g = new GeoPoint(n.getLatitude(),n.getLongitude());
+                        node.add(g);
+                    }
                     CustomPolyline polyline = new CustomPolyline();
-                    polyline.setRoad(r);
-                    polyline.setPoints(r.getRoadPoints());
-                    polyline.setColor(Color.BLACK);
+                    polyline.setPoints(node);
+                    polyline.setColor(Color.GREEN);
                     polyline.setWidth(18);
                     // See onClick() method in this class.
                     polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
@@ -371,6 +359,72 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
        // ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
 
 
+    }
+
+
+
+    /**
+     * A Asynctask Class to get the osm data from a certain area while longpressed
+     * This is used to find the nearest roads to a chosen point on the map
+     */
+    private class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
+        ProgressDialog progressDialog;
+
+        GetHighwaysFromCustomServerTask(Activity activity ) {
+
+            progressDialog = new ProgressDialog(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.progressDialog.setMessage("Lade Custom Straßen in der nähe..");
+            this.progressDialog.show();
+        }
+
+        @Override
+        protected Response doInBackground(Object... params) {
+
+            GeoPoint p = (GeoPoint) params[0];
+            int radius = (int) params[1];
+           // DownloadObstaclesTask task = new DownloadObstaclesTask();
+            OkHttpClient client = new OkHttpClient();
+
+            RequestBody body = RequestBody.create(MediaType.parse("text/plain"), RamplerOverpassAPI.getNearestHighwaysPayload(p, radius));
+
+            Request request = new Request.Builder()
+                    .url("https://routing.vincinator.de/api/barriers/ways/radius?lat1="+p.getLatitude()+ "&long1="+p.getLongitude()+"&radius="+radius)
+                    .build();
+
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            if (!response.isSuccessful()) {
+                //TODO: handle unsuccessful server responses
+            }
+
+
+
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(Response result) {
+            super.onPostExecute(result);
+
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+            processRoads(result, progressDialog.getContext());
+
+
+        }
     }
 
 }

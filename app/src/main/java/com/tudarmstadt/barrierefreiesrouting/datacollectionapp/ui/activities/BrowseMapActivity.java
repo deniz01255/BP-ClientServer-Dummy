@@ -250,6 +250,14 @@ public class BrowseMapActivity extends AppCompatActivity
         placeObstacleModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+                for (Polyline p : currentPolylineArrayList) {
+                    mapEditorFragment.map.getOverlays().remove(p);
+                }
+
+                ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
+                mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
+                mapEditorFragment.map.invalidate();
                 mapEditorFragment.getStateHandler().setActiveOperator(new PlaceNearestRoadsOnMapOperator());
             }
         });
