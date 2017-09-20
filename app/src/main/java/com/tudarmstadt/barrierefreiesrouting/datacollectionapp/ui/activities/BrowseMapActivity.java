@@ -262,7 +262,6 @@ public class BrowseMapActivity extends AppCompatActivity
                 }
 
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
-                mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
                 mapEditorFragment.getStateHandler().setActiveOperator(new PlaceNearestRoadsOnMapOperator());
                 mapEditorFragment.map.invalidate();
 

@@ -415,7 +415,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
      * A Asynctask Class to get the osm data from a certain area while longpressed
      * This is used to find the nearest roads to a chosen point on the map
      */
-    private class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
+    public class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 
         GetHighwaysFromCustomServerTask(Activity activity ) {
