@@ -102,6 +102,7 @@ public class BrowseMapActivity extends AppCompatActivity
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
+
     private long selectedBarrier;
     public FloatingActionButton floatingActionButton;
     public FloatingActionButton floatingActionButtonRoad;
@@ -246,10 +247,15 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-        Button placeObstacleModeButton = (Button) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
+        final Button placeObstacleModeButton = (Button) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
+        final Button roadEditorModeButton = (Button) findViewById(R.id.bottom_sheet_button_road_edit_mode);
         placeObstacleModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                roadEditorModeButton.setBackgroundColor(Color.WHITE);
+                placeObstacleModeButton.setBackgroundColor(Color.YELLOW);
+                floatingActionButtonRoad.hide();
+
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
                 for (Polyline p : currentPolylineArrayList) {
                     mapEditorFragment.map.getOverlays().remove(p);
@@ -257,22 +263,22 @@ public class BrowseMapActivity extends AppCompatActivity
 
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
                 mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
-                mapEditorFragment.map.invalidate();
                 mapEditorFragment.getStateHandler().setActiveOperator(new PlaceNearestRoadsOnMapOperator());
+                mapEditorFragment.map.invalidate();
+
             }
         });
 
-        Button roadEditorModeButton = (Button) findViewById(R.id.bottom_sheet_button_road_edit_mode);
         roadEditorModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                placeObstacleModeButton.setBackgroundColor(Color.WHITE);
+                roadEditorModeButton.setBackgroundColor(Color.YELLOW);
                 floatingActionButton.hide();
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
                 for (Polyline p : currentPolylineArrayList) {
                     mapEditorFragment.map.getOverlays().remove(p);
                 }
-
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
                 mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
                 mapEditorFragment.map.invalidate();

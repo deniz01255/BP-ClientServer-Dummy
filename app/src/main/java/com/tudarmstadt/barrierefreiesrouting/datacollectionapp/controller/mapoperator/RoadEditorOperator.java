@@ -100,11 +100,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         roadsOverlay = roadsDirector.construct(p);
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
+        task2 = new GetHighwaysFromCustomServerTask(context);
+        task2.execute(roadsOverlay.center, roadsOverlay.radius);
 
         task = new GetHighwaysFromOverpassAPITask(context);
         task.execute(roadsOverlay.center, roadsOverlay.radius);
-
-
 
         int i = 0;
 
@@ -115,13 +115,11 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                     mapEditorFragment.map.getOverlayManager().add(polyline);
                 }
             }
-            mapEditorFragment.map.invalidate();
+            //mapEditorFragment.map.invalidate();
             currentRoadCapture.clear();
         }
 
 //###########
-        task2 = new GetHighwaysFromCustomServerTask(context);
-        task2.execute(roadsOverlay.center, roadsOverlay.radius);
 
         return true;
     }
@@ -209,7 +207,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     public void addMapOverlay(Marker marker, Polyline polyline, MapEditorFragment mapEditorFragment){
         mapEditorFragment.map.getOverlays().add(marker);
         mapEditorFragment.map.getOverlayManager().add(polyline);
-        mapEditorFragment.map.invalidate();
+       // mapEditorFragment.map.invalidate();
     }
 
     public Polyline setUPPoly(Polyline streetLine, MapEditorFragment mapEditorFragment, List<GeoPoint> list){
@@ -256,10 +254,15 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 for (Way w: wayList) {
                     List<GeoPoint> node = new ArrayList<>();
+                    Road r = new Road();
+
                     for (Node n: w.getNodes()) {
                         GeoPoint g = new GeoPoint(n.getLatitude(),n.getLongitude());
                         node.add(g);
+
                     }
+                    r.setROADList(node);
+                    /**
                     CustomPolyline polyline = new CustomPolyline();
                     polyline.setPoints(node);
                     polyline.setColor(Color.GREEN);
@@ -267,7 +270,9 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                     // See onClick() method in this class.
                     polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
                     polylines.add(polyline);
+**/
 
+                    roadsOverlay.nearestRoads.add(r);
                 }
 
                 EventBus.getDefault().post(new RoadsHelperOverlayChangedEvent(polylines));
@@ -282,6 +287,60 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         }
 
     }
+
+     /* render the roads found near a chosen point as Polyline
+     * and give this an Eventlistener so when touched a barrier will be added to the map
+     * @param response
+     */
+    protected void processWays(Response response , Context context) {
+        if (response != null && response.isSuccessful()) {
+
+            try {
+                ArrayList<Polyline> polylines = new ArrayList<>();
+
+                SAXParserFactory factory = SAXParserFactory.newInstance();
+                SAXParser saxParser = factory.newSAXParser();
+
+                OsmParser parser = new OsmParser();
+                String ss = response.body().string();
+                InputSource source = new InputSource(new StringReader(ss));
+
+                saxParser.parse(source, parser);
+
+                List<Road> give = roadsOverlay.nearestRoads;
+
+                roadsOverlay.nearestRoads = parser.getRoads();
+                for (Road r: give) {
+                    roadsOverlay.nearestRoads.add(r);
+                }
+
+                if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
+                    return;
+
+                for (Road r : roadsOverlay.nearestRoads) {
+
+                    CustomPolyline polyline = new CustomPolyline();
+                    polyline.setRoad(r);
+                    polyline.setPoints(r.getRoadPoints());
+                    polyline.setColor(Color.BLACK);
+                    polyline.setWidth(18);
+                    // See onClick() method in this class.
+                    polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
+                    polylines.add(polyline);
+                }
+
+                EventBus.getDefault().post(new RoadsHelperOverlayChangedEvent(polylines));
+
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
     /**
@@ -343,23 +402,12 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
-            processRoads(result, progressDialog.getContext());
+            processWays(result , progressDialog.getContext());
 
 
         }
     }
 
-    public void sendToServer() {
-
-        //ObstacleDataSingleton.getInstance().setObstacle(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
-
-        //PostStreetToServerTask.PostStreet(RoadList.get(RoadList.size()-1));
-
-        // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
-       // ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
-
-
-    }
 
 
 
