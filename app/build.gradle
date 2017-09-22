@@ -42,23 +42,12 @@ dependencies {
 
     compile 'org.osmdroid:osmdroid-android:5.6.5'
 
-//<<<<<<< HEAD
-    //=======
-    //>>>>>>> 3f43510ff5c9271f9631117b4b37e4cc28a092c8
-
-
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
     compile 'com.android.support:support-v4:25.3.1'
 
-
-
-
-
-
-
     compile'com.android.support:design:25.3.1'
-    compile 'com.github.Vincinator:BP-Common:5d59591a1a'
+    compile 'com.github.Vincinator:BP-Common:c837c419fc'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'org.osmdroid:osmdroid-android:5.6.5'

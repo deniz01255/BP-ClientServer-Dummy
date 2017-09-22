@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -16,7 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewOverlay;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +29,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.CompleteRoadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
@@ -40,13 +37,12 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.DragObstacleListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceStartOfRoadOnPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
@@ -68,7 +64,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +79,6 @@ import bp.common.model.ways.Node;
 import bp.common.model.ways.Way;
 import okhttp3.Response;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.userInputDialog;
 
 /**
@@ -102,7 +96,6 @@ public class BrowseMapActivity extends AppCompatActivity
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
-
     private long selectedBarrier;
     public FloatingActionButton floatingActionButton;
     public FloatingActionButton floatingActionButtonRoad;
@@ -111,6 +104,7 @@ public class BrowseMapActivity extends AppCompatActivity
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
     private String result;
     private ArrayList<Node> nodeList = new ArrayList<Node>();
+    private CustomPolyline currentPolyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +127,6 @@ public class BrowseMapActivity extends AppCompatActivity
         }
 
 
-
-
         // get the bottom sheet view
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
 
@@ -155,11 +147,8 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-
         floatingActionButtonRoad = (FloatingActionButton) findViewById(R.id.action_send_Street);
-
         floatingActionButtonRoad.hide();
-
         floatingActionButtonRoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,8 +168,6 @@ public class BrowseMapActivity extends AppCompatActivity
                 for (GeoPoint gp: geop) {
                     nodeList.add(new Node(gp.getLatitude(),gp.getLongitude()));
                 }
-
-
                 LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
                 View mView = layoutInflaterAndroid.inflate(R.layout.activity_place_road, null);
                 AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
@@ -215,13 +202,8 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-
-
-
         floatingActionButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
-
         floatingActionButton.hide();
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,17 +213,13 @@ public class BrowseMapActivity extends AppCompatActivity
 
             }
         });
-
-
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 mapEditorFragment.map.getController().setCenter(new GeoPoint(place.getLatLng().latitude, place.getLatLng().longitude));
             }
-
             @Override
             public void onError(Status status) {
             }
@@ -383,7 +361,7 @@ public class BrowseMapActivity extends AppCompatActivity
             case "4":
                 return new FastTrafficLight();
             case "5":
-                return new Elevator("test", 0, 9);
+                return new Elevator();
             case "6":
                 return new TightPassage();
             default:
@@ -476,7 +454,8 @@ public class BrowseMapActivity extends AppCompatActivity
                 @Override
                 public void run() {
                     for (Obstacle obstacle : obstacleList) {
-                        ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
+                        // Only the starting point is displayed.
+                        ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitudeStart(), obstacle.getLongitudeStart()), obstacle);
                         overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
                         mapEditorFragment.obstacleOverlay.addItem(overlayItem);
                     }
@@ -504,9 +483,11 @@ public class BrowseMapActivity extends AppCompatActivity
             @Override
             public void run() {
 
-                ObstacleOverlayItem overlayItem = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitude(), obstacle.getLongitude()), obstacle);
-                overlayItem.setMarker(getResources().getDrawable(R.mipmap.ramppic));
-                mapEditorFragment.obstacleOverlay.addItem(overlayItem);
+                // Only the starting point is displayed on the map.
+                ObstacleOverlayItem overlayItemStart = new ObstacleOverlayItem(obstacle.getName(), getString(R.string.default_description), new GeoPoint(obstacle.getLatitudeStart(), obstacle.getLatitudeStart()), obstacle);
+
+                overlayItemStart.setMarker(getResources().getDrawable(R.mipmap.ramppic));
+                mapEditorFragment.obstacleOverlay.addItem(overlayItemStart);
 
                 Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
                         Toast.LENGTH_SHORT).show();
@@ -532,26 +513,50 @@ public class BrowseMapActivity extends AppCompatActivity
 
             floatingActionButtonRoad.hide();
         }
-        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = point;
+        ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
 
 
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
     public void onMessageEvent(ObstaclePositionSelectedOnPolylineEvent event) {
-        mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-        GeoPoint point = event.getPoint();
-        if (point != null) {
-            OverlayItem overlayItem = new OverlayItem("", "", point);
-            mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
-            mapEditorFragment.map.invalidate();
-            floatingActionButton.show();
-        } else {
 
-            floatingActionButton.hide();
+
+        // Assumption: if Startingpoint of Obstacle is already set, the currentPolyline is not null.
+        if(event.getPolyline() == currentPolyline){
+            GeoPoint point = event.getPoint();
+            if (point != null) {
+                OverlayItem overlayItem = new OverlayItem("", "", point);
+                mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
+                mapEditorFragment.map.invalidate();
+                ObstacleDataSingleton.getInstance().currentEndPositionOfSetObstacle = point;
+                currentPolyline = null;
+
+                floatingActionButton.show();
+            } else {
+
+                floatingActionButton.hide();
+            }
+        }else{
+            mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
+            GeoPoint point = event.getPoint();
+            if (point != null) {
+                OverlayItem overlayItem = new OverlayItem("", "", point);
+                mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
+                mapEditorFragment.map.invalidate();
+                floatingActionButton.show();
+                ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
+                // initialize the end position with the start point.
+                ObstacleDataSingleton.getInstance().currentEndPositionOfSetObstacle = point;
+
+                currentPolyline = event.getPolyline();
+            } else {
+
+                floatingActionButton.hide();
+            }
+
+
         }
-        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = point;
-
 
     }
 
@@ -597,7 +602,7 @@ public class BrowseMapActivity extends AppCompatActivity
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(StartEditObstacleEvent event) {
         ObstacleDataSingleton.getInstance().setObstacle(event.getObstacle());
-        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = new GeoPoint(event.getObstacle().latitude, event.getObstacle().longitude);
+        ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle = new GeoPoint(event.getObstacle().latitude_start, event.getObstacle().longitude_start);
         Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
         startActivity(intent);
     }
