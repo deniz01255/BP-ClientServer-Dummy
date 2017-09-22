@@ -19,6 +19,8 @@ public class RoutingServerAPI {
      */
     public static String obstacleResource = "/api/barriers/";
 
+    public static String roadResource = "/api/barriers/ways";
+
     /**
      * If the api key requires an apikey, load the api key to this variable.
      * NOTE: It is not recommended to publish API Keys with the source code.

@@ -27,9 +27,14 @@
     <string name="obstacle_label_fast_traffic_light">Fast traffic Light</string>
     <string name="obstacle_label_unevenness">Unevenness</string>
     <string name="Obstacle_saved">Obstacle saved!</string>
+    <string name="Way_saved">Road saved!</string>
     <string name="explain_send_data_to_server">By clicking \"complete\" you agree to send the data about the obstacle to the BP server. You agree to share the data under Blah Blah License</string>
     <string name="collected">Collected</string>
     <string name="data">data</string>
     <string name="obstacle">Obstacle</string>
+
+    <string name="title_activity_place_road">PLaceRoadActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 </resources>

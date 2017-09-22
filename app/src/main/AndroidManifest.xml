@@ -19,23 +19,23 @@
         <activity
             android:name=".ui.activities.BrowseMapActivity"
             android:windowSoftInputMode="stateHidden|adjustResize">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activities.PlaceObstacleActivity">
-
-        </activity>
-
+        <activity android:name=".ui.activities.PlaceObstacleActivity"></activity>
 
         <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyBYWtaiw8ELXwTPpQz9_AK-C_Ul1M6IQIQ"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBYWtaiw8ELXwTPpQz9_AK-C_Ul1M6IQIQ" />
 
+        <activity
+            android:name=".ui.activities.PLaceRoadActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_place_road"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

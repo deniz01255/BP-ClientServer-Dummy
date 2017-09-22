@@ -3,7 +3,6 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.liste
 import android.graphics.Point;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
@@ -11,8 +10,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
-
-import bp.common.model.obstacles.Obstacle;
 
 /**
  * Places an Obstacle on the Polygon that this class listens for Click Events.
@@ -31,7 +28,7 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
      */
     @Override
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos) {
-        ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle = null;
+        //ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle = null;
         try {
 
             Point projectedPoint = mapView.getProjection().toProjectedPixels(eventPos.getLatitude(), eventPos.getLongitude(), null);
@@ -45,7 +42,7 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
             }
             // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
             // Subscriber will be notified about this post, but only one specified method will be called
-            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint)));
+            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint), (CustomPolyline) polyline));
 
         } catch (Exception e) {
             e.printStackTrace();

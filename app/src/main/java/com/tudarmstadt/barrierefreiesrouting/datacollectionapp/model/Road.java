@@ -1,16 +1,21 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used for parsing the response from overpass api.
  *
  * Used by OsmParser
  */
-public class Road {
+public class Road implements Parcelable {
 
     public long id;
     /**
@@ -18,6 +23,7 @@ public class Road {
      */
     public String name = "has no name";
     private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
+    public ArrayList<Polyline> polylines = new ArrayList<>();
     /**
      * list of node instead of GeoPoint
      */
@@ -30,10 +36,24 @@ public class Road {
     /**
      * All GeoPoints that form the Road.
      */
+    public void setROADList(List<GeoPoint> list){
+        roadPoints = (ArrayList)list;
+    }
+
+    public void setRoadPoints(GeoPoint point){roadPoints.add(point);}
+
     public ArrayList<GeoPoint> getRoadPoints() {
         return roadPoints;
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

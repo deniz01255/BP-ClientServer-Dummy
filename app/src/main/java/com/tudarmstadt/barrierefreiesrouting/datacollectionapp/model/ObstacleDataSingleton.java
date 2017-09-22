@@ -20,7 +20,9 @@ public class ObstacleDataSingleton {
     private ObstacleViewModel mObstacleViewModel;
     public boolean editorIsSyncedWithSelection = false;
 
-    public GeoPoint currentPositionOfSetObstacle = null;
+    public GeoPoint currentStartingPositionOfSetObstacle = null;
+    public GeoPoint currentEndPositionOfSetObstacle = null;
+
     public boolean obstacleDataCollectionCompleted = false;
     private Obstacle existingSelectedObstacle;
 

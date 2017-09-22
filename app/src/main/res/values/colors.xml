@@ -3,16 +3,19 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimaryLight">#C5CAE9</color>
-    <color name="colorAccent">#009688 </color>
+    <color name="colorAccent">#009688</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
 
     <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
-#
+    #
     <color name="colorTabEnabled">#FFFFFF</color>
 
     <color name="colorTabDisabled">#BDBDBD</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="pink500">#E91E63</color>
 
 </resources>
 

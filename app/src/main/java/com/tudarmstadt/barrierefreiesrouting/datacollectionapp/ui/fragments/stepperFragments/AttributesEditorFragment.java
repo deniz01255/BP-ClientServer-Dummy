@@ -22,7 +22,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Attr;
 
 import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
@@ -168,9 +167,11 @@ public class AttributesEditorFragment extends Fragment implements Step {
                 break;
 
         }
-        result.setLatitude(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle.getLatitude());
-        result.setLongitude(ObstacleDataSingleton.getInstance().currentPositionOfSetObstacle.getLongitude());
+        result.setLatitudeEnd(ObstacleDataSingleton.getInstance().currentEndPositionOfSetObstacle.getLatitude());
+        result.setLongitudeEnd(ObstacleDataSingleton.getInstance().currentEndPositionOfSetObstacle.getLongitude());
 
+        result.setLatitudeStart(ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle.getLatitude());
+        result.setLongitudeStart(ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle.getLongitude());
         return result;
     }
 
