@@ -25,7 +25,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
  * Use the {@link TextAttributeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TextAttributeFragment extends Fragment implements IObstacleViewModelConsumer   {
+public class TextAttributeFragment extends Fragment   {
 
     private static final String ATTRIBUTE_KEY_STRING_PARAM = "keyStringParam";
 
@@ -121,12 +121,6 @@ public class TextAttributeFragment extends Fragment implements IObstacleViewMode
         super.onDetach();
         mListener = null;
     }
-
-    @Override
-    public void setObstacleViewModel() {
-
-    }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

@@ -9,6 +9,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObsta
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.DropdownAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 
@@ -57,7 +58,7 @@ public class AttributeFragmentFactory {
 
             } else if (entry.getValue().typeParameterClass == String.class) {
                 // TODO: if string is of type dropdown, insert dropdownFragment - otherwise TextAttributeFragment
-                fragTransaction.add(R.id.editor_attribute_list_container, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                fragTransaction.add(R.id.editor_attribute_list_container, DropdownAttributeFragment.newInstance(entry.getKey()), entry.getKey());
 
             } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
                 fragTransaction.add(R.id.editor_attribute_list_container, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());
