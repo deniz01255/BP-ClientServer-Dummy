@@ -554,8 +554,6 @@ public class BrowseMapActivity extends AppCompatActivity
 
                 floatingActionButton.hide();
             }
-
-
         }
 
     }

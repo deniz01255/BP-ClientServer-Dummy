@@ -56,6 +56,7 @@ public class AttributeFragmentFactory {
                 fragTransaction.add(R.id.editor_attribute_list_container, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
 
             } else if (entry.getValue().typeParameterClass == String.class) {
+                // TODO: if string is of type dropdown, insert dropdownFragment - otherwise TextAttributeFragment
                 fragTransaction.add(R.id.editor_attribute_list_container, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
 
             } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
