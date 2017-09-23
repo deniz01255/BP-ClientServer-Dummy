@@ -319,6 +319,8 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                 if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
                     return;
 
+                ArrayList<PlaceStartOfRoadOnPolyline> pl = new ArrayList<>();
+
                 for (Road r : roadsOverlay.nearestRoads) {
 
                     CustomPolyline polyline = new CustomPolyline();
@@ -327,7 +329,9 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                     polyline.setColor(Color.BLACK);
                     polyline.setWidth(18);
                     // See onClick() method in this class.
-                    polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
+                    PlaceStartOfRoadOnPolyline pla = new PlaceStartOfRoadOnPolyline(context,pl);
+                    pl.add(pla);
+                    polyline.setOnClickListener(pla);
                     polylines.add(polyline);
                 }
 

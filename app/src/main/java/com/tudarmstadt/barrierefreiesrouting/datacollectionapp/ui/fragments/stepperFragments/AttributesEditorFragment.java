@@ -27,7 +27,7 @@ import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.FastTrafficLight;
 import bp.common.model.obstacles.Obstacle;
-import bp.common.model.obstacles.Ramp;
+
 import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
@@ -143,9 +143,6 @@ public class AttributesEditorFragment extends Fragment implements Step {
         switch (String.valueOf(pos)) {
             case "0":
                 result = new Stairs();
-                break;
-            case "1":
-                result = new Ramp();
                 break;
             case "2":
                 result = new Unevenness();

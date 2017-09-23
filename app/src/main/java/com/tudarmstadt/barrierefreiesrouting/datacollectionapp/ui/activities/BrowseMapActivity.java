@@ -73,7 +73,6 @@ import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.FastTrafficLight;
 import bp.common.model.obstacles.Obstacle;
-import bp.common.model.obstacles.Ramp;
 import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
@@ -184,8 +183,8 @@ public class BrowseMapActivity extends AppCompatActivity
                             public void onClick(DialogInterface dialogBox, int id) {
                                 result = userInputDialogEditText.getText().toString();
                                 Way way = new Way(result, nodeList);
-                                way.setStartingPoint(nodeList.get(0));
-                                way.setEndPoint(nodeList.get(nodeList.size()-1));
+                              //  way.setStartingPoint(nodeList.get(0));
+                              //  way.setEndPoint(nodeList.get(nodeList.size()-1));
 
                                 RoadDataSingleton.getInstance().setWAY(way);
 
@@ -382,8 +381,6 @@ public class BrowseMapActivity extends AppCompatActivity
         switch (String.valueOf(selectedBarrier)) {
             case "0":
                 return new Stairs();
-            case "1":
-                return new Ramp();
             case "2":
                 return new Unevenness();
             case "3":

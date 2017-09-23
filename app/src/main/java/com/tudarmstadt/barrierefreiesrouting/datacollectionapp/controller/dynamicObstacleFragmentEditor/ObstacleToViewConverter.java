@@ -85,7 +85,7 @@ public class ObstacleToViewConverter {
                     try {
                         f.setAccessible(true);
                         if (f.getAnnotation(EditableAttribute.class) != null){
-                            String attributeName= f.getAnnotation(EditableAttribute.class).value();
+                            String attributeName= f.getAnnotation(EditableAttribute.class).toString();
                             ObstacleAttribute<?>  attribute = converterForClass.get(f.getType()).convert(f.get(obstacle), attributeName);
 
                             map.put(attributeName, attribute);
@@ -115,7 +115,7 @@ public class ObstacleToViewConverter {
                 Field f = fieldsOfObstacle[i];
                 f.setAccessible(true);
                 if (f.getAnnotation(EditableAttribute.class) != null) {
-                    String attributeName= f.getAnnotation(EditableAttribute.class).value();
+                    String attributeName= f.getAnnotation(EditableAttribute.class).toString();
 
                     ObstacleAttribute<?> attribute = viewModel.attributesMap.get(attributeName);
                     if(attribute != null){

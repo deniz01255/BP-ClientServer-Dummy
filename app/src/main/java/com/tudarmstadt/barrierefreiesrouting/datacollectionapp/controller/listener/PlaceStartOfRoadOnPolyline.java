@@ -34,18 +34,19 @@ import java.util.List;
 
 public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUserInteractionWithMap {
    public List<GeoPoint> roadEndPoints = new ArrayList<>();
-    public Boolean last;
+    public boolean last;
    public Road newStreet;
+    public ArrayList<PlaceStartOfRoadOnPolyline> pl = new ArrayList<>();
     public List<Marker>  RoadMarker = new ArrayList<>();
     public List<Road> RoadList = new ArrayList<>();
     public MapEditorFragment mapEditorFragment;
     public  Context context;
     public  List<Polyline> currentRoadCapture = new ArrayList<>();
 
-    public PlaceStartOfRoadOnPolyline( Context context){
+    public PlaceStartOfRoadOnPolyline( Context context, ArrayList<PlaceStartOfRoadOnPolyline> pl){
         /**this.mapEditorFragment = mapEditorFragment;**/
         this.context = context;
-        last = false;
+        this.pl = pl;
     }
 
 
@@ -53,6 +54,9 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
     public boolean onClick(Polyline polyline, MapView mapView, GeoPoint geoPoint) {
         if (last == false) {
             try {
+                for (PlaceStartOfRoadOnPolyline pp : pl) {
+                        pp.last = true;
+                }
 
                 Point projectedPoint = mapView.getProjection().toProjectedPixels(geoPoint.getLatitude(), geoPoint.getLongitude(), null);
                 Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
@@ -100,6 +104,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
             addMapOverlay(startMarker, streetLine, mapView);
             addMapOverlay(endM, streetLine, mapView);
 
+
             RoadList.add(newStreet);
 
             Log.d("myTag", "This is my message");
@@ -127,6 +132,10 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            newStreet = new Road();
+            roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()));
+            newStreet.setROADList(roadEndPoints);
+            RoadList.add(newStreet);
 
             List<GeoPoint> gp = new ArrayList<GeoPoint>();
             List<Overlay> xx = mapView.getOverlays();

@@ -24,8 +24,6 @@ public class ObstacleTranslator {
                 return context.getString(R.string.obstacle_label_construction);
             case STAIRS:
                 return context.getString(R.string.obstacle_label_stairs);
-            case RAMP:
-                return context.getString(R.string.obstacle_label_ramp);
             case ELEVATOR:
                 return context.getString(R.string.obstacle_label_elevator);
             case UNEVENNESS:
@@ -51,8 +49,6 @@ public class ObstacleTranslator {
         switch (type) {
             case STAIRS:
                 return 0;
-            case RAMP:
-                return 1;
             case UNEVENNESS:
                 return 2;
             case CONSTRUCTION:
