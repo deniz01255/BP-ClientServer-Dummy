@@ -66,6 +66,17 @@
         app:layout_anchorGravity="center_vertical|right"
         app:srcCompat="@drawable/ic_action_add" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="71dp"
+        android:layout_height="123dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:clickable="true"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/placeSnackBar"
+        app:layout_anchorGravity="center_vertical|left"
+        app:srcCompat="@drawable/cast_ic_notification_rewind" />
+
 
 </android.support.design.widget.CoordinatorLayout>
 

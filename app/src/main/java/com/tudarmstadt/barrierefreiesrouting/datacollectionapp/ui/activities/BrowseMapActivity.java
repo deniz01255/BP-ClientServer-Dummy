@@ -40,11 +40,13 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.RoadDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
@@ -80,6 +82,7 @@ import bp.common.model.ways.Way;
 import okhttp3.Response;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.userInputDialog;
+import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertAttributeMapToObstacle;
 
 /**
  * The starting point of the app.
@@ -97,8 +100,10 @@ public class BrowseMapActivity extends AppCompatActivity
         , IObstacleProvider {
 
     private long selectedBarrier;
+    private RoadEditorOperator reo;
     public FloatingActionButton floatingActionButton;
     public FloatingActionButton floatingActionButtonRoad;
+    public FloatingActionButton floatingActionSwitch;
     public MapEditorFragment mapEditorFragment;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
@@ -178,8 +183,22 @@ public class BrowseMapActivity extends AppCompatActivity
                         .setPositiveButton("An Server Senden ", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogBox, int id) {
                                 result = userInputDialogEditText.getText().toString();
-                                Way w = new Way(result, nodeList);
-                                PostStreetToServerTask.PostStreet(w);
+                                Way way = new Way(result, nodeList);
+                                way.setStartingPoint(nodeList.get(0));
+                                way.setEndPoint(nodeList.get(nodeList.size()-1));
+
+                                RoadDataSingleton.getInstance().setWAY(way);
+
+
+                                //RoadDataSingleton.getInstance().setWAY(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
+                                // wait for the Obstacle instance to be updated, then save 3 Ids into that Obstacle Instance before upload to the server
+                                RoadDataSingleton.getInstance().saveThreeIdAttributes();
+
+                                PostStreetToServerTask.PostStreet(RoadDataSingleton.getInstance().getWay());
+
+                                // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
+                                ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
+
                                 Toast.makeText(c, R.string.Way_saved, Toast.LENGTH_SHORT).show();
 
                             }
@@ -257,8 +276,19 @@ public class BrowseMapActivity extends AppCompatActivity
                     mapEditorFragment.map.getOverlays().remove(p);
                 }
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
-                mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
+                reo = new RoadEditorOperator();
+                mapEditorFragment.getStateHandler().setActiveOperator(reo);
                 mapEditorFragment.map.invalidate();
+
+            }
+        });
+
+        floatingActionSwitch = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+        floatingActionSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
 
             }
         });
@@ -513,7 +543,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
             floatingActionButtonRoad.hide();
         }
-        ObstacleDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
+        //RoadDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
 
 
     }

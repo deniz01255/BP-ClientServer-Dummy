@@ -1,5 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclePostedEvent;
@@ -50,19 +52,7 @@ public class PostStreetToServerTask {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-/**
 
-        StringBuilder parse = new StringBuilder();
-
-        parse.append("highway=*; Road-Nodes= ");
-        for (GeoPoint g : road.getRoadPoints()) {
-            parse.append(g.toString() + ", ");
-        }
-            parse.replace(parse.length() - 2, parse.length() - 2, "; ");
-
-            jsonString = parse.toString();
-
-**/
             MediaType JSON = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(JSON, jsonString);
 
@@ -77,7 +67,7 @@ public class PostStreetToServerTask {
                     .enqueue(new Callback() {
                         @Override
                         public void onFailure(final Call call, IOException e) {
-                            // Error
+                            Log.d("Error", e.toString());
                         }
 
                         @Override

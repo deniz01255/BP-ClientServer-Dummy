@@ -197,8 +197,10 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 addMapOverlay(end, streetLine, mapEditorFragment);
 
+                mapEditorFragment.map.invalidate();
                 return true;
             } else {
+                mapEditorFragment.map.invalidate();
                 return false;
             }
 
