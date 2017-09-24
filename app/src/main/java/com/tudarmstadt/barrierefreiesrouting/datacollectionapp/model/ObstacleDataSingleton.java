@@ -20,7 +20,6 @@ public class ObstacleDataSingleton {
     public boolean obstacleDataCollectionCompleted = false;
     private Obstacle mObstacle;
     private ObstacleViewModel mObstacleViewModel;
-    private Obstacle existingSelectedObstacle;
 
     /*  ##########################################################
         #Attribute needed for Export Tools

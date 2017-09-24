@@ -23,10 +23,6 @@ import okhttp3.Response;
  */
 public class PostObstacleToServerTask {
 
-    public PostObstacleToServerTask() {
-
-    }
-
     public static void PostObstacle(final Obstacle obstacle) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = "";

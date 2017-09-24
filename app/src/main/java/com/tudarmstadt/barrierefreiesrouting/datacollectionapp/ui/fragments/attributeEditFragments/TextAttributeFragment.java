@@ -31,10 +31,6 @@ public class TextAttributeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TextAttributeFragment() {
-        // Required empty public constructor
-    }
-
     public static TextAttributeFragment newInstance(String attributeKeyString) {
         TextAttributeFragment fragment = new TextAttributeFragment();
         Bundle args = new Bundle();

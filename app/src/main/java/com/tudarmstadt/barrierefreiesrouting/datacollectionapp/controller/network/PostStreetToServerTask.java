@@ -26,10 +26,6 @@ import okhttp3.Response;
 
 public class PostStreetToServerTask {
 
-
-    public PostStreetToServerTask() {
-    }
-
     public static void PostStreet(final Way way) {
 
 

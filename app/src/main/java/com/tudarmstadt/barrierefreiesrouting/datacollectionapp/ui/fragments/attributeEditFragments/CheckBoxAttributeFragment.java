@@ -27,10 +27,6 @@ public class CheckBoxAttributeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public CheckBoxAttributeFragment() {
-        // Required empty public constructor
-    }
-
     public static CheckBoxAttributeFragment newInstance(String labelName) {
         CheckBoxAttributeFragment fragment = new CheckBoxAttributeFragment();
         Bundle args = new Bundle();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -107,6 +108,8 @@ public class BrowseMapActivity extends AppCompatActivity
     private String result;
     private ArrayList<Node> nodeList = new ArrayList<Node>();
     private CustomPolyline currentPolyline;
+    // Polyline is used to display the line between the start and the end marker of obstacle placement
+    private Polyline currentSetObstaclePolyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -401,9 +404,6 @@ public class BrowseMapActivity extends AppCompatActivity
         DownloadRoadTask.downloadroad();
     }
 
-
-    //  ##############
-
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
 
@@ -430,7 +430,7 @@ public class BrowseMapActivity extends AppCompatActivity
                             GeoPoint g = new GeoPoint(node.getLatitude(), node.getLongitude());
                             gp.add(g);
                         }
-                        Polyline streetLine = new Polyline(getBaseContext());
+                        Polyline streetLine = new Polyline();
                         streetLine.setTitle("Text param");
                         streetLine.setWidth(10f);
                         streetLine.setColor(Color.RED);
@@ -453,9 +453,6 @@ public class BrowseMapActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
-
-
-    //###############################
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
@@ -538,7 +535,6 @@ public class BrowseMapActivity extends AppCompatActivity
         }
         //RoadDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
 
-
     }
 
     @Subscribe(threadMode = ThreadMode.POSTING)
@@ -550,7 +546,11 @@ public class BrowseMapActivity extends AppCompatActivity
             GeoPoint point = event.getPoint();
             if (point != null) {
                 OverlayItem overlayItem = new OverlayItem("", "", point);
+                Drawable newMarker = this.getResources().getDrawable(R.mipmap.ic_marker_end, null);
+
+                overlayItem.setMarker(newMarker);
                 mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
+
                 mapEditorFragment.map.invalidate();
                 ObstacleDataSingleton.getInstance().currentEndPositionOfSetObstacle = point;
                 currentPolyline = null;
@@ -565,6 +565,10 @@ public class BrowseMapActivity extends AppCompatActivity
             GeoPoint point = event.getPoint();
             if (point != null) {
                 OverlayItem overlayItem = new OverlayItem("", "", point);
+
+                Drawable newMarker = this.getResources().getDrawable(R.mipmap.ic_marker_start, null);
+                overlayItem.setMarker(newMarker);
+
                 mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
                 mapEditorFragment.map.invalidate();
                 floatingActionButton.show();

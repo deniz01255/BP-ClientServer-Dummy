@@ -27,9 +27,7 @@ import bp.common.model.obstacles.Stairs;
 public class PlaceObstacleActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
-    public BrowseMapActivity browseMapActivity;
     private StepperLayout mStepperLayout;
-    private int selectedBarrier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +39,7 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
 
         ObstacleDataSingleton.getInstance().setObstacle(new Stairs());
 
-
     }
-
 
     @Override
     public void onCompleted(View view) {
@@ -68,11 +64,6 @@ public class PlaceObstacleActivity extends AppCompatActivity implements StepperL
     public void onReturn() {
 
         ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
-    }
-
-
-    private Obstacle getObstacleFromSelection(long selectedItemId) {
-        return null;
     }
 
 

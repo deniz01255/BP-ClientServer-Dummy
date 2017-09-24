@@ -27,10 +27,6 @@ public class NumberAttributeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public NumberAttributeFragment() {
-        // Required empty public constructor
-    }
-
     public static NumberAttributeFragment newInstance(String labelName) {
         NumberAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
         NumberAttributeFragment fragment = new NumberAttributeFragment();

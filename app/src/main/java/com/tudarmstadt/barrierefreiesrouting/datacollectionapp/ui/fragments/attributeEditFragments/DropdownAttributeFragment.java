@@ -28,10 +28,6 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
 
     private TextAttributeFragment.OnFragmentInteractionListener mListener;
 
-    public DropdownAttributeFragment() {
-        // Required empty public constructor
-    }
-
     public static DropdownAttributeFragment newInstance(String attributeKeyString) {
         DropdownAttributeFragment fragment = new DropdownAttributeFragment();
         Bundle args = new Bundle();

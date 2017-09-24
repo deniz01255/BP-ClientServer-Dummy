@@ -19,11 +19,6 @@ import okhttp3.Response;
 
 public class DownloadRoadTask {
 
-    private OkHttpClient client = new OkHttpClient();
-
-    public DownloadRoadTask() {
-    }
-
     public static void downloadroad() {
         OkHttpClient client = new OkHttpClient();
 

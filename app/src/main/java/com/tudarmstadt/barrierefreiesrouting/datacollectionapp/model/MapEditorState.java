@@ -7,7 +7,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
 
 
 /**
- * Created by Vincent on 08.08.2017.
+ *
  */
 
 public class MapEditorState {

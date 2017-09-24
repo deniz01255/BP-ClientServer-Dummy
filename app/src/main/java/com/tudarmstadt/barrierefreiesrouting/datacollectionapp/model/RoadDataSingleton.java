@@ -14,12 +14,7 @@ import bp.common.model.ways.Way;
 public class RoadDataSingleton {
 
     private static volatile RoadDataSingleton instance = null;
-    public boolean editorIsSyncedWithSelection = false;
-    public GeoPoint currentPositionOfSetObstacle = null;
-    public boolean obstacleDataCollectionCompleted = false;
     private Way way;
-    private ObstacleViewModel mObstacleViewModel;
-    private Obstacle existingSelectedObstacle;
 
     /*  ##########################################################
         #Attribute needed for Export Tools
@@ -57,13 +52,6 @@ public class RoadDataSingleton {
         this.way = way;
     }
 
-    public ObstacleViewModel getmObstacleViewModel() {
-        return mObstacleViewModel;
-    }
-
-    public void setObstacleViewModel(ObstacleViewModel mObstacleViewModel) {
-        this.mObstacleViewModel = mObstacleViewModel;
-    }
 
     /*  ##########################################################
         #Function needed for Export Tools

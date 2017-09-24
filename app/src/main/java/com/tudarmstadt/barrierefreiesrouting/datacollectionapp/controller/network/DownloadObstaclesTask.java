@@ -18,11 +18,6 @@ import okhttp3.Response;
  */
 public class DownloadObstaclesTask {
 
-    private OkHttpClient client = new OkHttpClient();
-
-    public DownloadObstaclesTask() {
-    }
-
     public static void downloadObstacles() {
         OkHttpClient client = new OkHttpClient();
 
