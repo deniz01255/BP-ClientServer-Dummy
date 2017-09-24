@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 /**
@@ -25,7 +23,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
  * Use the {@link TextAttributeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TextAttributeFragment extends Fragment   {
+public class TextAttributeFragment extends Fragment {
 
     private static final String ATTRIBUTE_KEY_STRING_PARAM = "keyStringParam";
 
@@ -86,11 +84,11 @@ public class TextAttributeFragment extends Fragment   {
             }
         });
 
-        textEditInput.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        textEditInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
                 }
             }
@@ -100,7 +98,7 @@ public class TextAttributeFragment extends Fragment   {
         return v;
     }
 
-    private void validateEditText(CharSequence s){
+    private void validateEditText(CharSequence s) {
 
 
     }

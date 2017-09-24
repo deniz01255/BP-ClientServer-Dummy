@@ -2,9 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.liste
 
 import android.view.View;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -19,7 +17,7 @@ public class StartEditObstacleListener implements View.OnClickListener {
 
     private Obstacle obstacle;
 
-    public StartEditObstacleListener(Obstacle obstacle){
+    public StartEditObstacleListener(Obstacle obstacle) {
 
         this.obstacle = obstacle;
     }

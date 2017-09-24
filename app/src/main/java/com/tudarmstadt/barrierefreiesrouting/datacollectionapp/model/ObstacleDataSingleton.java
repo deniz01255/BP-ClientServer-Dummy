@@ -14,16 +14,12 @@ import bp.common.model.obstacles.Stairs;
 public class ObstacleDataSingleton {
 
     private static volatile ObstacleDataSingleton instance = null;
-
-    private Obstacle mObstacle;
-
-    private ObstacleViewModel mObstacleViewModel;
     public boolean editorIsSyncedWithSelection = false;
-
     public GeoPoint currentStartingPositionOfSetObstacle = null;
     public GeoPoint currentEndPositionOfSetObstacle = null;
-
     public boolean obstacleDataCollectionCompleted = false;
+    private Obstacle mObstacle;
+    private ObstacleViewModel mObstacleViewModel;
     private Obstacle existingSelectedObstacle;
 
     /*  ##########################################################
@@ -75,16 +71,16 @@ public class ObstacleDataSingleton {
     /**
      * set the 3 IDs values needed for ExportTool in the current Obstacle Object
      * before sending it to server
+     *
      * @return true if successful, meaning the Obstacle is already created and exists
      */
-    public boolean saveThreeIdAttributes(){
-        if(instance != null){
+    public boolean saveThreeIdAttributes() {
+        if (instance != null) {
             instance.getObstacle().setId_way(id_way);
             instance.getObstacle().setId_firstnode(id_firstnode);
             instance.getObstacle().setId_lastnode(id_lastnode);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     public long getId_way() {

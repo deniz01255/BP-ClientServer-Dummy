@@ -13,7 +13,7 @@ public class RoadsHelperOverlayChangedEvent {
 
     private ArrayList<Polyline> roads;
 
-    public RoadsHelperOverlayChangedEvent(ArrayList<Polyline> roads){
+    public RoadsHelperOverlayChangedEvent(ArrayList<Polyline> roads) {
 
         this.roads = roads;
     }

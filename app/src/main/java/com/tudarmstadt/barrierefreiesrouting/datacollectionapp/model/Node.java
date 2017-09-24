@@ -4,7 +4,7 @@ import org.osmdroid.util.GeoPoint;
 
 /**
  * Used for parsing the response from overpass api.
- *
+ * <p>
  * Used by OsmParser
  */
 public class Node {

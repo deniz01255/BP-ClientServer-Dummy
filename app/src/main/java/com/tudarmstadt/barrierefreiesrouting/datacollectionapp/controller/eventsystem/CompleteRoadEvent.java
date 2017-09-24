@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem;
 
-import bp.common.model.obstacles.Obstacle;
 import bp.common.model.ways.Way;
 
 /**
@@ -11,7 +10,7 @@ public class CompleteRoadEvent {
 
     private Way way;
 
-    public CompleteRoadEvent(Way way){
+    public CompleteRoadEvent(Way way) {
 
         this.way = way;
     }

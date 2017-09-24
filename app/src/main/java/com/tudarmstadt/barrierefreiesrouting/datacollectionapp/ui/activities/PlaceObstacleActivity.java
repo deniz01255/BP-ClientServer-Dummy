@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
@@ -24,16 +23,13 @@ import bp.common.model.obstacles.Stairs;
 /**
  * This activity provides a Stepper which is responsible to step through the
  * data collection process.
- *
  */
 public class PlaceObstacleActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
+    public BrowseMapActivity browseMapActivity;
     private StepperLayout mStepperLayout;
     private int selectedBarrier;
-
-    public BrowseMapActivity browseMapActivity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

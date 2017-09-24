@@ -1,14 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
-
-import java.util.Observable;
-import java.util.Observer;
-import java.util.function.Consumer;
-
 /**
  * ObstacleAttribute is used in the two-way binding between view and model.
  */
@@ -33,7 +24,6 @@ public class ObstacleAttribute<T> {
     public String name;
 
 
-
     /**
      * typeParameterClass must be specified in order to use this ObstacleAttribute.
      * A default value is not suitable
@@ -45,7 +35,7 @@ public class ObstacleAttribute<T> {
         this.name = name;
     }
 
-    public String getString(){
+    public String getString() {
         if (typeParameterClass == Double.TYPE) {
             return Double.toString((Double) value);
 
@@ -64,18 +54,18 @@ public class ObstacleAttribute<T> {
 
     public void setValueFromString(String newValue) {
         if (typeParameterClass == Double.TYPE) {
-            try{
+            try {
                 value = (T) Double.valueOf(newValue);
 
-            }catch(NumberFormatException e){
-                value =  (T) Double.valueOf(-1);
+            } catch (NumberFormatException e) {
+                value = (T) Double.valueOf(-1);
             }
         } else if (typeParameterClass == Integer.TYPE) {
-            try{
+            try {
                 value = (T) Integer.valueOf(newValue);
 
-            }catch(NumberFormatException e){
-                value =  (T) Integer.valueOf(-1);
+            } catch (NumberFormatException e) {
+                value = (T) Integer.valueOf(-1);
             }
 
         } else if (typeParameterClass == String.class) {

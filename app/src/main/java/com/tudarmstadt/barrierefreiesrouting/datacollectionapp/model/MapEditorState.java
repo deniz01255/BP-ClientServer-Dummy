@@ -1,10 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.ClearAllOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
 
 
 /**
@@ -19,7 +18,6 @@ public class MapEditorState {
     private IUserInteractionWithMap activeOperator;
 
 
-
     public MapEditorState(BrowseMapActivity browseMapActivity, MapEditorFragment mapEditorFragment) {
         activeOperator = new PlaceNearestRoadsOnMapOperator();
     }
@@ -28,10 +26,9 @@ public class MapEditorState {
         return activeOperator;
     }
 
-    public void setActiveOperator(IUserInteractionWithMap activeOperator){
+    public void setActiveOperator(IUserInteractionWithMap activeOperator) {
         this.activeOperator = activeOperator;
     }
-
 
 
 }

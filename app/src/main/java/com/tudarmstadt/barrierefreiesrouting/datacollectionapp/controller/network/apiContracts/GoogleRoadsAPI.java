@@ -2,7 +2,6 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 
 /**
  * API Contract for Google roads api.
- *
  */
 public class GoogleRoadsAPI {
 

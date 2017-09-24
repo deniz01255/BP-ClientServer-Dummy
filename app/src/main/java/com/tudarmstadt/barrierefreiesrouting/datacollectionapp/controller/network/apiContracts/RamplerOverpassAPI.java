@@ -4,7 +4,7 @@ import org.osmdroid.util.GeoPoint;
 
 /**
  * Alternative Overpass API.
- *
+ * <p>
  * Use this in case the main API is down.
  */
 public class RamplerOverpassAPI {

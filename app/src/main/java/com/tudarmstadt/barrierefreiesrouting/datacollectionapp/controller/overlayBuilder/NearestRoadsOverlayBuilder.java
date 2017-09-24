@@ -1,15 +1,14 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.INearestRoadsOverlayBuilder;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
 
 import org.osmdroid.util.GeoPoint;
+
 import java.util.LinkedList;
-import okhttp3.Response;
 
 /**
  * Builds a new NearestRoadsOverlay.
- *
+ * <p>
  * Use DefaultNearestRoadsDirector if you just want to create an roads overlay or create a own
  * implementation that uses this Builder to create own Overlay types.
  */

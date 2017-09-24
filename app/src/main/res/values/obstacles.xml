@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="BARRIER_TYPES">
-	    <item>@string/obstacle_label_stairs</item>
+        <item>@string/obstacle_label_stairs</item>
         <item>@string/obstacle_label_ramp</item>
         <item>@string/obstacle_label_unevenness</item>
         <item>@string/obstacle_label_construction</item>

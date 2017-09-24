@@ -2,8 +2,6 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.event
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 
-import org.osmdroid.views.overlay.OverlayItem;
-
 /**
  * Created by vincent on 8/16/17.
  */

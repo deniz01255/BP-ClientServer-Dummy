@@ -14,14 +14,11 @@ import bp.common.model.ways.Way;
 public class RoadDataSingleton {
 
     private static volatile RoadDataSingleton instance = null;
-
-    private Way way;
-
-    private ObstacleViewModel mObstacleViewModel;
     public boolean editorIsSyncedWithSelection = false;
-
     public GeoPoint currentPositionOfSetObstacle = null;
     public boolean obstacleDataCollectionCompleted = false;
+    private Way way;
+    private ObstacleViewModel mObstacleViewModel;
     private Obstacle existingSelectedObstacle;
 
     /*  ##########################################################
@@ -75,19 +72,19 @@ public class RoadDataSingleton {
     /**
      * set the 3 IDs values needed for ExportTool in the current Obstacle Object
      * before sending it to server
+     *
      * @return true if successful, meaning the Obstacle is already created and exists
      */
-    public boolean saveThreeIdAttributes(){
-        if(instance != null){
-                instance.getWay().setId(id_way);
-             instance.getWay().setOsmid_firstWay(id_firstnode);
-             instance.getWay().setOsmid_firstWaySecondNode(id_lastnode);
+    public boolean saveThreeIdAttributes() {
+        if (instance != null) {
+            instance.getWay().setId(id_way);
+            instance.getWay().setOsmid_firstWay(id_firstnode);
+            instance.getWay().setOsmid_firstWaySecondNode(id_lastnode);
             instance.getWay().setOsmid_secondWay(id_LASTfirstnode);
             instance.getWay().setOsmid_secondWayFirstNode(id_LASTfirstnode);
             instance.getWay().setOsmid_secondWaySecondNode(id_LASTlastnode);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     public long getId_way() {
@@ -110,6 +107,10 @@ public class RoadDataSingleton {
         return id_lastnode;
     }
 
+    public void setId_lastnode(long id_lastnode) {
+        this.id_lastnode = id_lastnode;
+    }
+
     public long getId_LASTfirstnode() {
         return id_LASTfirstnode;
     }
@@ -121,12 +122,9 @@ public class RoadDataSingleton {
     public long getId_LASTlastnode() {
         return id_LASTlastnode;
     }
+
     public void setId_LASTlastnode(long id_lastnode) {
         this.id_LASTlastnode = id_lastnode;
-    }
-
-    public void setId_lastnode(long id_lastnode) {
-        this.id_lastnode = id_lastnode;
     }
 
     /*  ##########################################################

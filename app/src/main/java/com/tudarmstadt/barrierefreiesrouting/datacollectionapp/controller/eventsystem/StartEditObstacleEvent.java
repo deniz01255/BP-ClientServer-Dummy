@@ -11,7 +11,7 @@ public class StartEditObstacleEvent {
 
     private Obstacle obstacle;
 
-    public StartEditObstacleEvent(Obstacle obstacle){
+    public StartEditObstacleEvent(Obstacle obstacle) {
 
         this.obstacle = obstacle;
     }

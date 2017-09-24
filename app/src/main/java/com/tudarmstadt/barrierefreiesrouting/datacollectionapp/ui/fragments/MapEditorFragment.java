@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.SelectObstacleForDetailsViewListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.MapEditorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.SelectObstacleForDetailsViewListener;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -117,7 +117,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), obstacleItems,
                 new SelectObstacleForDetailsViewListener());
 
-        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),tempObstacleItems,
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), tempObstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {
@@ -163,7 +163,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-            return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
+        return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
     }
 
     public MapEditorState getStateHandler() {

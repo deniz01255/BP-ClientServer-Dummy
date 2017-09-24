@@ -2,7 +2,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.netwo
 
 /**
  * API Contract for the BP Routing server web api.
- *
+ * <p>
  * Calls to the obstacleResource
  * POST: send a new obstacle
  * GET: get all obstacles

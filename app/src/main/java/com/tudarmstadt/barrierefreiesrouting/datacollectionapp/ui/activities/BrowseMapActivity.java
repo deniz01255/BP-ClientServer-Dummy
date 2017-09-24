@@ -38,9 +38,10 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
@@ -52,8 +53,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.Obst
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,14 +80,13 @@ import bp.common.model.ways.Way;
 import okhttp3.Response;
 
 import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.userInputDialog;
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleToViewConverter.convertAttributeMapToObstacle;
 
 /**
  * The starting point of the app.
- *
+ * <p>
  * This Activity displays the map fragment, the bottom sheet and the searchView.
- *
- *
+ * <p>
+ * <p>
  * Events send via the EventBus that require an update on the map, are handled in the
  * onMessageEvent() methods with the respective Event class as Parameter.
  */
@@ -98,12 +96,12 @@ public class BrowseMapActivity extends AppCompatActivity
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener
         , IObstacleProvider {
 
-    private long selectedBarrier;
-    private RoadEditorOperator reo;
     public FloatingActionButton floatingActionButton;
     public FloatingActionButton floatingActionButtonRoad;
     public FloatingActionButton floatingActionSwitch;
     public MapEditorFragment mapEditorFragment;
+    private long selectedBarrier;
+    private RoadEditorOperator reo;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
     private String result;
@@ -159,18 +157,18 @@ public class BrowseMapActivity extends AppCompatActivity
                 nodeList.clear();
                 List<GeoPoint> geop = new ArrayList<GeoPoint>();
                 List<Overlay> xx = mapEditorFragment.map.getOverlays();
-                for(int i = xx.size()-1; i > 0; i--){
-                    if (Polyline.class.isInstance(xx.get(i))|| Marker.class.isInstance(xx.get(i))) {
-                        if(Marker.class.isInstance(xx.get(i))){
+                for (int i = xx.size() - 1; i > 0; i--) {
+                    if (Polyline.class.isInstance(xx.get(i)) || Marker.class.isInstance(xx.get(i))) {
+                        if (Marker.class.isInstance(xx.get(i))) {
                             xx.get(i).isEnabled();
                             geop.add(((Marker) xx.get(i)).getPosition());
                         }
-                    } else{
+                    } else {
                         break;
                     }
                 }
-                for (GeoPoint gp: geop) {
-                    nodeList.add(new Node(gp.getLatitude(),gp.getLongitude()));
+                for (GeoPoint gp : geop) {
+                    nodeList.add(new Node(gp.getLatitude(), gp.getLongitude()));
                 }
                 LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
                 View mView = layoutInflaterAndroid.inflate(R.layout.activity_place_road, null);
@@ -183,8 +181,8 @@ public class BrowseMapActivity extends AppCompatActivity
                             public void onClick(DialogInterface dialogBox, int id) {
                                 result = userInputDialogEditText.getText().toString();
                                 Way way = new Way(result, nodeList);
-                              //  way.setStartingPoint(nodeList.get(0));
-                              //  way.setEndPoint(nodeList.get(nodeList.size()-1));
+                                //  way.setStartingPoint(nodeList.get(0));
+                                //  way.setEndPoint(nodeList.get(nodeList.size()-1));
 
                                 RoadDataSingleton.getInstance().setWAY(way);
 
@@ -238,6 +236,7 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onPlaceSelected(Place place) {
                 mapEditorFragment.map.getController().setCenter(new GeoPoint(place.getLatLng().latitude, place.getLatLng().longitude));
             }
+
             @Override
             public void onError(Status status) {
             }
@@ -288,7 +287,6 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onClick(View v) {
 
 
-
             }
         });
 
@@ -317,7 +315,6 @@ public class BrowseMapActivity extends AppCompatActivity
         EventBus.getDefault().register(this);
         getObstaclesFromServer();
         getRoadsFromServer();
-
 
 
     }
@@ -405,7 +402,7 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
 
-  //  ##############
+    //  ##############
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
@@ -429,10 +426,10 @@ public class BrowseMapActivity extends AppCompatActivity
 
                     for (Way way : wayList) {
                         List<GeoPoint> gp = new ArrayList<GeoPoint>();
-                            for (Node node : way.getNodes()) {
-                                GeoPoint g = new GeoPoint(node.getLatitude(),node.getLongitude());
-                                gp.add(g);
-                            }
+                        for (Node node : way.getNodes()) {
+                            GeoPoint g = new GeoPoint(node.getLatitude(), node.getLongitude());
+                            gp.add(g);
+                        }
                         Polyline streetLine = new Polyline(getBaseContext());
                         streetLine.setTitle("Text param");
                         streetLine.setWidth(10f);
@@ -444,7 +441,6 @@ public class BrowseMapActivity extends AppCompatActivity
                         mapEditorFragment.map.getOverlays().add(streetLine);
 
                     }
-
 
 
                     Toast.makeText(getBaseContext(), getString(R.string.action_barrier_loaded),
@@ -459,7 +455,7 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
 
-  //###############################
+    //###############################
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerObstaclesDownloadedEvent event) {
@@ -550,7 +546,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
 
         // Assumption: if Startingpoint of Obstacle is already set, the currentPolyline is not null.
-        if(event.getPolyline() == currentPolyline){
+        if (event.getPolyline() == currentPolyline) {
             GeoPoint point = event.getPoint();
             if (point != null) {
                 OverlayItem overlayItem = new OverlayItem("", "", point);
@@ -564,7 +560,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
                 floatingActionButton.hide();
             }
-        }else{
+        } else {
             mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
             GeoPoint point = event.getPoint();
             if (point != null) {

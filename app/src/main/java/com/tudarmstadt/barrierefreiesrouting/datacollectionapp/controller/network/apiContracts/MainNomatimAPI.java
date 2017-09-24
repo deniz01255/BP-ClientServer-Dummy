@@ -1,7 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts;
 
-import org.osmdroid.util.GeoPoint;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 

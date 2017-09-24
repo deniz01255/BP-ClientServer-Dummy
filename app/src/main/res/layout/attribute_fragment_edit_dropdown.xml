@@ -3,28 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.fragments.attributeEditFragments.DropdownAttributeFragment">
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/DropdownAttributeRelativeLayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-       >
+        android:layout_height="fill_parent">
 
         <TextView
+            android:id="@+id/dropDownAttributeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/dropDownAttributeLabel"/>
+            android:layout_alignParentLeft="true" />
 
 
         <Spinner
             android:id="@+id/spinner_attribute_selection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-             />
+            android:layout_alignParentRight="true" />
 
-</RelativeLayout>
+    </RelativeLayout>
 
 
 </FrameLayout>

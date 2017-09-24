@@ -61,11 +61,9 @@ import okhttp3.Response;
 
 public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
 
-    private NearestRoadsOverlay roadsOverlay;
     public GetHighwaysFromCustomServerTask task2;
-
-
     MainOverpassAPI overpassAPI = new MainOverpassAPI();
+    private NearestRoadsOverlay roadsOverlay;
 
     public PlaceNearestRoadsOnMapOperator() {
     }
@@ -86,7 +84,6 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
         task.execute(roadsOverlay.center, roadsOverlay.radius);
 
 
-
         return true;
     }
 
@@ -99,9 +96,10 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
     /**
      * render the roads found near a chosen point as Polyline
      * and give this an Eventlistener so when touched a barrier will be added to the map
+     *
      * @param response
      */
-    protected void processWays(Response response ,Context context) {
+    protected void processWays(Response response, Context context) {
         ArrayList<PlaceStartOfRoadOnPolyline> list = new ArrayList<>();
         if (response != null && response.isSuccessful()) {
 
@@ -123,12 +121,12 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 });
 
 
-                for (Way w: wayList) {
+                for (Way w : wayList) {
                     List<GeoPoint> node = new ArrayList<>();
                     Road r = new Road();
 
-                    for (Node n: w.getNodes()) {
-                        GeoPoint g = new GeoPoint(n.getLatitude(),n.getLongitude());
+                    for (Node n : w.getNodes()) {
+                        GeoPoint g = new GeoPoint(n.getLatitude(), n.getLongitude());
                         node.add(g);
 
                     }
@@ -162,6 +160,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
     /**
      * render the roads found near a chosen point as Polyline
      * and give this an Eventlistener so when touched a barrier will be added to the map
+     *
      * @param response
      */
     protected void processRoads(Response response) {
@@ -181,7 +180,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 List<Road> give = roadsOverlay.nearestRoads;
 
                 roadsOverlay.nearestRoads = parser.getRoads();
-                for (Road r: give) {
+                for (Road r : give) {
                     roadsOverlay.nearestRoads.add(r);
                 }
 
@@ -221,7 +220,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
     private class GetHighwaysFromOverpassAPITask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 
-        GetHighwaysFromOverpassAPITask(Activity activity ) {
+        GetHighwaysFromOverpassAPITask(Activity activity) {
 
             progressDialog = new ProgressDialog(activity);
         }
@@ -277,7 +276,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
     public class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 
-        GetHighwaysFromCustomServerTask(Activity activity ) {
+        GetHighwaysFromCustomServerTask(Activity activity) {
 
             progressDialog = new ProgressDialog(activity);
         }
@@ -300,7 +299,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
             RequestBody body = RequestBody.create(MediaType.parse("text/plain"), RamplerOverpassAPI.getNearestHighwaysPayload(p, radius));
 
             Request request = new Request.Builder()
-                    .url("https://routing.vincinator.de/api/barriers/ways/radius?lat1="+p.getLatitude()+ "&long1="+p.getLongitude()+"&radius="+radius)
+                    .url("https://routing.vincinator.de/api/barriers/ways/radius?lat1=" + p.getLatitude() + "&long1=" + p.getLongitude() + "&radius=" + radius)
                     .build();
 
             Response response = null;
@@ -314,8 +313,6 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
             if (!response.isSuccessful()) {
                 //TODO: handle unsuccessful server responses
             }
-
-
 
 
             return response;

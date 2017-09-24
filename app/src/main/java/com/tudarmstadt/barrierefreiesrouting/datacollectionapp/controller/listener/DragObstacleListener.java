@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
@@ -18,14 +17,14 @@ import java.util.List;
  * Created by deniz on 20.08.17.
  */
 
-public class DragObstacleListener implements Marker.OnMarkerDragListener{
+public class DragObstacleListener implements Marker.OnMarkerDragListener {
     List<GeoPoint> roadPoints = new ArrayList<>();
     MapEditorFragment mapEditorFragment;
     RoadEditorOperator roadEditorOperator;
     Context context;
     Road road;
 
-    public DragObstacleListener(Road road, MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints, RoadEditorOperator roadEditorOperator, Context context){
+    public DragObstacleListener(Road road, MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints, RoadEditorOperator roadEditorOperator, Context context) {
         this.mapEditorFragment = mapEditorFragment;
         this.roadPoints = roadPoints;
         this.roadEditorOperator = roadEditorOperator;
@@ -34,10 +33,9 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener{
     }
 
 
-
     @Override
     public void onMarkerDrag(Marker marker) {
-        marker.setPosition(new GeoPoint(marker.getPosition().getLatitude(),marker.getPosition().getLongitude()));
+        marker.setPosition(new GeoPoint(marker.getPosition().getLatitude(), marker.getPosition().getLongitude()));
 
 
     }
@@ -48,18 +46,18 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener{
         Polyline streetLine = new Polyline(context);
         List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
 
-        mapEditorFragment.map.getOverlays().remove(mapEditorFragment.map.getOverlays().size()-1);
+        mapEditorFragment.map.getOverlays().remove(mapEditorFragment.map.getOverlays().size() - 1);
 
         road.setRoadPoints(geopoint);
         roadPoints.add(geopoint);
-       // roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size()-3));
+        // roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size()-3));
 
 
         roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size() - 3));
         roadEndPointsCrob.add(geopoint);
-        road.getRoadPoints().remove(road.getRoadPoints().size()-2);
+        road.getRoadPoints().remove(road.getRoadPoints().size() - 2);
 
-        streetLine = roadEditorOperator.setUPPoly(streetLine, mapEditorFragment,roadEndPointsCrob);
+        streetLine = roadEditorOperator.setUPPoly(streetLine, mapEditorFragment, roadEndPointsCrob);
 
         mapEditorFragment.map.getOverlayManager().add(streetLine);
         mapEditorFragment.map.invalidate();

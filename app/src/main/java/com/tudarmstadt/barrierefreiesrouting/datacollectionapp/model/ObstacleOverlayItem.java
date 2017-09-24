@@ -7,7 +7,7 @@ import bp.common.model.obstacles.Obstacle;
 
 /**
  * Used as wrapper class to store an obstacle in addition to the overlayitem.
- *
+ * <p>
  * This is required in order to get the obstacle that should be edited when the user
  * clicks on an obstacle overlay item on the map and initiates the edit process.
  */

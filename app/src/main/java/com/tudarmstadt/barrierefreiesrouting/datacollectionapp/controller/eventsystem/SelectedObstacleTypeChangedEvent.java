@@ -11,7 +11,7 @@ public class SelectedObstacleTypeChangedEvent {
 
     private Obstacle obstacle;
 
-    public SelectedObstacleTypeChangedEvent(Obstacle obstacle){
+    public SelectedObstacleTypeChangedEvent(Obstacle obstacle) {
 
         this.obstacle = obstacle;
     }

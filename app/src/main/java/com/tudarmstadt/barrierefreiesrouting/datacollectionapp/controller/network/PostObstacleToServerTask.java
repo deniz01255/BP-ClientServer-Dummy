@@ -20,7 +20,6 @@ import okhttp3.Response;
 
 /**
  * Task to post a new obstacle to the routing web-api.
- *
  */
 public class PostObstacleToServerTask {
 
