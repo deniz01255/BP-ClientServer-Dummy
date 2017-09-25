@@ -11,7 +11,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.RoadDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
@@ -33,10 +33,10 @@ import java.util.List;
 public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUserInteractionWithMap {
     public List<GeoPoint> roadEndPoints = new ArrayList<>();
     public boolean last;
-    public Road newStreet;
+    public ParcedOverpassRoad newStreet;
     public ArrayList<PlaceStartOfRoadOnPolyline> pl = new ArrayList<>();
     public List<Marker> RoadMarker = new ArrayList<>();
-    public List<Road> RoadList = new ArrayList<>();
+    public List<ParcedOverpassRoad> RoadList = new ArrayList<>();
     public MapEditorFragment mapEditorFragment;
     public Context context;
     public List<Polyline> currentRoadCapture = new ArrayList<>();
@@ -75,7 +75,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
 
             last = true;
 
-            newStreet = new Road();
+            newStreet = new ParcedOverpassRoad();
 
 
             Polyline streetLine = new Polyline(context);
@@ -89,13 +89,13 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
 
             Marker startMarker = new Marker(mapView);
             startMarker.setPosition(roadEndPoints.get(0));
-            startMarker.setTitle("Start point for creating new Road");
+            startMarker.setTitle("Start point for creating new ParcedOverpassRoad");
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(startMarker);
 
             Marker endM = new Marker(mapView);
             endM.setPosition(roadEndPoints.get(2));
-            endM.setTitle("Start point for creating new Road");
+            endM.setTitle("Start point for creating new ParcedOverpassRoad");
             endM.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(endM);
 
@@ -130,14 +130,14 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            newStreet = new Road();
+            newStreet = new ParcedOverpassRoad();
             roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()));
             newStreet.setROADList(roadEndPoints);
             RoadList.add(newStreet);
 
             List<GeoPoint> gp = new ArrayList<GeoPoint>();
             List<Overlay> xx = mapView.getOverlays();
-            Road road = RoadList.get(RoadList.size() - 1);
+            ParcedOverpassRoad road = RoadList.get(RoadList.size() - 1);
             road.polylines.add((Polyline) xx.get(xx.size() - 1));
             road.polylines.add((Polyline) xx.get(xx.size() - 3));
 

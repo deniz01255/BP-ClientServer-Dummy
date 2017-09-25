@@ -1,7 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Node;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 
 import org.osmdroid.util.GeoPoint;
 import org.xml.sax.Attributes;
@@ -23,8 +23,8 @@ public class OsmParser extends DefaultHandler {
     /**
      * Stores all Roads from the overpass api response
      */
-    private LinkedList<Road> roads = new LinkedList<>();
-    private Road currentRoad;
+    private LinkedList<ParcedOverpassRoad> roads = new LinkedList<>();
+    private ParcedOverpassRoad currentRoad;
     private Node currentNode;
 
     @Override
@@ -40,7 +40,7 @@ public class OsmParser extends DefaultHandler {
             currentNode.geoPoint = new GeoPoint(lat, lon);
 
         } else if (qName.equalsIgnoreCase("way")) {
-            currentRoad = new Road();
+            currentRoad = new ParcedOverpassRoad();
             currentRoad.id = Long.parseLong(attributes.getValue("id"));
 
         } else if (qName.equalsIgnoreCase("nd")) {
@@ -71,7 +71,7 @@ public class OsmParser extends DefaultHandler {
 
     }
 
-    public LinkedList<Road> getRoads() {
+    public LinkedList<ParcedOverpassRoad> getRoads() {
         return roads;
     }
 }

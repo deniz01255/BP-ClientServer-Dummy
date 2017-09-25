@@ -42,12 +42,12 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listen
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.RoadDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
@@ -295,7 +295,7 @@ public class BrowseMapActivity extends AppCompatActivity
 
         android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(c);
         builder1.setTitle("Start Hilfe");
-        builder1.setMessage("Um die umliegenden Straßen \"chlickbar\" zu machen, erfordert dies ein längeres gedrückthalten des fingers von ca. 2-3sec. auf den Bildschirm");
+        builder1.setMessage("Um die umliegenden Straßen \"auswählbar\" zu machen, erfordert dies ein längeres drücken auf dem Bildschirm");
         builder1.setCancelable(true);
 
         builder1.setPositiveButton(
@@ -317,8 +317,6 @@ public class BrowseMapActivity extends AppCompatActivity
         super.onStart();
         EventBus.getDefault().register(this);
         getObstaclesFromServer();
-        getRoadsFromServer();
-
 
     }
 
@@ -400,9 +398,6 @@ public class BrowseMapActivity extends AppCompatActivity
         DownloadObstaclesTask.downloadObstacles();
     }
 
-    public void getRoadsFromServer() {
-        DownloadRoadTask.downloadroad();
-    }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
@@ -430,7 +425,12 @@ public class BrowseMapActivity extends AppCompatActivity
                             GeoPoint g = new GeoPoint(node.getLatitude(), node.getLongitude());
                             gp.add(g);
                         }
-                        Polyline streetLine = new Polyline();
+
+                        CustomPolyline streetLine = new CustomPolyline();
+                        ParcedOverpassRoad r = new ParcedOverpassRoad();
+                        r.id = way.id;
+                        streetLine.setRoad(r);
+
                         streetLine.setTitle("Text param");
                         streetLine.setWidth(10f);
                         streetLine.setColor(Color.RED);

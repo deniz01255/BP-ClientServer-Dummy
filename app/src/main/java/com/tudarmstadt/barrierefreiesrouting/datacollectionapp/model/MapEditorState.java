@@ -5,11 +5,9 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserI
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
-
 /**
  *
  */
-
 public class MapEditorState {
 
     /**

@@ -26,18 +26,12 @@ import bp.common.model.ways.Node;
 import bp.common.model.ways.Way;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
  */
-public class PLaceRoadActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
+public class PlaceRoadActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
-    public BrowseMapActivity browseMapActivity;
     ArrayList<Node> nodex = new ArrayList<>();
     private StepperLayout mStepperLayout;
-    private int selectedBarrier;
-    private int i;
-    private String roadString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +40,12 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
         Intent intent = getIntent();
         nodex.clear();
         String xx = intent.getExtras().getString("key");
-        ArrayList<Character> lat = new ArrayList<>();
-        ArrayList<Character> lo = new ArrayList<>();
         ArrayList<Node> nodes = new ArrayList<>();
 
 
         String[] tokens = xx.split(",");
         for (String s : tokens) {
             String[] tokenss = s.split(";");
-
-            String lati = tokenss[0];
-            String longi = tokenss[1];
 
             Node n = new Node((Double.parseDouble(tokenss[0])), (Double.parseDouble(tokenss[1])));
             nodes.add(n);
@@ -67,7 +56,6 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
         mStepperLayout.setAdapter(new AddObstacleStepperAdapter(getSupportFragmentManager(), this));
         mStepperLayout.setListener(this);
 
-
         ObstacleDataSingleton.getInstance().setObstacle(new Stairs());
 
         nodex = nodes;
@@ -76,7 +64,6 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
         PostStreetToServerTask.PostStreet(w);
 
     }
-
 
     @Override
     public void onCompleted(View view) {
@@ -105,11 +92,6 @@ public class PLaceRoadActivity extends AppCompatActivity implements StepperLayou
     public void onReturn() {
 
         ObstacleDataSingleton.getInstance().editorIsSyncedWithSelection = false;
-    }
-
-
-    private Obstacle getObstacleFromSelection(long selectedItemId) {
-        return null;
     }
 
 

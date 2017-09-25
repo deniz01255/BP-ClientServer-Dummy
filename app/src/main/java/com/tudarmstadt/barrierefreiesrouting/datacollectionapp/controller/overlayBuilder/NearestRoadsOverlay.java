@@ -1,6 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -14,7 +14,7 @@ public class NearestRoadsOverlay {
     /**
      * Contains the nearest roads of the given point
      */
-    public LinkedList<Road> nearestRoads;
+    public LinkedList<ParcedOverpassRoad> nearestRoads;
 
     /**
      * The User provides this point. It is the center point of the circle of nearest roads.

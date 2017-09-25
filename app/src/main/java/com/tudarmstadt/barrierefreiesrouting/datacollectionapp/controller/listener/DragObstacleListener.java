@@ -3,7 +3,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.liste
 import android.content.Context;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.osmdroid.util.GeoPoint;
@@ -22,9 +22,9 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener {
     MapEditorFragment mapEditorFragment;
     RoadEditorOperator roadEditorOperator;
     Context context;
-    Road road;
+    ParcedOverpassRoad road;
 
-    public DragObstacleListener(Road road, MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints, RoadEditorOperator roadEditorOperator, Context context) {
+    public DragObstacleListener(ParcedOverpassRoad road, MapEditorFragment mapEditorFragment, List<GeoPoint> roadPoints, RoadEditorOperator roadEditorOperator, Context context) {
         this.mapEditorFragment = mapEditorFragment;
         this.roadPoints = roadPoints;
         this.roadEditorOperator = roadEditorOperator;

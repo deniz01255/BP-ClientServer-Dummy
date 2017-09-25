@@ -7,16 +7,16 @@ import org.osmdroid.views.overlay.Polyline;
  */
 
 public class CustomPolyline extends Polyline {
-    private Road road = null;
+    private ParcedOverpassRoad road = null;
 
     /**
      * @return the road element corresponding to this Polyline Object
      */
-    public Road getRoad() {
+    public ParcedOverpassRoad getRoad() {
         return road;
     }
 
-    public void setRoad(Road road) {
+    public void setRoad(ParcedOverpassRoad road) {
         this.road = road;
     }
 }

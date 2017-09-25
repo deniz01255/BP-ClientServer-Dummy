@@ -13,6 +13,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceStartOfRoadOnPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadRoadTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.MainOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RamplerOverpassAPI;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.DefaultNearestRoadsDirector;
@@ -21,7 +22,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,6 +71,10 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
 
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
+
+        //Downloads all custom roads.
+        DownloadRoadTask.downloadroad();
+
         DefaultNearestRoadsDirector roadsDirector = new DefaultNearestRoadsDirector(new NearestRoadsOverlayBuilder());
         roadsOverlay = roadsDirector.construct(p);
 
@@ -120,10 +125,9 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 final List<Way> wayList = mapper.readValue(ss, new TypeReference<List<Way>>() {
                 });
 
-
                 for (Way w : wayList) {
                     List<GeoPoint> node = new ArrayList<>();
-                    Road r = new Road();
+                    ParcedOverpassRoad r = new ParcedOverpassRoad();
 
                     for (Node n : w.getNodes()) {
                         GeoPoint g = new GeoPoint(n.getLatitude(), n.getLongitude());
@@ -131,16 +135,6 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
 
                     }
                     r.setROADList(node);
-                    /**
-                     CustomPolyline polyline = new CustomPolyline();
-                     polyline.setPoints(node);
-                     polyline.setColor(Color.GREEN);
-                     polyline.setWidth(18);
-                     // See onClick() method in this class.
-                     polyline.setOnClickListener(new PlaceStartOfRoadOnPolyline(context));
-                     polylines.add(polyline);
-                     **/
-
                     roadsOverlay.nearestRoads.add(r);
                 }
 
@@ -177,10 +171,10 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 InputSource source = new InputSource(new StringReader(ss));
 
                 saxParser.parse(source, parser);
-                List<Road> give = roadsOverlay.nearestRoads;
+                List<ParcedOverpassRoad> give = roadsOverlay.nearestRoads;
 
                 roadsOverlay.nearestRoads = parser.getRoads();
-                for (Road r : give) {
+                for (ParcedOverpassRoad r : give) {
                     roadsOverlay.nearestRoads.add(r);
                 }
 
@@ -189,7 +183,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 if (roadsOverlay.nearestRoads.isEmpty() || roadsOverlay.nearestRoads.getFirst().getRoadPoints().isEmpty())
                     return;
 
-                for (Road r : roadsOverlay.nearestRoads) {
+                for (ParcedOverpassRoad r : roadsOverlay.nearestRoads) {
 
                     CustomPolyline polyline = new CustomPolyline();
                     polyline.setRoad(r);

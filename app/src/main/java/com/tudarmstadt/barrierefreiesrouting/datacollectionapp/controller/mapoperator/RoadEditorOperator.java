@@ -23,7 +23,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overlayBuilder.OsmParser;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -59,7 +59,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
     public NearestRoadsOverlay roadsOverlay;
     public List<GeoPoint> roadEndPoints = new ArrayList<>();
-    public List<Road> RoadList = new ArrayList<>();
+    public List<ParcedOverpassRoad> RoadList = new ArrayList<>();
     public List<List<Polyline>> colorCapture = new ArrayList<>();
     public List<Marker> RoadMarker = new ArrayList<>();
     public List<Polyline> currentRoadCapture = new ArrayList<>();
@@ -70,7 +70,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
     // Longpress auf die Map
     @Override
     public boolean longPressHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
-        Road newStreet = new Road();
+        ParcedOverpassRoad newStreet = new ParcedOverpassRoad();
         if (RoadList.size() != 0) {
             newStreet.id = RoadList.get(RoadList.size() - 1).id + 1;
         } else {
@@ -98,7 +98,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         int i = 0;
 
         if (RoadList.size() != 0) {
-            for (Road road : RoadList) {
+            for (ParcedOverpassRoad road : RoadList) {
                 for (Polyline polyline : road.polylines) {
                     polyline.setColor(Color.BLACK);
                     mapEditorFragment.map.getOverlayManager().add(polyline);
@@ -148,7 +148,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         }
         List<GeoPoint> gp = new ArrayList<GeoPoint>();
         List<Overlay> xx = mapEditorFragment.map.getOverlays();
-        Road road = RoadList.get(RoadList.size() - 1);
+        ParcedOverpassRoad road = RoadList.get(RoadList.size() - 1);
         road.polylines.add((Polyline) xx.get(xx.size() - 1));
         road.polylines.add((Polyline) xx.get(xx.size() - 3));
 
@@ -246,7 +246,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 for (Way w : wayList) {
                     List<GeoPoint> node = new ArrayList<>();
-                    Road r = new Road();
+                    ParcedOverpassRoad r = new ParcedOverpassRoad();
 
                     for (Node n : w.getNodes()) {
                         GeoPoint g = new GeoPoint(n.getLatitude(), n.getLongitude());
@@ -299,10 +299,10 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 saxParser.parse(source, parser);
 
-                List<Road> give = roadsOverlay.nearestRoads;
+                List<ParcedOverpassRoad> give = roadsOverlay.nearestRoads;
 
                 roadsOverlay.nearestRoads = parser.getRoads();
-                for (Road r : give) {
+                for (ParcedOverpassRoad r : give) {
                     roadsOverlay.nearestRoads.add(r);
                 }
 
@@ -311,7 +311,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
                 ArrayList<PlaceStartOfRoadOnPolyline> pl = new ArrayList<>();
 
-                for (Road r : roadsOverlay.nearestRoads) {
+                for (ParcedOverpassRoad r : roadsOverlay.nearestRoads) {
 
                     CustomPolyline polyline = new CustomPolyline();
                     polyline.setRoad(r);

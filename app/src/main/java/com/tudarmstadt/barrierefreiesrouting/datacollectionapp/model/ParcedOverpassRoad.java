@@ -14,7 +14,7 @@ import java.util.List;
  * <p>
  * Used by OsmParser
  */
-public class Road implements Parcelable {
+public class ParcedOverpassRoad implements Parcelable {
 
     public long id;
     /**
@@ -28,12 +28,33 @@ public class Road implements Parcelable {
      */
     private ArrayList<Node> roadNodes = new ArrayList<Node>();
 
+    public ParcedOverpassRoad(){
+
+    }
+    protected ParcedOverpassRoad(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        roadPoints = in.createTypedArrayList(GeoPoint.CREATOR);
+    }
+
+    public static final Creator<ParcedOverpassRoad> CREATOR = new Creator<ParcedOverpassRoad>() {
+        @Override
+        public ParcedOverpassRoad createFromParcel(Parcel in) {
+            return new ParcedOverpassRoad(in);
+        }
+
+        @Override
+        public ParcedOverpassRoad[] newArray(int size) {
+            return new ParcedOverpassRoad[size];
+        }
+    };
+
     public ArrayList<Node> getRoadNodes() {
         return roadNodes;
     }
 
     /**
-     * All GeoPoints that form the Road.
+     * All GeoPoints that form the ParcedOverpassRoad.
      */
     public void setROADList(List<GeoPoint> list) {
         roadPoints = (ArrayList) list;
@@ -54,6 +75,8 @@ public class Road implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeTypedList(roadPoints);
     }
 }

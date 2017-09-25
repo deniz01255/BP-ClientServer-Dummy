@@ -32,7 +32,7 @@
             android:value="AIzaSyBYWtaiw8ELXwTPpQz9_AK-C_Ul1M6IQIQ" />
 
         <activity
-            android:name=".ui.activities.PLaceRoadActivity"
+            android:name=".ui.activities.PlaceRoadActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_place_road"
             android:theme="@style/FullscreenTheme"></activity>
