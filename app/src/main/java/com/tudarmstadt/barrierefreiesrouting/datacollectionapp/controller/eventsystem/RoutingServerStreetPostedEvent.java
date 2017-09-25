@@ -1,8 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.Road;
-
-import bp.common.model.obstacles.Obstacle;
 import bp.common.model.ways.Way;
 import okhttp3.Response;
 

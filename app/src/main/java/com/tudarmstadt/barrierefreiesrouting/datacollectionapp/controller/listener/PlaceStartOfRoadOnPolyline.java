@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.util.Log;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
@@ -24,7 +23,6 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,18 +30,18 @@ import java.util.List;
  * Created by deniz on 26.08.17.
  */
 
-public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUserInteractionWithMap {
-   public List<GeoPoint> roadEndPoints = new ArrayList<>();
+public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUserInteractionWithMap {
+    public List<GeoPoint> roadEndPoints = new ArrayList<>();
     public boolean last;
-   public Road newStreet;
+    public Road newStreet;
     public ArrayList<PlaceStartOfRoadOnPolyline> pl = new ArrayList<>();
-    public List<Marker>  RoadMarker = new ArrayList<>();
+    public List<Marker> RoadMarker = new ArrayList<>();
     public List<Road> RoadList = new ArrayList<>();
     public MapEditorFragment mapEditorFragment;
-    public  Context context;
-    public  List<Polyline> currentRoadCapture = new ArrayList<>();
+    public Context context;
+    public List<Polyline> currentRoadCapture = new ArrayList<>();
 
-    public PlaceStartOfRoadOnPolyline( Context context, ArrayList<PlaceStartOfRoadOnPolyline> pl){
+    public PlaceStartOfRoadOnPolyline(Context context, ArrayList<PlaceStartOfRoadOnPolyline> pl) {
         /**this.mapEditorFragment = mapEditorFragment;**/
         this.context = context;
         this.pl = pl;
@@ -55,7 +53,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
         if (last == false) {
             try {
                 for (PlaceStartOfRoadOnPolyline pp : pl) {
-                        pp.last = true;
+                    pp.last = true;
                 }
 
                 Point projectedPoint = mapView.getProjection().toProjectedPixels(geoPoint.getLatitude(), geoPoint.getLongitude(), null);
@@ -175,7 +173,6 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
                 addMapOverlay(end, streetLine, mapView);
 
 
-
             }
             return true;
         }
@@ -183,7 +180,6 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
 
 
     /**
-     *
      * @param mapView
      * @param polyline
      * @param point
@@ -232,11 +228,10 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
                         // save the ID of the 2 nodes surrounding the current Obstacle node in ObstacleDataSingleton
                         // TODO: From Bi, maybe something incorect, check later
                         // check if polyline is really from type Custom
-                        if(polyline instanceof CustomPolyline)
-                        {
+                        if (polyline instanceof CustomPolyline) {
                             CustomPolyline cuspo = (CustomPolyline) polyline;
                             RoadDataSingleton.getInstance().setId_firstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
-                            RoadDataSingleton.getInstance().setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
+                            RoadDataSingleton.getInstance().setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex + 1).id);
                         }
                     }
                 }
@@ -292,11 +287,10 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
                         // save the ID of the 2 nodes surrounding the current Obstacle node in ObstacleDataSingleton
                         // TODO: From Bi, maybe something incorect, check later
                         // check if polyline is really from type Custom
-                        if(polyline instanceof CustomPolyline)
-                        {
+                        if (polyline instanceof CustomPolyline) {
                             CustomPolyline cuspo = (CustomPolyline) polyline;
                             RoadDataSingleton.getInstance().setId_LASTfirstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
-                            RoadDataSingleton.getInstance().setId_LASTlastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
+                            RoadDataSingleton.getInstance().setId_LASTlastnode(cuspo.getRoad().getRoadNodes().get(curIndex + 1).id);
                         }
                     }
                 }
@@ -310,13 +304,13 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
     }
 
 
-    public void addMapOverlay(Marker marker, Polyline polyline, MapView map){
+    public void addMapOverlay(Marker marker, Polyline polyline, MapView map) {
         map.getOverlays().add(marker);
         map.getOverlayManager().add(polyline);
         map.invalidate();
     }
 
-    public Polyline setUPPoly(Polyline streetLine, MapView map, List<GeoPoint> list){
+    public Polyline setUPPoly(Polyline streetLine, MapView map, List<GeoPoint> list) {
 
         streetLine.setTitle("Text param");
         streetLine.setWidth(10f);
@@ -338,25 +332,25 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, MapEditorFragment mapEditorFragment) {
-        if(roadEndPoints.size() > 0) {
+        if (roadEndPoints.size() > 0) {
 
             List<GeoPoint> roadEndPointsCrob = new ArrayList<>();
             Polyline streetLine = new Polyline(context);
 
 
             roadEndPoints.add(p);
-            RoadList.get(RoadList.size()-1).setROADList(roadEndPoints);
+            RoadList.get(RoadList.size() - 1).setROADList(roadEndPoints);
 
             roadEndPointsCrob.add(roadEndPoints.get(roadEndPoints.size() - 2));
             roadEndPointsCrob.add(p);
-            streetLine = setUPPoly(streetLine, mapEditorFragment.map,roadEndPointsCrob);
+            streetLine = setUPPoly(streetLine, mapEditorFragment.map, roadEndPointsCrob);
 
             Marker end = new Marker(mapEditorFragment.map);
             end.setPosition(p);
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
-           // end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
+            // end.setOnMarkerDragListener(new DragObstacleListener(mapEditorFragment,roadEndPoints,this,context));
 
 
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -367,12 +361,10 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener,IUse
 
 
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
-
 
 
     public double getDistance(Point a, Point b) {

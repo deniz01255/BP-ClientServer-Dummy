@@ -30,7 +30,7 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 /**
  * This Fragment provides an overview of the Attributes that were collected and
  * a legal notice that by clicking "complete" the user agrees to send the collected data to the server.
- *
+ * <p>
  * By Clicking complete the edited Obstacle is send via the PostObstacle Task to the routing server.
  */
 public class OverviewSendFragment extends Fragment implements BlockingStep, IObstacleViewModelConsumer {
@@ -57,6 +57,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
 
         return view;
     }
+
     @Override
     public VerificationError verifyStep() {
         return null;
@@ -71,7 +72,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
         ObstacleTypes typeCode = ObstacleDataSingleton.getInstance().getObstacle().getTypeCode();
 
 
-        title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
+        title.setText(getString(R.string.collected) + " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " " + getString(R.string.data));
 
         LinearLayout detailsList = (LinearLayout) view.findViewById(R.id.overview_details_attribute_list);
 
@@ -81,7 +82,7 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
         for (Map.Entry<String, ObstacleAttribute<?>> entry : ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.entrySet()) {
 
             TextView tt = new TextView(getActivity());
-            tt.setText(entry.getValue().name + ": " +  entry.getValue().getString());
+            tt.setText(entry.getValue().name + ": " + entry.getValue().getString());
             detailsList.addView(tt);
 
         }

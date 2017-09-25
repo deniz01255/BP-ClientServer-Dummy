@@ -35,23 +35,20 @@ public class ObstacleDetailsViewerFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
 
-
         View v = inflater.inflate(R.layout.viewer_fragment_obstacle_details, container, false);
         TextView title = (TextView) v.findViewById(R.id.overview_obstacle_title);
         ObstacleTypes typeCode = obstacle.getTypeCode();
-        title.setText(getString(R.string.collected)+ " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " "+  getString(R.string.data));
+        title.setText(getString(R.string.collected) + " " + ObstacleTranslator.getTranslationFor(getContext(), typeCode) + " " + getString(R.string.data));
 
 
         Button editObstacleButton = (Button) v.findViewById(R.id.edit_obstacle_details_button);
 
         editObstacleButton.setOnClickListener(new StartEditObstacleListener(obstacle));
-
 
 
         return v;

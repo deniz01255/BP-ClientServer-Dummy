@@ -18,7 +18,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
 
 import org.apache.commons.lang3.NotImplementedException;
 
-public class NumberAttributeFragment extends Fragment  {
+public class NumberAttributeFragment extends Fragment {
 
     private static final String ATTRIBUTE_KEY_PARAM = "attributeKeyParam";
     private static IObstacleViewModelProvider obstacleViewModelProvider;
@@ -26,10 +26,6 @@ public class NumberAttributeFragment extends Fragment  {
     private String mAttributeKeyString;
 
     private OnFragmentInteractionListener mListener;
-
-    public NumberAttributeFragment() {
-        // Required empty public constructor
-    }
 
     public static NumberAttributeFragment newInstance(String labelName) {
         NumberAttributeFragment.obstacleViewModelProvider = obstacleViewModelProvider;
@@ -60,13 +56,13 @@ public class NumberAttributeFragment extends Fragment  {
 
         final EditText textEditInput = (EditText) v.findViewById(R.id.input_text);
 
-        if(ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Integer.TYPE){
+        if (ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Integer.TYPE) {
             textEditInput.setText(Integer.toString((Integer) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
 
-        }else if(ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Double.TYPE){
-            textEditInput.setText(Double.toString( (Double) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
+        } else if (ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).typeParameterClass == Double.TYPE) {
+            textEditInput.setText(Double.toString((Double) ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).value));
 
-        }else{
+        } else {
             throw new NotImplementedException("Type not implemented");
         }
 
@@ -89,11 +85,11 @@ public class NumberAttributeFragment extends Fragment  {
             }
         });
 
-        textEditInput.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        textEditInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(textEditInput.getText().toString());
                 }
             }
@@ -105,11 +101,11 @@ public class NumberAttributeFragment extends Fragment  {
     }
 
     // TODO: handle verification
-    private void validateEditText(CharSequence s){
+    private void validateEditText(CharSequence s) {
 
         String temp = s.toString();
 
-        if (!temp.matches("[0-9]+") ) {
+        if (!temp.matches("[0-9]+")) {
         }
     }
 

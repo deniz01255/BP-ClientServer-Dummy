@@ -6,7 +6,7 @@ import org.osmdroid.util.GeoPoint;
 
 /**
  * Creates an OverlayBuilder with the default parameters.
- *
+ * <p>
  * Custom NearestRoadsOverlays can be created analog to this Default calss.
  */
 public class DefaultNearestRoadsDirector {

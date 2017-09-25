@@ -1,14 +1,9 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Message;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
@@ -22,9 +17,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attr
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.stepperFragments.AddObstacleStepperAdapter;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -40,16 +32,12 @@ import bp.common.model.ways.Way;
 public class PLaceRoadActivity extends AppCompatActivity implements StepperLayout.StepperListener, MapEditorFragment.OnFragmentInteractionListener,
         TextAttributeFragment.OnFragmentInteractionListener, CheckBoxAttributeFragment.OnFragmentInteractionListener, NumberAttributeFragment.OnFragmentInteractionListener {
 
-    private StepperLayout mStepperLayout;
-    ArrayList<Node>  nodex = new ArrayList<>();
-    private int selectedBarrier;
-    private int i ;
-private String roadString;
-
     public BrowseMapActivity browseMapActivity;
-
-
-
+    ArrayList<Node> nodex = new ArrayList<>();
+    private StepperLayout mStepperLayout;
+    private int selectedBarrier;
+    private int i;
+    private String roadString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,20 +48,19 @@ private String roadString;
         String xx = intent.getExtras().getString("key");
         ArrayList<Character> lat = new ArrayList<>();
         ArrayList<Character> lo = new ArrayList<>();
-        ArrayList<Node>  nodes = new ArrayList<>();
+        ArrayList<Node> nodes = new ArrayList<>();
 
 
         String[] tokens = xx.split(",");
-        for (String s: tokens) {
+        for (String s : tokens) {
             String[] tokenss = s.split(";");
 
             String lati = tokenss[0];
             String longi = tokenss[1];
 
-            Node n = new Node((Double.parseDouble(tokenss[0])),(Double.parseDouble(tokenss[1])));
+            Node n = new Node((Double.parseDouble(tokenss[0])), (Double.parseDouble(tokenss[1])));
             nodes.add(n);
         }
-
 
 
         mStepperLayout = (StepperLayout) findViewById(R.id.stepperLayout);
@@ -85,7 +72,7 @@ private String roadString;
 
         nodex = nodes;
 
-        Way w = new Way("Neue Straße",nodex);
+        Way w = new Way("Neue Straße", nodex);
         PostStreetToServerTask.PostStreet(w);
 
     }
@@ -93,7 +80,7 @@ private String roadString;
 
     @Override
     public void onCompleted(View view) {
-        Way w = new Way("Neue Straße",nodex);
+        Way w = new Way("Neue Straße", nodex);
         PostStreetToServerTask.PostStreet(w);
 
 

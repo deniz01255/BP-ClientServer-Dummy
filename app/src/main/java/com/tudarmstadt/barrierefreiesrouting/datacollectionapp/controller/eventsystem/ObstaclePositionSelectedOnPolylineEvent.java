@@ -3,10 +3,6 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.event
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polyline;
-
-import java.util.ArrayList;
 
 /**
  * Created by vincent on 8/16/17.

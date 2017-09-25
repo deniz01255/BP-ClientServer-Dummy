@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem;
 
-import bp.common.model.obstacles.Obstacle;
 import okhttp3.Response;
 
 /**
@@ -8,7 +7,6 @@ import okhttp3.Response;
  */
 
 public class RoutingServerObstaclesDownloadedEvent {
-
 
 
     private final Response response;

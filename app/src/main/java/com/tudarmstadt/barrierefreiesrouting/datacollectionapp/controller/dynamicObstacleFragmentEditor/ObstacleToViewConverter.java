@@ -7,13 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import bp.common.model.annotations.EditableAttribute;
-import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.Obstacle;
-import bp.common.model.obstacles.Stairs;
 
 /**
  * Converts the Obstacle to a ObstacleViewModel.
- *
  */
 public class ObstacleToViewConverter {
 
@@ -84,9 +81,9 @@ public class ObstacleToViewConverter {
                 if (converterForClass.get(f.getType()) != null)
                     try {
                         f.setAccessible(true);
-                        if (f.getAnnotation(EditableAttribute.class) != null){
-                            String attributeName= f.getAnnotation(EditableAttribute.class).toString();
-                            ObstacleAttribute<?>  attribute = converterForClass.get(f.getType()).convert(f.get(obstacle), attributeName);
+                        if (f.getAnnotation(EditableAttribute.class) != null) {
+                            String attributeName = f.getAnnotation(EditableAttribute.class).toString();
+                            ObstacleAttribute<?> attribute = converterForClass.get(f.getType()).convert(f.get(obstacle), attributeName);
 
                             map.put(attributeName, attribute);
 
@@ -115,10 +112,10 @@ public class ObstacleToViewConverter {
                 Field f = fieldsOfObstacle[i];
                 f.setAccessible(true);
                 if (f.getAnnotation(EditableAttribute.class) != null) {
-                    String attributeName= f.getAnnotation(EditableAttribute.class).toString();
+                    String attributeName = f.getAnnotation(EditableAttribute.class).toString();
 
                     ObstacleAttribute<?> attribute = viewModel.attributesMap.get(attributeName);
-                    if(attribute != null){
+                    if (attribute != null) {
                         try {
                             f.set(result, attribute.value);
                         } catch (IllegalAccessException e) {

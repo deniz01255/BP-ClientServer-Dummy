@@ -6,13 +6,12 @@ import android.os.Parcelable;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polyline;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Used for parsing the response from overpass api.
- *
+ * <p>
  * Used by OsmParser
  */
 public class Road implements Parcelable {
@@ -22,8 +21,8 @@ public class Road implements Parcelable {
      * The name of the road to display in the details view of the road.
      */
     public String name = "has no name";
-    private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
     public ArrayList<Polyline> polylines = new ArrayList<>();
+    private ArrayList<GeoPoint> roadPoints = new ArrayList<GeoPoint>();
     /**
      * list of node instead of GeoPoint
      */
@@ -36,16 +35,17 @@ public class Road implements Parcelable {
     /**
      * All GeoPoints that form the Road.
      */
-    public void setROADList(List<GeoPoint> list){
-        roadPoints = (ArrayList)list;
+    public void setROADList(List<GeoPoint> list) {
+        roadPoints = (ArrayList) list;
     }
-
-    public void setRoadPoints(GeoPoint point){roadPoints.add(point);}
 
     public ArrayList<GeoPoint> getRoadPoints() {
         return roadPoints;
     }
 
+    public void setRoadPoints(GeoPoint point) {
+        roadPoints.add(point);
+    }
 
     @Override
     public int describeContents() {

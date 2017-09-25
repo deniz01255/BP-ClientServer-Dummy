@@ -10,12 +10,12 @@ public class ClearAllOperator {
 
     private MapEditorFragment mapEditorFragment;
 
-    public ClearAllOperator(MapEditorFragment mapEditorFragment){
+    public ClearAllOperator(MapEditorFragment mapEditorFragment) {
 
         this.mapEditorFragment = mapEditorFragment;
     }
 
-    public void clearAll(){
+    public void clearAll() {
         // Go back to place obstacle OperatorState
         //mapEditorFragment.getStateHandler().replaceActiveOperator(new PlaceNearestRoadsOnMapOperator(mapEditorFragment));
 
@@ -25,7 +25,6 @@ public class ClearAllOperator {
 
         mapEditorFragment.map.invalidate();
     }
-
 
 
 }

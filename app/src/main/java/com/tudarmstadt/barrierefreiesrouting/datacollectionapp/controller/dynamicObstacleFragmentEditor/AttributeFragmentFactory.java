@@ -5,30 +5,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.ObstacleDetailsViewerFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.DropdownAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * This "Factory" creates a List of Fragments according to the concrete implementation of the
  * abstract Obstacle class.
- *
+ * <p>
  * All Fields marked with "@EditableAttribute" Annotation in the BP-Common Project are getting an
  * InputFragment. Via this Input Fragment Obstacle Data can be edited.
- *
+ * <p>
  * Between the Fragment and the POJO Obstacle is an ObstacleViewModel. This ViewModel holds the mapping
  * between the Fields and the edited Attributes.
- *
+ * <p>
  * After the editing is done, the obstacle is updated with the content from the ViewModel.
- *
  */
 public class AttributeFragmentFactory {
 
@@ -78,8 +73,7 @@ public class AttributeFragmentFactory {
         if (allCurrentFragments == null)
             return;
 
-        for (Fragment frag : allCurrentFragments)
-        {
+        for (Fragment frag : allCurrentFragments) {
             fragTransaction.remove(frag);
         }
         fragTransaction.commit();

@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.SelectObstacleForDetailsViewListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.MapEditorState;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleOverlayItem;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities.BrowseMapActivity;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.SelectObstacleForDetailsViewListener;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
@@ -23,6 +23,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -39,7 +40,6 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
     public ItemizedOverlayWithFocus<OverlayItem> placeNewObstacleOverlay;
 
     private MapEventsOverlay evOverlay;
-    private IMapController mapController;
     /**
      * All existing Obstacles items
      */
@@ -100,7 +100,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
         // Auf der Startposition wird die Map zentriert - 49.8728, 8.6512 => Luisenplatz ;)
         GeoPoint startPoint = new GeoPoint(49.8728, 8.6512);
-        mapController = map.getController();
+        IMapController mapController = map.getController();
         mapController.setCenter(startPoint);
         map.setMaxZoomLevel(21);
 
@@ -117,7 +117,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
         obstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), obstacleItems,
                 new SelectObstacleForDetailsViewListener());
 
-        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(),tempObstacleItems,
+        placeNewObstacleOverlay = new ItemizedOverlayWithFocus<>(getActivity(), tempObstacleItems,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int i, OverlayItem overlayItem) {
@@ -163,7 +163,7 @@ public class MapEditorFragment extends Fragment implements MapEventsReceiver {
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-            return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
+        return mapStateHandler.getActiveOperator().longPressHelper(p, getActivity(), this);
     }
 
     public MapEditorState getStateHandler() {

@@ -27,7 +27,6 @@ import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.FastTrafficLight;
 import bp.common.model.obstacles.Obstacle;
-
 import bp.common.model.obstacles.Stairs;
 import bp.common.model.obstacles.TightPassage;
 import bp.common.model.obstacles.Unevenness;
@@ -37,15 +36,13 @@ import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller
 
 /**
  * This Fragment holds a Obstacle Type dropdown selection (a spinner)
- *
+ * <p>
  * Selecting an item from the spinner, the current Obstacle Type is updated in the
  * ObstacleDataSingleton. This Obstacle Type is used to initialize the Attribute List
  * via the AttributeFragmentFactory.
- *
- *
  */
 public class AttributesEditorFragment extends Fragment implements Step {
-    
+
     @Override
     public void onStart() {
         super.onStart();
@@ -79,8 +76,6 @@ public class AttributesEditorFragment extends Fragment implements Step {
 
             if (ObstacleDataSingleton.getInstance().getObstacle() != null)
                 spinner.setSelection(ObstacleTranslator.getSpinnerPositionFromType(ObstacleDataSingleton.getInstance().getObstacle().getTypeCode()));
-
-
 
 
             spinner.setAdapter(adapter);

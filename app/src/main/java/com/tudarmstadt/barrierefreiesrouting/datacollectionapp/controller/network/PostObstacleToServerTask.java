@@ -20,13 +20,8 @@ import okhttp3.Response;
 
 /**
  * Task to post a new obstacle to the routing web-api.
- *
  */
 public class PostObstacleToServerTask {
-
-    public PostObstacleToServerTask() {
-
-    }
 
     public static void PostObstacle(final Obstacle obstacle) {
         ObjectMapper mapper = new ObjectMapper();

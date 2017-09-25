@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal">
 
     <Button
+        android:id="@+id/bottom_sheet_button_place_obstacle_mode"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:drawableTop="@android:drawable/ic_menu_myplaces"
         android:text="Place Obstacle Edit Mode"
-        android:id="@+id/bottom_sheet_button_place_obstacle_mode"
 
         />
 
     <Button
+        android:id="@+id/bottom_sheet_button_road_edit_mode"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:drawableTop="@android:drawable/ic_input_add"
         android:text="Road Edit Mode"
-        android:id="@+id/bottom_sheet_button_road_edit_mode"
 
         />
 

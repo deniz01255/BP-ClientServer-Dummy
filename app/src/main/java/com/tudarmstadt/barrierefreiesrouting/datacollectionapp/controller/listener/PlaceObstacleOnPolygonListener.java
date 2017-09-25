@@ -13,14 +13,14 @@ import org.osmdroid.views.overlay.Polyline;
 
 /**
  * Places an Obstacle on the Polygon that this class listens for Click Events.
- *
  */
 public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener {
 
 
     /**
-     *  Callback function gets called after the user has clicked on the polyline that this
-     *  Listener is set to listen to.
+     * Callback function gets called after the user has clicked on the polyline that this
+     * Listener is set to listen to.
+     *
      * @param polyline
      * @param mapView
      * @param eventPos
@@ -35,14 +35,13 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
             Point finalPoint = mapView.getProjection().toPixelsFromProjected(projectedPoint, null);
 
             // TODO: Bi Check
-            if(polyline instanceof CustomPolyline)
-            {
+            if (polyline instanceof CustomPolyline) {
                 CustomPolyline cuspo = (CustomPolyline) polyline;
                 ObstacleDataSingleton.getInstance().setId_way(cuspo.getRoad().id);
             }
             // Send Event that an Obstacle Position has been set, and send the position on the line with the event.
             // Subscriber will be notified about this post, but only one specified method will be called
-            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView,polyline, finalPoint), (CustomPolyline) polyline));
+            EventBus.getDefault().post(new ObstaclePositionSelectedOnPolylineEvent(getClosestPointOnPolyLine(mapView, polyline, finalPoint), (CustomPolyline) polyline));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +50,6 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
     }
 
     /**
-     *
      * @param mapView
      * @param polyline
      * @param point
@@ -100,11 +98,10 @@ public class PlaceObstacleOnPolygonListener implements Polyline.OnClickListener 
                         // save the ID of the 2 nodes surrounding the current Obstacle node in ObstacleDataSingleton
                         // TODO: From Bi, maybe something incorect, check later
                         // check if polyline is really from type Custom
-                        if(polyline instanceof CustomPolyline)
-                        {
+                        if (polyline instanceof CustomPolyline) {
                             CustomPolyline cuspo = (CustomPolyline) polyline;
                             ObstacleDataSingleton.getInstance().setId_firstnode(cuspo.getRoad().getRoadNodes().get(curIndex).id);
-                            ObstacleDataSingleton.getInstance().setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex+1).id);
+                            ObstacleDataSingleton.getInstance().setId_lastnode(cuspo.getRoad().getRoadNodes().get(curIndex + 1).id);
                         }
                     }
                 }

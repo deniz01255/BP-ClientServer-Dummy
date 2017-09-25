@@ -1,6 +1,5 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network;
 
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.apiContracts.RoutingServerAPI;
 
@@ -19,11 +18,6 @@ import okhttp3.Response;
  */
 
 public class DownloadRoadTask {
-
-    private OkHttpClient client = new OkHttpClient();
-
-    public DownloadRoadTask() {
-    }
 
     public static void downloadroad() {
         OkHttpClient client = new OkHttpClient();

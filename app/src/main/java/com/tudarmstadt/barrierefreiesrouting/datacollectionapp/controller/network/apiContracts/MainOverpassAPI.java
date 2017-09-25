@@ -4,7 +4,6 @@ import org.osmdroid.util.GeoPoint;
 
 /**
  * API Contract for the main overpass api
- *
  */
 public class MainOverpassAPI {
 

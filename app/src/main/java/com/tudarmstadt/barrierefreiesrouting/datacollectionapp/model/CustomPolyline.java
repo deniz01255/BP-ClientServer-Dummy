@@ -2,11 +2,8 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model;
 
 import org.osmdroid.views.overlay.Polyline;
 
-import java.util.ArrayList;
-
 /**
- * Created by Bi on 17.08.2017.
- * this class extends from Polyline class and one extra attribute road
+ * This class extends from Polyline class and one extra attribute road
  */
 
 public class CustomPolyline extends Polyline {

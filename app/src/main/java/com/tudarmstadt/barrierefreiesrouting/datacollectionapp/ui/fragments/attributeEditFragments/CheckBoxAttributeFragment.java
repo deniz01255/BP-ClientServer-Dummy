@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,17 +19,13 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObsta
  * Use the {@link CheckBoxAttributeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CheckBoxAttributeFragment extends Fragment{
+public class CheckBoxAttributeFragment extends Fragment {
 
     private static final String LABEL_PARAM = "labelParam";
 
     private String mLabelParam;
 
     private OnFragmentInteractionListener mListener;
-
-    public CheckBoxAttributeFragment() {
-        // Required empty public constructor
-    }
 
     public static CheckBoxAttributeFragment newInstance(String labelName) {
         CheckBoxAttributeFragment fragment = new CheckBoxAttributeFragment();
