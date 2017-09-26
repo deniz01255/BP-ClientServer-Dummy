@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import bp.common.model.AttributeTypes;
 import bp.common.model.annotations.EditableAttribute;
 import bp.common.model.obstacles.Obstacle;
 
@@ -82,9 +83,14 @@ public class ObstacleToViewConverter {
                     try {
                         f.setAccessible(true);
                         if (f.getAnnotation(EditableAttribute.class) != null) {
-                            String attributeName = f.getAnnotation(EditableAttribute.class).toString();
+                            String attributeName = f.getAnnotation(EditableAttribute.class).name();
                             ObstacleAttribute<?> attribute = converterForClass.get(f.getType()).convert(f.get(obstacle), attributeName);
+                            String validOptions = f.getAnnotation(EditableAttribute.class).validoptions();
 
+                            if(f.getAnnotation(EditableAttribute.class).type().equals(AttributeTypes.DROPDOWN) && !validOptions.isEmpty()){
+                                attribute.validOptions = validOptions;
+                                attribute.isDrowpdown = true;
+                            }
                             map.put(attributeName, attribute);
 
                         }

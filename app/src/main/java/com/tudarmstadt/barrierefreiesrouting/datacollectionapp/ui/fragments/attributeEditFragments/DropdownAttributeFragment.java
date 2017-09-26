@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by vincent on 22.09.17.
  */
@@ -22,16 +26,21 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
 
 
     private static final String ATTRIBUTE_KEY_STRING_PARAM = "keyStringParam";
-    private String[] items = new String[]{"Yes", "Nö", "Maybe"};
+    private static final String VALID_OPTIONS_STRING_PARAM = "validOptionsParam";
+    private static final String NAME_STRING_PARAM = "nameStringParam";
 
     private String mAttributeKeyString;
+    private String mValidOptionsString;
+    private String mAttributeLabelName;
 
     private TextAttributeFragment.OnFragmentInteractionListener mListener;
-
-    public static DropdownAttributeFragment newInstance(String attributeKeyString) {
+    List<String> items;
+    public static DropdownAttributeFragment newInstance(String attributeKeyString, String validOptionsString, String nameString) {
         DropdownAttributeFragment fragment = new DropdownAttributeFragment();
         Bundle args = new Bundle();
         args.putString(ATTRIBUTE_KEY_STRING_PARAM, attributeKeyString);
+        args.putString(VALID_OPTIONS_STRING_PARAM, validOptionsString);
+        args.putString(NAME_STRING_PARAM, nameString);
 
         fragment.setArguments(args);
         return fragment;
@@ -42,6 +51,9 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAttributeKeyString = getArguments().getString(ATTRIBUTE_KEY_STRING_PARAM);
+            mValidOptionsString = getArguments().getString(VALID_OPTIONS_STRING_PARAM);
+            mAttributeLabelName = getArguments().getString(NAME_STRING_PARAM);
+
         }
     }
 
@@ -50,6 +62,9 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.attribute_fragment_edit_dropdown, container, false);
+
+        // create items from csv string
+        items = Arrays.asList(mValidOptionsString.split("\\s*,\\s*"));
 
         // TODO: get the items from the obstacle attribute annotation "valid options"
         Spinner spinner = (Spinner) v.findViewById(R.id.spinner_attribute_selection);
@@ -62,7 +77,7 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
 
         TextView label = (TextView) v.findViewById(R.id.dropDownAttributeLabel);
 
-        label.setText("How Much is the fish!?");
+        label.setText(mAttributeLabelName);
 
 
         return v;
@@ -87,7 +102,7 @@ public class DropdownAttributeFragment extends Fragment implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(items[i]);
+        ObstacleDataSingleton.getInstance().getmObstacleViewModel().attributesMap.get(mAttributeKeyString).setValueFromString(items.get(i));
 
     }
 

@@ -9,6 +9,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDat
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.CheckBoxAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.DropdownAttributeFragment;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.NumberAttributeFragment;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.attributeEditFragments.TextAttributeFragment;
 
 import java.util.List;
 import java.util.Map;
@@ -52,8 +53,15 @@ public class AttributeFragmentFactory {
                 fragTransaction.add(R.id.editor_attribute_list_container, NumberAttributeFragment.newInstance(entry.getKey()), entry.getKey());
 
             } else if (entry.getValue().typeParameterClass == String.class) {
-                // TODO: if string is of type dropdown, insert dropdownFragment - otherwise TextAttributeFragment
-                fragTransaction.add(R.id.editor_attribute_list_container, DropdownAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+
+                // Insert Dropdown Fragment for Attribute
+                // only if in BP-Common the EditableAttribute Annotation has marked this attribued as Dropdown.
+                if(entry.getValue().isDrowpdown){
+                    fragTransaction.add(R.id.editor_attribute_list_container, DropdownAttributeFragment.newInstance(entry.getKey(), entry.getValue().validOptions, entry.getValue().name), entry.getKey());
+                }else{
+                    // Freetext Editing for string attributes is default.
+                    fragTransaction.add(R.id.editor_attribute_list_container, TextAttributeFragment.newInstance(entry.getKey()), entry.getKey());
+                }
 
             } else if (entry.getValue().typeParameterClass == Boolean.TYPE) {
                 fragTransaction.add(R.id.editor_attribute_list_container, CheckBoxAttributeFragment.newInstance(entry.getKey()), entry.getKey());

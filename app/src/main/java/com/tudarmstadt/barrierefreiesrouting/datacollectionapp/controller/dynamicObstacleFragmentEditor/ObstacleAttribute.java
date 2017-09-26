@@ -23,6 +23,17 @@ public class ObstacleAttribute<T> {
      */
     public String name;
 
+    /**
+     * If enabled, the validOptions MUST NOT be empty.
+     */
+    public boolean isDrowpdown = false;
+
+
+    /**
+     * If the Attribute has type dropdown, validOptions will contain all valid options in one string
+     * separated by comma.
+     */
+    public String validOptions;
 
     /**
      * typeParameterClass must be specified in order to use this ObstacleAttribute.
