@@ -8,6 +8,6 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapE
 
 public interface IMapFragmentProvider {
 
-    public MapEditorFragment getMapEditorFragment();
+    MapEditorFragment getMapEditorFragment();
 
 }

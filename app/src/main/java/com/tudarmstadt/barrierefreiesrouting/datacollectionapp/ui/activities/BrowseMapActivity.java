@@ -40,6 +40,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.events
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerObstaclesDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoutingServerRoadDownloadEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.StartEditObstacleEvent;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.ActionButtonClickListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
@@ -100,24 +101,18 @@ public class BrowseMapActivity extends AppCompatActivity
         , IObstacleProvider {
 
     public FloatingActionButton floatingActionButton;
-    public FloatingActionButton floatingActionButtonRoad;
-    public FloatingActionButton floatingActionSwitch;
     public MapEditorFragment mapEditorFragment;
     private long selectedBarrier;
-    private RoadEditorOperator reo;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
-    private String result;
-    private ArrayList<Node> nodeList = new ArrayList<Node>();
     private CustomPolyline currentPolyline;
-    // Polyline is used to display the line between the start and the end marker of obstacle placement
-    private Polyline currentSetObstaclePolyline;
+
+    public boolean roadEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Context c = this;
         setContentView(R.layout.activity_browser_map);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -138,9 +133,7 @@ public class BrowseMapActivity extends AppCompatActivity
         LinearLayout rlBottomLayout = (LinearLayout) findViewById(R.id.bottom_sheet);
 
         bottomSheetBehavior = BottomSheetBehavior.from(rlBottomLayout);
-
         bottomSheetBehavior.setHideable(false);
-
         BottomSheetBehavior.from(rlBottomLayout)
                 .setState(BottomSheetBehavior.STATE_COLLAPSED);
 
@@ -154,86 +147,11 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-        floatingActionButtonRoad = (FloatingActionButton) findViewById(R.id.action_send_Street);
-        floatingActionButtonRoad.hide();
-        floatingActionButtonRoad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                nodeList.clear();
-                List<GeoPoint> geop = new ArrayList<GeoPoint>();
-                List<Overlay> xx = mapEditorFragment.map.getOverlays();
-                for (int i = xx.size() - 1; i > 0; i--) {
-                    if (Polyline.class.isInstance(xx.get(i)) || Marker.class.isInstance(xx.get(i))) {
-                        if (Marker.class.isInstance(xx.get(i))) {
-                            xx.get(i).isEnabled();
-                            geop.add(((Marker) xx.get(i)).getPosition());
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                for (GeoPoint gp : geop) {
-                    nodeList.add(new Node(gp.getLatitude(), gp.getLongitude()));
-                }
-                LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
-                View mView = layoutInflaterAndroid.inflate(R.layout.activity_place_road, null);
-                AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
-                alertDialogBuilderUserInput.setView(mView);
-                final EditText userInputDialogEditText = (EditText) mView.findViewById(userInputDialog);
-                alertDialogBuilderUserInput
-                        .setCancelable(false)
-                        .setPositiveButton("An Server Senden ", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                result = userInputDialogEditText.getText().toString();
-                                Way way = new Way(result, nodeList);
-                                //  way.setStartingPoint(nodeList.get(0));
-                                //  way.setEndPoint(nodeList.get(nodeList.size()-1));
-
-                                RoadDataSingleton.getInstance().setWAY(way);
-
-
-                                //RoadDataSingleton.getInstance().setWAY(convertAttributeMapToObstacle(ObstacleDataSingleton.getInstance().getmObstacleViewModel()));
-                                // wait for the Obstacle instance to be updated, then save 3 Ids into that Obstacle Instance before upload to the server
-                                RoadDataSingleton.getInstance().saveThreeIdAttributes();
-
-                                PostStreetToServerTask.PostStreet(RoadDataSingleton.getInstance().getWay());
-
-                                // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
-                                ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
-
-                                Toast.makeText(c, R.string.Way_saved, Toast.LENGTH_SHORT).show();
-
-                            }
-                        })
-
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialogBox, int id) {
-                                        dialogBox.cancel();
-                                    }
-                                });
-
-                AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
-                alertDialogAndroid.show();
-
-
-                //String ret = result.getText().toString() ;
-
-
-            }
-        });
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.action_place_obstacle);
+        floatingActionButton.setOnClickListener(new ActionButtonClickListener());
         floatingActionButton.hide();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Intent intent = new Intent(BrowseMapActivity.this, PlaceObstacleActivity.class);
-                startActivity(intent);
-
-            }
-        });
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -248,69 +166,39 @@ public class BrowseMapActivity extends AppCompatActivity
         });
 
         final RadioButton placeObstacleModeButton = (RadioButton) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
-        final RadioButton roadEditorModeButton = (RadioButton) findViewById(R.id.bottom_sheet_button_road_edit_mode);
         placeObstacleModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                roadEditorModeButton.setActivated(false);
-                placeObstacleModeButton.setActivated(true);
-                floatingActionButtonRoad.hide();
-
+                roadEditMode = false;
+                floatingActionButton.hide();
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-                for (Polyline p : currentPolylineArrayList) {
-                    mapEditorFragment.map.getOverlays().remove(p);
-                }
-
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
                 mapEditorFragment.getStateHandler().setActiveOperator(new PlaceNearestRoadsOnMapOperator());
                 mapEditorFragment.map.invalidate();
 
             }
         });
-
+        final RadioButton roadEditorModeButton = (RadioButton) findViewById(R.id.bottom_sheet_button_road_edit_mode);
         roadEditorModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                roadEditorModeButton.setActivated(true);
-                placeObstacleModeButton.setActivated(false);
+                roadEditMode = true;
                 floatingActionButton.hide();
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
-                for (Polyline p : currentPolylineArrayList) {
-                    mapEditorFragment.map.getOverlays().remove(p);
-                }
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
-                reo = new RoadEditorOperator();
-                mapEditorFragment.getStateHandler().setActiveOperator(reo);
+                mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
                 mapEditorFragment.map.invalidate();
 
             }
         });
 
-        floatingActionSwitch = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        floatingActionSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
-        android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(c);
-        builder1.setTitle("Start Hilfe");
-        builder1.setMessage("Um die umliegenden Straßen \"auswählbar\" zu machen, erfordert dies ein längeres drücken auf dem Bildschirm");
-        builder1.setCancelable(true);
-
-        builder1.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-
-        android.app.AlertDialog alert11 = builder1.create();
-        alert11.show();
+        AlertDialog.Builder startupAlertBuilder = new AlertDialog.Builder(this);
+        startupAlertBuilder.setTitle("Start Hilfe");
+        startupAlertBuilder.setMessage("Um die umliegenden Straßen \"auswählbar\" zu machen, erfordert dies ein längeres drücken auf dem Bildschirm");
+        startupAlertBuilder.setCancelable(true);
+        startupAlertBuilder.setPositiveButton("OK", null);
+        AlertDialog startupAlertDialog = startupAlertBuilder.create();
+        startupAlertDialog.show();
 
     }
 
@@ -530,10 +418,6 @@ public class BrowseMapActivity extends AppCompatActivity
             OverlayItem overlayItem = new OverlayItem("", "", point);
             mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
             mapEditorFragment.map.invalidate();
-            floatingActionButtonRoad.show();
-        } else {
-
-            floatingActionButtonRoad.hide();
         }
         //RoadDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
 

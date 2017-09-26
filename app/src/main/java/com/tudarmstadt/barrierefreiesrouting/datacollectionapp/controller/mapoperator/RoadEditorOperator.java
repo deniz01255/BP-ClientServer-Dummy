@@ -78,8 +78,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
         }
 
 
-/**crec3vr
- https://routing.vincinator.de/api/barriers/ways/radius?lat1=49.873090&long1=8.659275&radius=100**/
+/** https://routing.vincinator.de/api/barriers/ways/radius?lat1=49.873090&long1=8.659275&radius=100**/
 
         newStreet.name = "Street: " + newStreet.id;
 
@@ -107,9 +106,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             //mapEditorFragment.map.invalidate();
             currentRoadCapture.clear();
         }
-
-//###########
-
+        
         return true;
     }
 

@@ -6,7 +6,7 @@ package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces;
 
 public interface IObstacleViewModelConsumer {
 
-    public void setObstacleViewModel();
+    void setObstacleViewModel();
 
 
 }
