@@ -4,27 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/bottom_sheet_button_place_obstacle_mode"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@android:drawable/ic_menu_myplaces"
-        android:text="Place Obstacle Edit Mode"
 
-        />
+        <RadioButton
+            android:id="@+id/bottom_sheet_button_place_obstacle_mode"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@android:drawable/ic_menu_myplaces"
+            android:text="Obstacle Mode"
+            android:background="#ffffffff"
 
-    <Button
-        android:id="@+id/bottom_sheet_button_road_edit_mode"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:drawableTop="@android:drawable/ic_input_add"
-        android:text="Road Edit Mode"
+            />
 
-        />
+        <RadioButton
+            android:id="@+id/bottom_sheet_button_road_edit_mode"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@android:drawable/ic_input_add"
+            android:text="Road Mode"
+            android:background="#ffffffff"
+
+            />
+    </RadioGroup>
+
 
 </LinearLayout>

@@ -20,7 +20,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -245,13 +247,13 @@ public class BrowseMapActivity extends AppCompatActivity
             }
         });
 
-        final Button placeObstacleModeButton = (Button) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
-        final Button roadEditorModeButton = (Button) findViewById(R.id.bottom_sheet_button_road_edit_mode);
+        final RadioButton placeObstacleModeButton = (RadioButton) findViewById(R.id.bottom_sheet_button_place_obstacle_mode);
+        final RadioButton roadEditorModeButton = (RadioButton) findViewById(R.id.bottom_sheet_button_road_edit_mode);
         placeObstacleModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                roadEditorModeButton.setBackgroundColor(Color.WHITE);
-                placeObstacleModeButton.setBackgroundColor(Color.YELLOW);
+                roadEditorModeButton.setActivated(false);
+                placeObstacleModeButton.setActivated(true);
                 floatingActionButtonRoad.hide();
 
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
@@ -269,8 +271,8 @@ public class BrowseMapActivity extends AppCompatActivity
         roadEditorModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                placeObstacleModeButton.setBackgroundColor(Color.WHITE);
-                roadEditorModeButton.setBackgroundColor(Color.YELLOW);
+                roadEditorModeButton.setActivated(true);
+                placeObstacleModeButton.setActivated(false);
                 floatingActionButton.hide();
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
                 for (Polyline p : currentPolylineArrayList) {
