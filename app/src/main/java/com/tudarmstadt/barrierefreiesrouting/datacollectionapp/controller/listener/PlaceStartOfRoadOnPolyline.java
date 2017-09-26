@@ -81,7 +81,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
             Polyline streetLine = new Polyline(context);
             roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude()));
             roadEndPoints.add(new GeoPoint(geoPoint.getLatitude(), geoPoint.getLongitude() + 0.0002));
-            roadEndPoints.add(new GeoPoint(geoPoint.getLatitude() + 0.0002, geoPoint.getLongitude()));
+            //roadEndPoints.add(new GeoPoint(geoPoint.getLatitude() + 0.0002, geoPoint.getLongitude()));
             newStreet.setROADList(roadEndPoints);
 
             streetLine = setUPPoly(streetLine, mapView, roadEndPoints);
@@ -94,9 +94,17 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
             RoadMarker.add(startMarker);
 
             Marker endM = new Marker(mapView);
-            endM.setPosition(roadEndPoints.get(2));
+            endM.setPosition(roadEndPoints.get(1));
             endM.setTitle("Start point for creating new ParcedOverpassRoad");
             endM.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+            ParcedOverpassRoad road = new ParcedOverpassRoad();
+            road.setROADList(roadEndPoints);
+            endM.setDraggable(true);
+            endM.isDraggable();
+            endM.setOnMarkerDragListener(new DragObstacleListener(road, mapView, roadEndPoints, this, context));
+
+
             RoadMarker.add(endM);
 
             addMapOverlay(startMarker, streetLine, mapView);
@@ -106,7 +114,7 @@ public class PlaceStartOfRoadOnPolyline implements Polyline.OnClickListener, IUs
             RoadList.add(newStreet);
 
             Log.d("myTag", "This is my message");
-            roadEndPoints.clear();
+            //roadEndPoints.clear();
             EventBus.getDefault().post(new RoadPositionSelectedOnPolylineEvent(geoPoint));
 
 
