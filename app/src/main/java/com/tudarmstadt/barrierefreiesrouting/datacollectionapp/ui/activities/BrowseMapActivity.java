@@ -171,6 +171,9 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onClick(View v) {
                 roadEditMode = false;
                 floatingActionButton.hide();
+                for (Polyline p : currentPolylineArrayList) {
+                    mapEditorFragment.map.getOverlays().remove(p);
+                }
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
                 mapEditorFragment.getStateHandler().setActiveOperator(new PlaceNearestRoadsOnMapOperator());
@@ -184,6 +187,9 @@ public class BrowseMapActivity extends AppCompatActivity
             public void onClick(View v) {
                 roadEditMode = true;
                 floatingActionButton.hide();
+                for (Polyline p : currentPolylineArrayList) {
+                    mapEditorFragment.map.getOverlays().remove(p);
+                }
                 mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
                 ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = false;
                 mapEditorFragment.getStateHandler().setActiveOperator(new RoadEditorOperator());
