@@ -12,7 +12,7 @@ public class RoutingServerAPI {
     /**
      * The base URL where to send the api requests. Append the path to the proper API resource
      */
-    public static String baseURL = "https://routing.vincinator.de";
+    public static String baseURL = "http://routing.vincinator.de";
 
     /**
      * The Path to the Stairs Resource on the routing server

@@ -46,6 +46,7 @@ public class PostObstacleToServerTask {
                     @Override
                     public void onFailure(final Call call, IOException e) {
                         // Error
+                        System.out.println(e);
                     }
 
                     @Override
