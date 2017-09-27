@@ -1,7 +1,6 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -14,15 +13,11 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -32,6 +27,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.BlacklistedRoadsTaskDownloadedEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstacleOverlayItemSingleTapEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.ObstaclePositionSelectedOnPolylineEvent;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.eventsystem.RoadPositionSelectedOnPolylineEvent;
@@ -44,8 +40,8 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listen
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener.PlaceObstacleOnPolygonListener;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.PlaceNearestRoadsOnMapOperator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadBlacklistedRoadsTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadObstaclesTask;
-import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostStreetToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleProvider;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ObstacleDataSingleton;
@@ -63,8 +59,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
@@ -72,6 +66,7 @@ import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 import java.util.ArrayList;
 import java.util.List;
 
+import bp.common.model.WayBlacklist;
 import bp.common.model.obstacles.Construction;
 import bp.common.model.obstacles.Elevator;
 import bp.common.model.obstacles.FastTrafficLight;
@@ -82,8 +77,6 @@ import bp.common.model.obstacles.Unevenness;
 import bp.common.model.ways.Node;
 import bp.common.model.ways.Way;
 import okhttp3.Response;
-
-import static com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R.id.userInputDialog;
 
 /**
  * The starting point of the app.
@@ -104,6 +97,7 @@ public class BrowseMapActivity extends AppCompatActivity
     public MapEditorFragment mapEditorFragment;
     private long selectedBarrier;
     private ArrayList<Polyline> currentPolylineArrayList = new ArrayList<>();
+
     private BottomSheetBehavior<LinearLayout> bottomSheetBehavior;
     private CustomPolyline currentPolyline;
 
@@ -112,6 +106,8 @@ public class BrowseMapActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // get the initial Blacklisted ways. Always update after inserting stairs obstacle.
+        DownloadBlacklistedRoadsTask.downloadBlacklistedWays();
 
         setContentView(R.layout.activity_browser_map);
 
@@ -295,6 +291,30 @@ public class BrowseMapActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Delete all Blacklisted Roads and store them in the blackli
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.POSTING)
+    public void onMessageEvent(BlacklistedRoadsTaskDownloadedEvent event) {
+
+        try {
+            Response response = event.getResponse();
+            String res = response.body().string();
+
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            if (!response.isSuccessful())
+                return;
+
+            RoadDataSingleton.getInstance().setBlacklistedRoads(mapper.<ArrayList<WayBlacklist>>readValue(res, new TypeReference<List<Way>>() { }));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(RoutingServerRoadDownloadEvent event) {
 
@@ -316,6 +336,10 @@ public class BrowseMapActivity extends AppCompatActivity
                 public void run() {
 
                     for (Way way : wayList) {
+
+                        if(isBlacklisted(way))
+                            continue;
+
                         List<GeoPoint> gp = new ArrayList<GeoPoint>();
                         for (Node node : way.getNodes()) {
                             GeoPoint g = new GeoPoint(node.getLatitude(), node.getLongitude());
@@ -348,6 +372,22 @@ public class BrowseMapActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Very inefficient solution. This can be improved by either
+     *  - not using overpass api and getting all roads from the server, and filter the blacklisted roads on the server
+     *  - optimized data structure
+     * @param way
+     * @return
+     */
+    private boolean isBlacklisted(Way way) {
+
+        for(WayBlacklist wayblacklist : RoadDataSingleton.getInstance().getBlacklistedRoads()){
+            if(way.getOsm_id() == wayblacklist.getOsm_id())
+                return true;
+        }
+        return false;
     }
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
@@ -430,7 +470,12 @@ public class BrowseMapActivity extends AppCompatActivity
 
     }
 
-    @Subscribe(threadMode = ThreadMode.POSTING)
+
+
+
+
+
+        @Subscribe(threadMode = ThreadMode.POSTING)
     public void onMessageEvent(ObstaclePositionSelectedOnPolylineEvent event) {
 
 

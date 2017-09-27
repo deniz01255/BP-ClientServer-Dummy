@@ -23,6 +23,7 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.overla
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IUserInteractionWithMap;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.CustomPolyline;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.ParcedOverpassRoad;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.model.RoadDataSingleton;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.ui.fragments.MapEditorFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,6 +41,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import bp.common.model.WayBlacklist;
 import bp.common.model.ways.Node;
 import bp.common.model.ways.Way;
 import okhttp3.MediaType;
@@ -63,7 +65,6 @@ import okhttp3.Response;
 public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
 
     public GetHighwaysFromCustomServerTask task2;
-    MainOverpassAPI overpassAPI = new MainOverpassAPI();
     private NearestRoadsOverlay roadsOverlay;
 
     public PlaceNearestRoadsOnMapOperator() {
@@ -82,7 +83,6 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
         mapEditorFragment.placeNewObstacleOverlay.removeAllItems();
 
         PlaceNearestRoadsOnMapOperator.GetHighwaysFromOverpassAPITask task = new PlaceNearestRoadsOnMapOperator.GetHighwaysFromOverpassAPITask(context);
-
         task2 = new GetHighwaysFromCustomServerTask(context);
         task2.execute(roadsOverlay.center, roadsOverlay.radius);
 
@@ -98,6 +98,20 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
     }
 
 
+    /**
+     * Very inefficient solution. This can be improved by either
+     *  - not using overpass api and getting all roads from the server, and filter the blacklisted roads on the server
+     *  - optimized data structure
+     * @return
+     */
+    private boolean isBlacklisted(long wayID) {
+
+        for(WayBlacklist wayblacklist : RoadDataSingleton.getInstance().getBlacklistedRoads()){
+            if(wayID == wayblacklist.getOsm_id())
+                return true;
+        }
+        return false;
+    }
     /**
      * render the roads found near a chosen point as Polyline
      * and give this an Eventlistener so when touched a barrier will be added to the map
@@ -126,6 +140,8 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                 });
 
                 for (Way w : wayList) {
+                    if(isBlacklisted(w.getOsm_id()))
+                        continue;
                     List<GeoPoint> node = new ArrayList<>();
                     ParcedOverpassRoad r = new ParcedOverpassRoad();
 
@@ -184,7 +200,8 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
                     return;
 
                 for (ParcedOverpassRoad r : roadsOverlay.nearestRoads) {
-
+                    if(isBlacklisted(r.id))
+                        continue;
                     CustomPolyline polyline = new CustomPolyline();
                     polyline.setRoad(r);
                     polyline.setPoints(r.getRoadPoints());
@@ -267,7 +284,7 @@ public class PlaceNearestRoadsOnMapOperator implements IUserInteractionWithMap {
         }
     }
 
-    public class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
+    private class GetHighwaysFromCustomServerTask extends AsyncTask<Object, Object, Response> {
         ProgressDialog progressDialog;
 
         GetHighwaysFromCustomServerTask(Activity activity) {

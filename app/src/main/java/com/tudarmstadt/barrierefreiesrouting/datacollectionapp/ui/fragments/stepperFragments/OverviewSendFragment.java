@@ -16,6 +16,7 @@ import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.R;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynamicObstacleFragmentEditor.ObstacleAttribute;
+import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.DownloadBlacklistedRoadsTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.network.PostObstacleToServerTask;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.utils.ObstacleTranslator;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.interfaces.IObstacleViewModelConsumer;
@@ -116,6 +117,9 @@ public class OverviewSendFragment extends Fragment implements BlockingStep, IObs
 
         // TODO: place this in the success of the server message (?) and update the BrowseMapActivity manually
         ObstacleDataSingleton.getInstance().obstacleDataCollectionCompleted = true;
+
+        // After inserting
+        DownloadBlacklistedRoadsTask.downloadBlacklistedWays();
 
         callback.complete();
     }
