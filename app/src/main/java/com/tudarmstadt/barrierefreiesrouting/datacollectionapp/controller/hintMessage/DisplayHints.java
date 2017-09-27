@@ -15,8 +15,8 @@ public class DisplayHints {
         this.context = context;
     }
 
-    private void simpleHint(String title, String){
-        android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(c);
+    private void simpleHint(String title, String s){
+        android.app.AlertDialog.Builder builder1 = new android.app.AlertDialog.Builder(context);
         builder1.setTitle("Start Hilfe");
         builder1.setMessage("Um die umliegenden Straßen \"chlickbar\" zu machen, erfordert dies ein längeres gedrückthalten des fingers von ca. 2-3sec. auf den Bildschirm");
         builder1.setCancelable(true);
