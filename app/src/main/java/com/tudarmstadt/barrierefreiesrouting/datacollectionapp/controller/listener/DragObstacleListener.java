@@ -1,6 +1,7 @@
 package com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.listener;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.google.android.gms.location.places.Place;
 import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.mapoperator.RoadEditorOperator;
@@ -99,7 +100,10 @@ public class DragObstacleListener implements Marker.OnMarkerDragListener {
                 once = false;
                 road.setRoadPoints(geopoint);
                 List<Overlay> xxxx = mv.getOverlays();
-                mv.getOverlays().remove(mv.getOverlays().size()-2);
+                Overlay ov = mv.getOverlays().get(mv.getOverlays().size()-2);
+                Polyline poly = (Polyline)ov;
+                poly.setColor(Color.TRANSPARENT);
+
             }else{
                 road.setRoadPoints(geopoint);
             }
