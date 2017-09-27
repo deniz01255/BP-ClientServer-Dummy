@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/placeSnackBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+
+        android:clipChildren="false">
+
+
+        <FrameLayout
+            android:id="@+id/map_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+        <!-- include bottom sheet -->
+        <include layout="@layout/bottom_sheet" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/action_place_obstacle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:paddingBottom="90dp"
+            android:src="@drawable/ic_action_add"
+            android:tint="@android:color/white"
+            app:layout_anchor="@+id/bottom_sheet"
+            app:layout_anchorGravity="top|end" />
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+

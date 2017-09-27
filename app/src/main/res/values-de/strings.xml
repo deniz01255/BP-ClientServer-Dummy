@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobile Datenerfassung</string>
+    <string name="error_server_not_found">Fehler: Server nicht gefunden</string>
+    <string name="default_description">Keine Beschreibung Verfügbar</string>
+    <string name="action_barrier_added">Barriere hinzugefügt</string>
+    <string name="action_barrier_loaded">Barrieren geladen</string>
+    <string name="help_place_an_obstacle">Platziere eine Barriere</string>
+    <string name="action_barrier_placed">Barriere platziert</string>
+    <string name="server_response_roads_loaded">Straßen in der nähe geladen</string>
+    <string name="navigation_get_near_roads">Hole Straßen</string>
+    <string name="action_roads_overlay_loaded">Straßen in der Nähe geladen</string>
+    <string name="help_get_nearest_roads">Barriere platzieren</string>
+    <string name="server_response_posted_new_obstacle">Barriere gespeichert</string>
+    <string name="navigation_place_obstacle">Platziere Hinderniss</string>
+    <string name="navigation_get_details">Details</string>
+    <string name="obstacle_label_construction">Baustelle</string>
+    <string name="obstacle_label_elevator">Fahrstuhl</string>
+    <string name="obstacle_label_fast_traffic_light">Schnelle Ampel</string>
+    <string name="obstacle_label_ramp">Rampe</string>
+    <string name="obstacle_label_stairs">Treppe</string>
+    <string name="obstacle_label_tight_passage">Enger Durchgang</string>
+    <string name="obstacle_label_unevenness">Unebenheit</string>
+</resources>
