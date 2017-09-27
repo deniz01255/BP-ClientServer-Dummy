@@ -4,6 +4,9 @@ import com.tudarmstadt.barrierefreiesrouting.datacollectionapp.controller.dynami
 
 import org.osmdroid.util.GeoPoint;
 
+import java.util.ArrayList;
+
+import bp.common.model.WayBlacklist;
 import bp.common.model.obstacles.Obstacle;
 import bp.common.model.ways.Way;
 
@@ -12,6 +15,9 @@ import bp.common.model.ways.Way;
  */
 
 public class RoadDataSingleton {
+
+
+    private ArrayList<WayBlacklist> blacklistedRoads = new ArrayList<>();
 
     private static volatile RoadDataSingleton instance = null;
     private Way way;
@@ -118,6 +124,7 @@ public class RoadDataSingleton {
         this.id_LASTlastnode = id_lastnode;
     }
 
+<<<<<<< HEAD
     public void setId_firstWAY(long id_firstWAY) {
         this.id_firstWAY = id_firstWAY;
     }
@@ -129,6 +136,14 @@ public class RoadDataSingleton {
     }
     public long getId_secondWAY() {
         return this.id_secondWAY;
+=======
+    public ArrayList<WayBlacklist> getBlacklistedRoads() {
+        return blacklistedRoads;
+    }
+
+    public void setBlacklistedRoads(ArrayList<WayBlacklist> blacklistedRoads) {
+        this.blacklistedRoads = blacklistedRoads;
+>>>>>>> 9c3f1d68542496ef8531a63993f7e5fc00ba5b2e
     }
 
     /*  ##########################################################

@@ -21,6 +21,9 @@ public class RoutingServerAPI {
 
     public static String roadResource = "/api/barriers/ways";
 
+    public static String blacklistedRoadResource = "/api/barriers/ways/blacklist";
+
+
     /**
      * If the api key requires an apikey, load the api key to this variable.
      * NOTE: It is not recommended to publish API Keys with the source code.
