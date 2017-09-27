@@ -418,6 +418,7 @@ public class BrowseMapActivity extends AppCompatActivity
             OverlayItem overlayItem = new OverlayItem("", "", point);
             mapEditorFragment.placeNewObstacleOverlay.addItem(overlayItem);
             mapEditorFragment.map.invalidate();
+            floatingActionButton.show();
         }
         //RoadDataSingleton.getInstance().currentStartingPositionOfSetObstacle = point;
 

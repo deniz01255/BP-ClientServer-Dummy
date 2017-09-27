@@ -113,7 +113,7 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
 
     // Single Tap auf die Map
     @Override
-    public boolean singleTapConfirmedHelper(GeoPoint p, Activity context, final MapEditorFragment mapEditorFragment) {
+    public boolean singleTapConfirmedHelper(GeoPoint geoPoint, Activity context, final MapEditorFragment mapEditorFragment) {
         if (RoadList.size() == 0) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setTitle("No existing road!");
@@ -129,13 +129,6 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
                         }
                     });
 
-            /**builder1.setNegativeButton(
-             "No",
-             new DialogInterface.OnClickListener() {
-             public void onClick(DialogInterface dialog, int id) {
-             dialog.cancel();
-             }
-             });**/
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
@@ -162,20 +155,24 @@ public class RoadEditorOperator implements IUserInteractionWithMap {
             Polyline streetLine = new Polyline(context);
 
 
-            road.setRoadPoints(p);
+            road.setRoadPoints(geoPoint);
 
 
             roadEndPointsCrob.add(road.getRoadPoints().get(road.getRoadPoints().size() - 2));
-            roadEndPointsCrob.add(p);
+            roadEndPointsCrob.add(geoPoint);
             streetLine = setUPPoly(streetLine, mapEditorFragment, roadEndPointsCrob);
 
             Marker end = new Marker(mapEditorFragment.map);
-            end.setPosition(p);
+            end.setPosition(geoPoint);
             end.setTitle("endPunkt");
             end.setDraggable(true);
             end.isDraggable();
             end.setOnMarkerDragListener(new DragObstacleListener(road, mapEditorFragment, roadEndPoints, this, context));
 
+            List<Overlay> xxxx = mapEditorFragment.map.getOverlays();
+            Overlay ov = mapEditorFragment.map.getOverlays().get(mapEditorFragment.map.getOverlays().size()-2);
+            Marker mark = (Marker)ov;
+            mark.setDraggable(false);
 
             end.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             RoadMarker.add(end);
